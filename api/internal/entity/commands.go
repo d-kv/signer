@@ -1,17 +1,19 @@
 package entity
 
 type EnableCapabilityType struct {
-	TenantId       int
-	IntegrationId  int
+	ID             uint
+	TenantId       uint
+	IntegrationId  uint
 	BundleId       string
 	CapabilityType CapabilityType
 	Status         Status
 }
 
 type CreateBundleId struct {
-	TenantId         int
-	IntegrationId    int
-	BundleIdentifier int
+	ID               uint
+	TenantId         uint
+	IntegrationId    uint
+	BundleIdentifier string
 	BundleName       string
 	BundlePlatform   Platform
 	SeedId           string
@@ -19,8 +21,9 @@ type CreateBundleId struct {
 }
 
 type CreateDevice struct {
-	TenantId       int
-	IntegrationId  int
+	ID             uint
+	TenantId       uint
+	IntegrationId  uint
 	DeviceName     string
 	DevicePlatform Platform
 	DeviceUdid     string
