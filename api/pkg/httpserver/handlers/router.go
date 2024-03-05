@@ -7,25 +7,29 @@ type Handler struct {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	bundleId := router.Group("/bundleid")
+	identification := router.Group("/:tenantId/:integrationId")
 	{
-		bundleId.POST("/", h.postBundleId)
-		bundleId.GET("/", h.getBundleId)
-	}
-	devices := router.Group("/devices")
-	{
-		devices.POST("/", h.postDevice)
-		devices.GET("/", h.getDevice)
-	}
-	certificates := router.Group("/certificates")
-	{
-		certificates.POST("/", h.postCertificate)
-		certificates.GET("/", h.getCertificate)
-	}
-	profiles := router.Group("/profiles")
-	{
-		profiles.POST("/", h.postProfile)
-		profiles.GET("/", h.getProfile)
+		identification.POST("/bundleid", h.postBundleId)
+		identification.GET("/bundleid", h.getBundleIds)
+		identification.GET("/bundleid/:id", h.getBundleIdByID)
+		identification.DELETE("/bundleid/:id", h.deleteBundleIdByID)
+
+		identification.POST("/capability", h.postCapability)
+		identification.DELETE("/capability/:id", h.deleteCapabilityByID)
+
+		identification.POST("/devices", h.postDevice)
+		identification.GET("/devices", h.getDevices)
+		identification.GET("/devices/:id", h.getDevice)
+
+		identification.POST("/certificates", h.postCertificate)
+		identification.GET("/certificates", h.getCertificates)
+		identification.GET("/certificates/:id", h.postCertificate)
+		identification.DELETE("/certificates/:id", h.deleteCertificate)
+
+		identification.POST("/profiles", h.postProfile)
+		identification.GET("/profiles", h.getProfiles)
+		identification.GET("/profiles/:id", h.getProfile)
+		identification.DELETE("/profiles/:id", h.deleteProfile)
 	}
 	return router
 }
