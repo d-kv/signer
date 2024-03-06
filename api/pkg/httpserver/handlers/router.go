@@ -1,35 +1,53 @@
 package handlers
 
-import "github.com/gin-gonic/gin"
+import (
+	_ "api/docs"
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+)
 
 type Handler struct {
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	identification := router.Group("/:tenantId/:integrationId")
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	identification := router.Group("/v1/:tenantId/:integrationId")
 	{
-		identification.POST("/bundleid", h.postBundleId)
-		identification.GET("/bundleid", h.getBundleIds)
-		identification.GET("/bundleid/:id", h.getBundleIdByID)
-		identification.DELETE("/bundleid/:id", h.deleteBundleIdByID)
+		bundleId := identification.Group("/bundleIds")
+		{
+			bundleId.POST("/", h.postBundleId)
+			bundleId.GET("/", h.getBundleIds)
+			bundleId.GET("/:id", h.getBundleIdByID)
+			bundleId.DELETE("/:id", h.deleteBundleIdByID)
+		}
+		capability := identification.Group("/capabilities")
+		{
+			capability.POST("/", h.postCapability)
+			capability.DELETE("/:id", h.deleteCapabilityByID)
+		}
+		device := identification.Group("/devices")
+		{
+			device.POST("/", h.postDevice)
+			device.GET("/", h.getDevices)
+			device.GET("/:id", h.getDeviceByID)
+		}
+		certificate := identification.Group("/certificates")
+		{
+			certificate.POST("/", h.postCertificate)
+			certificate.GET("/", h.getCertificates)
+			certificate.GET("/:id", h.getCertificateByID)
+			certificate.DELETE("/:id", h.deleteCertificateByID)
+		}
+		profile := identification.Group("/profiles")
+		{
+			profile.POST("/", h.postProfile)
+			profile.GET("/", h.getProfiles)
+			profile.GET("/:id", h.getProfileByID)
+			profile.DELETE("/:id", h.deleteProfileByID)
+		}
 
-		identification.POST("/capability", h.postCapability)
-		identification.DELETE("/capability/:id", h.deleteCapabilityByID)
-
-		identification.POST("/devices", h.postDevice)
-		identification.GET("/devices", h.getDevices)
-		identification.GET("/devices/:id", h.getDevice)
-
-		identification.POST("/certificates", h.postCertificate)
-		identification.GET("/certificates", h.getCertificates)
-		identification.GET("/certificates/:id", h.postCertificate)
-		identification.DELETE("/certificates/:id", h.deleteCertificate)
-
-		identification.POST("/profiles", h.postProfile)
-		identification.GET("/profiles", h.getProfiles)
-		identification.GET("/profiles/:id", h.getProfile)
-		identification.DELETE("/profiles/:id", h.deleteProfile)
 	}
 	return router
 }

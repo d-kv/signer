@@ -6,10 +6,17 @@ import (
 	"log"
 )
 
+// @title AppStoreConnect project API
+// @version 1.0
+// @description API server for AppStoreConnect project
+
+// @host localhost:8080
+// @BasePath /v1/{tenantId}/{integrationId}
+
 func main() {
-	handlers := new(handlers.Handler)
+	h := new(handlers.Handler)
 	server := new(httpserver.Server)
-	err := server.Run("8000", handlers.InitRoutes())
+	err := server.Run("8080", h.InitRoutes())
 	if err != nil {
 		log.Fatalf("server running error: %s", err.Error())
 	}

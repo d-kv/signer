@@ -1,0 +1,471 @@
+basePath: /v1/{tenantId}/{integrationId}
+definitions:
+  entities.BundleId:
+    properties:
+      identifier:
+        type: string
+      name:
+        type: string
+    type: object
+  entities.Capability:
+    properties:
+      bundleId:
+        type: string
+      name:
+        type: string
+    type: object
+  entities.Certificate:
+    properties:
+      identifier:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  entities.Device:
+    properties:
+      identifier:
+        type: string
+      name:
+        type: string
+      userId:
+        type: string
+    type: object
+  entities.Profile:
+    properties:
+      bundleId:
+        type: string
+      identifier:
+        type: string
+      integrationId:
+        type: string
+      name:
+        type: string
+    type: object
+  handlers.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API server for AppStoreConnect project
+  title: AppStoreConnect project API
+  version: "1.0"
+paths:
+  /bundleId/{id}:
+    delete:
+      description: BundleId deletion by id
+      operationId: delete-bundleId
+      parameters:
+      - description: bundleId identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Deletion success
+          schema:
+            type: string
+        "404":
+          description: BundleId not found
+          schema:
+            type: string
+      summary: Delete bundleId
+      tags:
+      - bundleId
+  /bundleIds:
+    get:
+      description: Get all bundleIds
+      operationId: get-bundleIds-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entities.BundleId'
+              type: array
+            type: array
+      summary: Get bundleIds list
+      tags:
+      - bundleId
+    post:
+      consumes:
+      - application/json
+      description: Create new bundleId instance
+      operationId: add-bundleId
+      parameters:
+      - description: bundleId params
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.BundleId'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.BundleId'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Add new BundleId
+      tags:
+      - bundleId
+  /bundleIds/{id}:
+    get:
+      description: Get bundleId instance by id
+      operationId: get-bundleId
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.BundleId'
+      summary: Get bundleId
+      tags:
+      - bundleId
+  /capabilities:
+    post:
+      consumes:
+      - application/json
+      description: Create new capability instance
+      operationId: add-capability
+      parameters:
+      - description: capability params
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Capability'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Capability'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Add new capability
+      tags:
+      - capability
+  /capabilities/{id}:
+    delete:
+      description: Capability deletion by id
+      operationId: delete-capability
+      parameters:
+      - description: capability identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Deletion success
+          schema:
+            type: string
+        "404":
+          description: Capability not found
+          schema:
+            type: string
+      summary: Delete capability
+      tags:
+      - capability
+  /certificates:
+    get:
+      description: Get all certificates
+      operationId: get-certificates-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entities.Profile'
+              type: array
+            type: array
+      summary: Get certificates list
+      tags:
+      - certificate
+    post:
+      consumes:
+      - application/json
+      description: Create new certificate instance
+      operationId: add-certificate
+      parameters:
+      - description: certificate params
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Certificate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Certificate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Add new certificate
+      tags:
+      - certificate
+  /certificates/{id}:
+    delete:
+      description: Certificate deletion by id
+      operationId: delete-certificate
+      parameters:
+      - description: certificate identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Deletion success
+          schema:
+            type: string
+        "404":
+          description: Certificate not found
+          schema:
+            type: string
+      summary: Delete certificate
+      tags:
+      - certificate
+    get:
+      description: Get certificate instance by id
+      operationId: get-certificate
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Certificate'
+      summary: Get certificate
+      tags:
+      - certificate
+  /devices:
+    get:
+      description: Get all devices
+      operationId: get-devices-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entities.Device'
+              type: array
+            type: array
+      summary: Get devices list
+      tags:
+      - device
+    post:
+      consumes:
+      - application/json
+      description: Create new device instance
+      operationId: add-device
+      parameters:
+      - description: device params
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Device'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Device'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Add new device
+      tags:
+      - device
+  /devices/{id}:
+    get:
+      description: Get device instance by id
+      operationId: get-device
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Device'
+      summary: Get device
+      tags:
+      - device
+  /profiles:
+    get:
+      description: Get all profiles
+      operationId: get-profiles-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entities.Profile'
+              type: array
+            type: array
+      summary: Get profiles list
+      tags:
+      - profile
+    post:
+      consumes:
+      - application/json
+      description: Create new profile instance
+      operationId: add-profile
+      parameters:
+      - description: profile params
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Profile'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Add new profile
+      tags:
+      - profile
+  /profiles/{id}:
+    delete:
+      description: Profile deletion by id
+      operationId: delete-profile
+      parameters:
+      - description: profile identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Deletion success
+          schema:
+            type: string
+        "404":
+          description: Profile not found
+          schema:
+            type: string
+      summary: Delete profile
+      tags:
+      - profile
+    get:
+      description: Get profile instance by id
+      operationId: get-profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Profile'
+      summary: Get profile
+      tags:
+      - profile
+swagger: "2.0"
