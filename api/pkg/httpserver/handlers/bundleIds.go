@@ -37,24 +37,19 @@ func (h *Handler) postBundleId(c *gin.Context) {
 // @Success 200 {array} []entities.BundleId
 // @Router /bundleIds [get]
 func (h *Handler) getBundleIds(c *gin.Context) {
-	bundleIds := []entities.BundleId{}
-
-	c.JSON(http.StatusOK, bundleIds)
+	h.services.QueryHandlerService.GetBundleIds(c)
 }
 
 // @Summary Get bundleId
 // @Description Get bundleId instance by id
 // @Tags bundleId
 // @ID get-bundleId
+// @Param id path string true "bundleId identifier"
 // @Produce  json
 // @Success 200 {object} entities.BundleId
 // @Router /bundleIds/{id} [get]
 func (h *Handler) getBundleIdByID(c *gin.Context) {
-	id := c.Param("id")
-
-	bundleId := entities.BundleId{Identifier: id}
-
-	c.JSON(http.StatusOK, bundleId)
+	h.services.QueryHandlerService.GetBundleIdById(c)
 }
 
 // @Summary Delete bundleId

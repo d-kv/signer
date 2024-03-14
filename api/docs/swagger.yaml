@@ -139,6 +139,12 @@ paths:
     get:
       description: Get bundleId instance by id
       operationId: get-bundleId
+      parameters:
+      - description: bundleId identifier
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -295,6 +301,12 @@ paths:
     get:
       description: Get certificate instance by id
       operationId: get-certificate
+      parameters:
+      - description: certificate identifier
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -365,6 +377,12 @@ paths:
     get:
       description: Get device instance by id
       operationId: get-device
+      parameters:
+      - description: device identifier
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -458,6 +476,12 @@ paths:
     get:
       description: Get profile instance by id
       operationId: get-profile
+      parameters:
+      - description: profile identifier
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:

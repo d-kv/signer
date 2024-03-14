@@ -146,6 +146,15 @@ const docTemplate = `{
                 ],
                 "summary": "Get bundleId",
                 "operationId": "get-bundleId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "bundleId identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -346,6 +355,15 @@ const docTemplate = `{
                 ],
                 "summary": "Get certificate",
                 "operationId": "get-certificate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "certificate identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -485,6 +503,15 @@ const docTemplate = `{
                 ],
                 "summary": "Get device",
                 "operationId": "get-device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "device identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -590,6 +617,15 @@ const docTemplate = `{
                 ],
                 "summary": "Get profile",
                 "operationId": "get-profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "profile identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

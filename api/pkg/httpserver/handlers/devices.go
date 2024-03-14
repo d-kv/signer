@@ -37,22 +37,17 @@ func (h *Handler) postDevice(c *gin.Context) {
 // @Success 200 {array} []entities.Device
 // @Router /devices [get]
 func (h *Handler) getDevices(c *gin.Context) {
-	devices := []entities.Device{}
-	c.JSON(http.StatusOK, devices)
+	h.services.QueryHandlerService.GetDevices(c)
 }
 
 // @Summary Get device
 // @Description Get device instance by id
 // @Tags device
 // @ID get-device
+// @Param id path string true "device identifier"
 // @Produce  json
 // @Success 200 {object} entities.Device
 // @Router /devices/{id} [get]
 func (h *Handler) getDeviceByID(c *gin.Context) {
-	id := c.Param("id")
-
-	device := entities.Device{Identifier: id}
-
-	c.JSON(http.StatusOK, device)
-
+	h.services.QueryHandlerService.GetDeviceById(c)
 }

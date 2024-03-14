@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/internal/client-service"
 	"api/pkg/httpserver"
 	"api/pkg/httpserver/handlers"
 	"log"
@@ -14,9 +15,10 @@ import (
 // @BasePath /v1/{tenantId}/{integrationId}
 
 func main() {
-	h := new(handlers.Handler)
+	services := client_service.NewService()
+	handler := handlers.NewHandler(services)
 	server := new(httpserver.Server)
-	err := server.Run("8080", h.InitRoutes())
+	err := server.Run("8080", handler.InitRoutes())
 	if err != nil {
 		log.Fatalf("server running error: %s", err.Error())
 	}

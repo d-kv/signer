@@ -37,24 +37,19 @@ func (h *Handler) postProfile(c *gin.Context) {
 // @Success 200 {array} []entities.Profile
 // @Router /profiles [get]
 func (h *Handler) getProfiles(c *gin.Context) {
-	profiles := []entities.Profile{}
-
-	c.JSON(http.StatusOK, profiles)
+	h.services.QueryHandlerService.GetProfiles(c)
 }
 
 // @Summary Get profile
 // @Description Get profile instance by id
 // @Tags profile
 // @ID get-profile
+// @Param id path string true "profile identifier"
 // @Produce  json
 // @Success 200 {object} entities.Profile
 // @Router /profiles/{id} [get]
 func (h *Handler) getProfileByID(c *gin.Context) {
-	id := c.Param("id")
-
-	profile := entities.Profile{Identifier: id}
-
-	c.JSON(http.StatusOK, profile)
+	h.services.QueryHandlerService.GetProfileById(c)
 }
 
 // @Summary Delete profile

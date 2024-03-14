@@ -37,24 +37,19 @@ func (h *Handler) postCertificate(c *gin.Context) {
 // @Success 200 {array} []entities.Profile
 // @Router /certificates [get]
 func (h *Handler) getCertificates(c *gin.Context) {
-	certificates := []entities.Certificate{}
-
-	c.JSON(http.StatusOK, certificates)
+	h.services.QueryHandlerService.GetCertificates(c)
 }
 
 // @Summary Get certificate
 // @Description Get certificate instance by id
 // @Tags certificate
 // @ID get-certificate
+// @Param id path string true "certificate identifier"
 // @Produce  json
 // @Success 200 {object} entities.Certificate
 // @Router /certificates/{id} [get]
 func (h *Handler) getCertificateByID(c *gin.Context) {
-	id := c.Param("id")
-
-	certificate := entities.Certificate{Identifier: id}
-
-	c.JSON(http.StatusOK, certificate)
+	h.services.QueryHandlerService.GetCertificateById(c)
 }
 
 // @Summary Delete certificate
