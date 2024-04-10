@@ -2,23 +2,13 @@ package main
 
 import (
 	"command-executor/internal/services"
-	"fmt"
-	"log"
-	"os"
+	"context"
 	"time"
 )
 
 func main() {
-	jwtToken, err := services.GetJWT([]string{""}, 20*time.Minute)
-	if err != nil {
-		log.Fatal("Error generate JWT")
-		return
-	}
-	err = os.WriteFile("token.txt", []byte(jwtToken), 0644)
-	if err != nil {
-		log.Fatal("Error write token")
-		return
-	}
-	fmt.Println(jwtToken)
-	fmt.Println("Token was written!")
+	ctx, cancel := context.WithCancel(context.Background())
+	go services.Activate(ctx)
+	time.Sleep(1 * time.Minute)
+	cancel()
 }

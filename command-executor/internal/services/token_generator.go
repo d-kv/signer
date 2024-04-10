@@ -1,16 +1,20 @@
 package services
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"encoding/base64"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"log"
+	"os"
 	"time"
 )
 
 const (
 	base64PrivateKey = "CHANGEME"
 	keyID            = "CHANGEME"
+	tokenLifetime    = 20 * time.Minute
 )
 
 func generateECDSAPrivateKey() (*ecdsa.PrivateKey, error) {
@@ -31,7 +35,7 @@ func generateECDSAPrivateKey() (*ecdsa.PrivateKey, error) {
 	return key, nil
 }
 
-func GetJWT(scope []string, tokenLifetime time.Duration) (string, error) {
+func getJWT() (string, error) {
 	// Создаем новый JWT токен
 	token := jwt.New(jwt.SigningMethodES256)
 
@@ -61,4 +65,29 @@ func GetJWT(scope []string, tokenLifetime time.Duration) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+func Activate(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+
+		default:
+			jwtToken, err := getJWT()
+			if err != nil {
+				log.Fatal("Error generate JWT")
+				return
+			}
+			err = os.WriteFile("token.txt", []byte(jwtToken), 0644)
+			if err != nil {
+				log.Fatal("Error write token")
+				return
+			}
+			fmt.Println(jwtToken)
+			fmt.Println("Token was written!")
+		}
+
+		time.Sleep(tokenLifetime)
+	}
 }
