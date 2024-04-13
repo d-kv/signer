@@ -1,4 +1,4 @@
-package repo
+package domain
 
 import (
 	"command-executor/internal/entity"
