@@ -1,6 +1,6 @@
 # Appstore Signer Project
 
-**[MiroAllMaterials](https://miro.com/app/board/uXjVN7ZCQww=/)**
+**<a href="[http://example.com/](https://miro.com/app/board/uXjVN7ZCQww=/)" target="_blank">Miro All Materials Link</a>**
 
 ## Architecture
 
