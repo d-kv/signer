@@ -34,3 +34,9 @@ func (repo *GormRepo) DeleteById(ctx context.Context, ID uint) error {
 	err := repo.DB.WithContext(ctx).Delete(&entity.Capability{}, ID).Error
 	return err
 }
+
+func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.Capability, error) {
+	var capabilities []entity.Capability
+	err := repo.DB.WithContext(ctx).Find(&capabilities).Error
+	return capabilities, err
+}

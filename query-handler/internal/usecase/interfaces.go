@@ -11,6 +11,7 @@ type (
 		FindById(context.Context, uint) (entity.Tenant, error)
 		Update(context.Context, *entity.Tenant) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.Tenant, error)
 	}
 
 	DeviceRepo interface {
@@ -18,6 +19,7 @@ type (
 		FindById(context.Context, uint) (entity.Device, error)
 		Update(context.Context, *entity.Device) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.Device, error)
 	}
 
 	IntegrationRepo interface {
@@ -25,6 +27,7 @@ type (
 		FindById(context.Context, uint) (entity.Integration, error)
 		Update(context.Context, *entity.Integration) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.Integration, error)
 	}
 
 	ProfileRepo interface {
@@ -32,6 +35,7 @@ type (
 		FindById(context.Context, uint) (entity.Profile, error)
 		Update(context.Context, *entity.Profile) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.Profile, error)
 	}
 
 	BundleIdRepo interface {
@@ -39,6 +43,7 @@ type (
 		FindById(context.Context, uint) (entity.BundleId, error)
 		Update(context.Context, *entity.BundleId) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.BundleId, error)
 	}
 
 	CertificateRepo interface {
@@ -46,6 +51,7 @@ type (
 		FindById(context.Context, uint) (entity.Certificate, error)
 		Update(context.Context, *entity.Certificate) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.Certificate, error)
 	}
 
 	UserRepo interface {
@@ -53,6 +59,7 @@ type (
 		FindById(context.Context, uint) (entity.User, error)
 		Update(context.Context, *entity.User) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.User, error)
 	}
 
 	CapabilityRepo interface {
@@ -60,5 +67,6 @@ type (
 		FindById(context.Context, uint) (entity.Capability, error)
 		Update(context.Context, *entity.Capability) error
 		DeleteById(context.Context, uint) error
+		FindAll(context.Context) ([]entity.Capability, error)
 	}
 )
