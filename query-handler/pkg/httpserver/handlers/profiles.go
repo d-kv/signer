@@ -3,12 +3,30 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	repo "query-handler/internal/entity"
 	"query-handler/pkg/httpserver/entities"
 )
 
-func (h *Handler) getProfiles(c *gin.Context) {
-	profiles := []entities.Profile{}
+func mapProfiles(profiles []repo.Profile) []entities.Profile {
+	var result []entities.Profile
+	for _, profile := range profiles {
+		result = append(result, entities.Profile{
+			Identifier:    parseStr(profile.ID),
+			Name:          profile.Name,
+			BundleId:      parseStr(profile.BundleId.ID),
+			IntegrationId: parseStr(profile.Integration.ID),
+		})
+	}
+	return result
+}
 
+func (h *Handler) getProfiles(c *gin.Context) {
+	repoProfiles, err := h.QueryProcessor.ProfileRepo.FindAll(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	profiles := mapProfiles(repoProfiles)
 	c.JSON(http.StatusOK, profiles)
 }
 

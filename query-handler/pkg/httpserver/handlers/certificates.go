@@ -3,12 +3,29 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	repo "query-handler/internal/entity"
 	"query-handler/pkg/httpserver/entities"
 )
 
-func (h *Handler) getCertificates(c *gin.Context) {
-	certificates := []entities.Certificate{}
+func mapCertificates(certificates []repo.Certificate) []entities.Certificate {
+	var result []entities.Certificate
+	for _, cert := range certificates {
+		result = append(result, entities.Certificate{
+			Identifier: parseStr(cert.ID),
+			Name:       cert.Name,
+			Type:       cert.Type,
+		})
+	}
+	return result
+}
 
+func (h *Handler) getCertificates(c *gin.Context) {
+	repoCertificates, err := h.QueryProcessor.CertificateRepo.FindAll(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	certificates := mapCertificates(repoCertificates)
 	c.JSON(http.StatusOK, certificates)
 }
 
