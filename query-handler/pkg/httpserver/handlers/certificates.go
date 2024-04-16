@@ -13,9 +13,25 @@ func (h *Handler) getCertificates(c *gin.Context) {
 }
 
 func (h *Handler) getCertificateByID(c *gin.Context) {
-	id := c.Param("id")
+	idStr := c.Param("id")
 
-	certificate := entities.Certificate{Identifier: id}
+	id, err := parseUint(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be integer"})
+		return
+	}
+
+	repoCertificate, err := h.QueryProcessor.CertificateRepo.FindById(c, id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "certificate not found"})
+		return
+	}
+
+	certificate := entities.Certificate{
+		Identifier: idStr,
+		Name:       repoCertificate.Name,
+		Type:       repoCertificate.Type,
+	}
 
 	c.JSON(http.StatusOK, certificate)
 }

@@ -12,9 +12,27 @@ func (h *Handler) getDevices(c *gin.Context) {
 }
 
 func (h *Handler) getDeviceByID(c *gin.Context) {
-	id := c.Param("id")
+	idStr := c.Param("id")
 
-	device := entities.Device{Identifier: id, Name: "TestName"}
+	id, err := parseUint(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be integer"})
+		return
+	}
+
+	repoDevice, err := h.QueryProcessor.DeviceRepo.FindById(c, id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "device not found"})
+		return
+	}
+
+	userId := parseStr(repoDevice.User.ID)
+
+	device := entities.Device{
+		Identifier: idStr,
+		Name:       repoDevice.Name,
+		UserId:     userId,
+	}
 
 	c.JSON(http.StatusOK, device)
 }
