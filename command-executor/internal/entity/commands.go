@@ -1,33 +1,43 @@
 package entity
 
+type DataBaseCommand interface {
+	Convert() ApiEntity
+}
+
 type EnableCapabilityType struct {
-	ID             uint
-	TenantId       uint
-	IntegrationId  uint
+	ID            uint
+	TenantId      uint
+	IntegrationId uint
+
 	BundleId       string
 	CapabilityType CapabilityType
-	Status         Status
+
+	Status Status
 }
 
 type CreateBundleId struct {
-	ID               uint
-	TenantId         uint
-	IntegrationId    uint
+	ID            uint
+	TenantId      uint
+	IntegrationId uint
+
 	BundleIdentifier string
 	BundleName       string
 	BundlePlatform   Platform
 	SeedId           string
-	Status           Status
+
+	Status Status
 }
 
 type CreateDevice struct {
-	ID             uint
-	TenantId       uint
-	IntegrationId  uint
+	ID            uint
+	TenantId      uint
+	IntegrationId uint
+
 	DeviceName     string
 	DevicePlatform Platform
 	DeviceUdid     string
-	Status         Status
+
+	Status Status
 }
 
 type Platform string
@@ -53,4 +63,12 @@ const (
 	Created    Status = "CREATED"
 	Processing Status = "PROCESSING"
 	Completed  Status = "COMPLETED"
+)
+
+type URL string
+
+const (
+	CapabilitiesURL URL = "https://api.appstoreconnect.apple.com/v1/bundleIdCapabilities"
+	DevicesURL      URL = "https://api.appstoreconnect.apple.com/v1/devices"
+	BundleIdURL     URL = "https://api.appstoreconnect.apple.com/v1/bundleIds"
 )
