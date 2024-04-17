@@ -1,9 +1,9 @@
 package entity
 
-func convertCreateDevice(input *CreateDevice) *ApiCreateDevice {
-	newDeviceData := &ApiCreateDevice{
+func (input CreateDevice) Convert() ApiEntity {
+	newDeviceData := ApiCreateDevice{
 		Data: DeviceData{
-			Type: "",
+			Type: "devices",
 			Attributes: DeviceAttributes{
 				Name:     input.DeviceName,
 				UDID:     input.DeviceUdid,
@@ -11,11 +11,11 @@ func convertCreateDevice(input *CreateDevice) *ApiCreateDevice {
 			},
 		},
 	}
-	return newDeviceData
+	return &newDeviceData
 }
 
-func convertCreateBundleId(input *CreateBundleId) *ApiCreateBundleId {
-	newBid := &ApiCreateBundleId{
+func (input CreateBundleId) Convert() ApiEntity {
+	newBid := ApiCreateBundleId{
 		Data: BundleIdData{
 			Type: "bundleIds",
 			Attributes: BundleIdAttributes{
@@ -26,10 +26,10 @@ func convertCreateBundleId(input *CreateBundleId) *ApiCreateBundleId {
 			},
 		},
 	}
-	return newBid
+	return &newBid
 }
 
-func convertEnableCapability(enableCap *EnableCapabilityType) *ApiEnableCapability {
+func (enableCap EnableCapabilityType) Convert() ApiEntity {
 	settingData := SettingData{}
 
 	optionData := OptionData{}
@@ -60,9 +60,9 @@ func convertEnableCapability(enableCap *EnableCapabilityType) *ApiEnableCapabili
 		Type:          "bundleIdCapabilities",
 	}
 
-	apiEnableCapability := &ApiEnableCapability{
+	apiEnableCapability := ApiEnableCapability{
 		Data: dataForCapability,
 	}
 
-	return apiEnableCapability
+	return &apiEnableCapability
 }

@@ -1,5 +1,9 @@
 package entity
 
+type DataBaseCommand interface {
+	Convert() ApiEntity
+}
+
 type EnableCapabilityType struct {
 	ID            uint
 	TenantId      uint
@@ -59,4 +63,12 @@ const (
 	Created    Status = "CREATED"
 	Processing Status = "PROCESSING"
 	Completed  Status = "COMPLETED"
+)
+
+type URL string
+
+const (
+	CapabilitiesURL URL = "https://api.appstoreconnect.apple.com/v1/bundleIdCapabilities"
+	DevicesURL      URL = "https://api.appstoreconnect.apple.com/v1/devices"
+	BundleIdURL     URL = "https://api.appstoreconnect.apple.com/v1/bundleIds"
 )

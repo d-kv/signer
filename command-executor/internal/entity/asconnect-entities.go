@@ -1,5 +1,9 @@
 package entity
 
+type ApiEntity interface {
+	GetURL() URL
+}
+
 type ApiCreateBundleId struct {
 	Data BundleIdData `json:"data"`
 }
@@ -17,6 +21,10 @@ type BundleIdData struct {
 	Attributes BundleIdAttributes `json:"attributes"`
 }
 
+func (b *ApiCreateBundleId) GetURL() URL {
+	return BundleIdURL
+}
+
 //BundleID
 
 type ApiCreateDevice struct {
@@ -32,6 +40,10 @@ type DeviceAttributes struct {
 type DeviceData struct {
 	Attributes DeviceAttributes `json:"attributes"`
 	Type       string           `json:"type"`
+}
+
+func (b *ApiCreateDevice) GetURL() URL {
+	return DevicesURL
 }
 
 //Device
@@ -82,6 +94,10 @@ type DataForCapability struct {
 	Relationships RelationshipsData `json:"relationships"`
 	Attributes    AttributesData    `json:"attributes"`
 	Type          string            `json:"type"`
+}
+
+func (b *ApiEnableCapability) GetURL() URL {
+	return CapabilitiesURL
 }
 
 //Capability
