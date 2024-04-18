@@ -34,3 +34,9 @@ func (repo *GormRepo) DeleteById(ctx context.Context, ID uint) error {
 	err := repo.DB.WithContext(ctx).Delete(&entity.BundleId{}, ID).Error
 	return err
 }
+
+func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.BundleId, error) {
+	var bundleIds []entity.BundleId
+	err := repo.DB.WithContext(ctx).Find(&bundleIds).Error
+	return bundleIds, err
+}

@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"query-handler/internal/services"
 )
 
 type Handler struct {
+	QueryProcessor *services.QueryProcessor
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
