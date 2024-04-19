@@ -2,6 +2,7 @@ package entity
 
 type DataBaseCommand interface {
 	Convert() ApiEntity
+	GetId() uint
 }
 
 type EnableCapabilityType struct {
@@ -13,6 +14,10 @@ type EnableCapabilityType struct {
 	CapabilityType CapabilityType
 
 	Status Status
+}
+
+func (input *EnableCapabilityType) GetId() uint {
+	return input.ID
 }
 
 type CreateBundleId struct {
@@ -28,6 +33,10 @@ type CreateBundleId struct {
 	Status Status
 }
 
+func (input *CreateBundleId) GetId() uint {
+	return input.ID
+}
+
 type CreateDevice struct {
 	ID            uint
 	TenantId      uint
@@ -38,6 +47,10 @@ type CreateDevice struct {
 	DeviceUdid     string
 
 	Status Status
+}
+
+func (input *CreateDevice) GetId() uint {
+	return input.ID
 }
 
 type Platform string
@@ -63,6 +76,7 @@ const (
 	Created    Status = "CREATED"
 	Processing Status = "PROCESSING"
 	Completed  Status = "COMPLETED"
+	Error      Status = "ERROR"
 )
 
 type URL string

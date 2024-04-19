@@ -1,41 +1,146 @@
 package services
 
 import (
+	"bytes"
 	_ "command-executor/internal/config"
 	"command-executor/internal/entity"
 	_ "command-executor/internal/entity"
 	"command-executor/internal/repo/command"
 	_ "command-executor/internal/repo/command"
+	"command-executor/internal/repo/domain"
 	_ "command-executor/internal/repo/domain"
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
+	"net/http"
 )
 
-func StartProcessor(ctx context.Context, repo *command.Repo) {
+const accessToken = "CHANGEME"
+
+func SetStatusByIdAnything(ctx context.Context, baseCommand *entity.DataBaseCommand, status entity.Status, queue *command.Repo) error {
+	err := error(nil)
+	switch (*baseCommand).(type) {
+	case *entity.CreateDevice:
+		err = queue.SetStatusByIdDeviceCommand(ctx, (*baseCommand).GetId(), status)
+	case *entity.CreateBundleId:
+		err = queue.SetStatusByIdBundleIdCommand(ctx, (*baseCommand).GetId(), status)
+	case *entity.EnableCapabilityType:
+		err = queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, (*baseCommand).GetId(), status)
+	default:
+		err = errors.New("unknown type")
+	}
+	return err
+}
+
+func Processing(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo, operation entity.DataBaseCommand) error {
+	err := SetStatusByIdAnything(ctx, &operation, entity.Processing, queue)
+	if err != nil {
+		return err
+	}
+	err = SendCommand(ctx, operation.Convert())
+	if err != nil {
+		err = SetStatusByIdAnything(ctx, &operation, entity.Error, queue)
+		if err != nil {
+			return err
+		}
+	}
+	err = SetStatusByIdAnything(ctx, &operation, entity.Completed, queue)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func StartProcessor(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo) {
 	for {
-		deviceCommand := repo.FindByStatusDeviceCommand(ctx, entity.Created)
-		for _, operation := range deviceCommand {
-			err := repo.SetStatusByIdDeviceCommand(ctx, operation.ID, entity.Processing)
+		commands := queue.FindByStatusDeviceCommand(ctx, entity.Created)
+		for _, operation := range commands {
+			err := Processing(ctx, queue, repo, &operation)
 			if err != nil {
-				fmt.Println("Error while changing status of Device operation: ", operation.ID)
+				fmt.Println("Error while processing", err)
 			}
-			fmt.Println(operation) // transport to the service layer
+			/*if not repo.DeviceRepo.FindById(ctx, operation.DeviceUdid), create, else update
+			device := entity.ConvertDevice(operation)
+			repo.DeviceRepo.Create(ctx, device)*/
 		}
-		bundleIdCommand := repo.FindByStatusBundleIdCommand(ctx, entity.Created)
+		bundleIdCommand := queue.FindByStatusBundleIdCommand(ctx, entity.Created)
 		for _, operation := range bundleIdCommand {
-			err := repo.SetStatusByIdBundleIdCommand(ctx, operation.ID, entity.Processing)
+			err := Processing(ctx, queue, repo, &operation)
 			if err != nil {
-				fmt.Println("Error while changing status of BundleId operation: ", operation.ID)
+				fmt.Println("Error while processing", err)
 			}
-			fmt.Println(operation)
+
+			id, err := repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
+			if err != nil {
+				fmt.Println("Error while matching integration", err)
+			}
+			converted := entity.ConvertBundleId(&id, &operation)
+			err = repo.BundleIdRepo.Create(ctx, converted)
+			if err != nil {
+				fmt.Println("Error while creating record in db")
+			}
 		}
-		capabilityCommand := repo.FindByStatusEnableCapabilityTypeCommand(ctx, entity.Created)
+		capabilityCommand := queue.FindByStatusEnableCapabilityTypeCommand(ctx, entity.Created)
 		for _, operation := range capabilityCommand {
-			err := repo.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, entity.Processing)
+			err := Processing(ctx, queue, repo, &operation)
 			if err != nil {
-				fmt.Println("Error while changing status of capability operation: ", operation.ID)
+				fmt.Println("Error while processing", err)
 			}
-			fmt.Println(operation)
+
+			/*id, err := repo.BundleIdRepo.FindById(ctx, operation.BundleId)
+			if err != nil {
+				fmt.Println("Error while matching integration", err)
+			}
+			converted := entity.ConvertBundleId(&id, &operation)
+			err = repo.BundleIdRepo.Create(ctx, converted)
+			if err != nil {
+				fmt.Println("Error while creating record in db")
+			}*/
 		}
-	} // обработка команд по отдельности, подумать над обработкой команд а порядке очереди по времени
+	}
+}
+
+func SendCommand(ctx context.Context, e entity.ApiEntity) error {
+	payload, err := json.Marshal(e)
+	if err != nil {
+		fmt.Println("Error marshalling JSON:", err)
+		return err
+	}
+
+	req, err := http.NewRequest("POST", string(e.GetURL()), bytes.NewBuffer(payload))
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return err
+	}
+
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error making request:", err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Println("Error closing response body:", err)
+			return
+		}
+	}(resp.Body)
+
+	if resp.StatusCode != http.StatusCreated {
+		fmt.Println("Error: Unexpected response status code", resp.Status)
+		responseBody, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Println("Error reading response body:", err)
+			return err
+		}
+		fmt.Println("Response Body:", string(responseBody))
+		fmt.Println("New instance created successfully!")
+	}
+	return nil
 }

@@ -1,6 +1,6 @@
 package entity
 
-func (input CreateDevice) Convert() ApiEntity {
+func (input *CreateDevice) Convert() ApiEntity {
 	newDeviceData := ApiCreateDevice{
 		Data: DeviceData{
 			Type: "devices",
@@ -14,7 +14,7 @@ func (input CreateDevice) Convert() ApiEntity {
 	return &newDeviceData
 }
 
-func (input CreateBundleId) Convert() ApiEntity {
+func (input *CreateBundleId) Convert() ApiEntity {
 	newBid := ApiCreateBundleId{
 		Data: BundleIdData{
 			Type: "bundleIds",
@@ -29,39 +29,39 @@ func (input CreateBundleId) Convert() ApiEntity {
 	return &newBid
 }
 
-func (enableCap EnableCapabilityType) Convert() ApiEntity {
+func (input *EnableCapabilityType) Convert() ApiEntity {
 	settingData := SettingData{}
 
 	optionData := OptionData{}
 
 	settingData.Options = append(settingData.Options, optionData)
 
-	attributesData := AttributesData{
-		CapabilityType: string(enableCap.CapabilityType),
+	attributesData := &AttributesData{
+		CapabilityType: string(input.CapabilityType),
 		Settings:       []SettingData{settingData},
 	}
 
-	bundleIdForCapabilityData := BundleIdForCapabilityData{
-		Id:   enableCap.BundleId,
+	bundleIdForCapabilityData := &BundleIdForCapabilityData{
+		Id:   input.BundleId,
 		Type: "bundleIds",
 	}
 
-	bundleIdRelationship := BundleIdRelationship{
-		Data: bundleIdForCapabilityData,
+	bundleIdRelationship := &BundleIdRelationship{
+		Data: *bundleIdForCapabilityData,
 	}
 
-	relationshipsData := RelationshipsData{
-		BundleId: bundleIdRelationship,
+	relationshipsData := &RelationshipsData{
+		BundleId: *bundleIdRelationship,
 	}
 
-	dataForCapability := DataForCapability{
-		Relationships: relationshipsData,
-		Attributes:    attributesData,
+	dataForCapability := &DataForCapability{
+		Relationships: *relationshipsData,
+		Attributes:    *attributesData,
 		Type:          "bundleIdCapabilities",
 	}
 
 	apiEnableCapability := ApiEnableCapability{
-		Data: dataForCapability,
+		Data: *dataForCapability,
 	}
 
 	return &apiEnableCapability
