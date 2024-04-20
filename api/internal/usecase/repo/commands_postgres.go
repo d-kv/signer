@@ -1,8 +1,8 @@
 package repo
 
 import (
-	"api/internal/entity"
 	"context"
+	"d-kv/signer/api/internal/entity"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"api/internal/entity"
 	"context"
+	"d-kv/signer/api/internal/entity"
 )
 
 type CommandRepo interface {
