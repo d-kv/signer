@@ -1,12 +1,12 @@
 package entity
 
 type Tenant struct {
-	ID   uint
+	ID   string
 	Name string
 }
 
 type Integration struct {
-	ID       uint
+	ID       string
 	IssuerId string
 	TeamId   string
 	Tenant   Tenant
@@ -14,7 +14,7 @@ type Integration struct {
 }
 
 type BundleId struct {
-	ID          uint
+	ID          string
 	Name        string
 	Integration Integration
 }
@@ -25,12 +25,12 @@ type Capability struct {
 }
 
 type User struct {
-	ID   uint
+	ID   string
 	Name string
 }
 
 type Device struct {
-	ID           uint
+	ID           string
 	Name         string
 	User         User
 	Profiles     []Profile     `gorm:"many2many:profile_devices;"`
@@ -38,7 +38,7 @@ type Device struct {
 }
 
 type Certificate struct {
-	ID          uint
+	ID          string
 	Name        string
 	Type        string
 	Integration Integration
@@ -46,7 +46,7 @@ type Certificate struct {
 }
 
 type Profile struct {
-	ID           uint
+	ID           string
 	Name         string
 	BundleId     BundleId
 	Integration  Integration
