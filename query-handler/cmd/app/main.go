@@ -1,21 +1,21 @@
 package main
 
 import (
+	"d-kv/signer/query-handler/internal/repo/domain/bundle_id"
+	"d-kv/signer/query-handler/internal/repo/domain/capability"
+	"d-kv/signer/query-handler/internal/repo/domain/certificate"
+	"d-kv/signer/query-handler/internal/repo/domain/device"
+	"d-kv/signer/query-handler/internal/repo/domain/integration"
+	"d-kv/signer/query-handler/internal/repo/domain/profile"
+	"d-kv/signer/query-handler/internal/repo/domain/tenant"
+	"d-kv/signer/query-handler/internal/repo/domain/user"
+	"d-kv/signer/query-handler/internal/services"
+	"d-kv/signer/query-handler/pkg/httpserver"
+	"d-kv/signer/query-handler/pkg/httpserver/handlers"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 	"net/url"
-	"query-handler/internal/repo/domain/bundle_id"
-	"query-handler/internal/repo/domain/capability"
-	"query-handler/internal/repo/domain/certificate"
-	"query-handler/internal/repo/domain/device"
-	"query-handler/internal/repo/domain/integration"
-	"query-handler/internal/repo/domain/profile"
-	"query-handler/internal/repo/domain/tenant"
-	"query-handler/internal/repo/domain/user"
-	"query-handler/internal/services"
-	"query-handler/pkg/httpserver"
-	"query-handler/pkg/httpserver/handlers"
 )
 
 func main() {

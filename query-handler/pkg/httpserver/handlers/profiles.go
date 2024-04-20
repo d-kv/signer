@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	repo "d-kv/signer/query-handler/internal/entity"
+	"d-kv/signer/query-handler/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	repo "query-handler/internal/entity"
-	"query-handler/pkg/httpserver/entities"
 )
 
 func mapProfiles(profiles []repo.Profile) []entities.Profile {

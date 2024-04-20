@@ -1,20 +1,20 @@
 package domain
 
 import (
+	"d-kv/signer/query-handler/internal/entity"
+	"d-kv/signer/query-handler/internal/repo/domain/bundle_id"
+	"d-kv/signer/query-handler/internal/repo/domain/capability"
+	"d-kv/signer/query-handler/internal/repo/domain/certificate"
+	"d-kv/signer/query-handler/internal/repo/domain/device"
+	"d-kv/signer/query-handler/internal/repo/domain/integration"
+	"d-kv/signer/query-handler/internal/repo/domain/profile"
+	"d-kv/signer/query-handler/internal/repo/domain/tenant"
+	"d-kv/signer/query-handler/internal/repo/domain/user"
+	"d-kv/signer/query-handler/internal/usecase"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"query-handler/internal/entity"
-	"query-handler/internal/repo/domain/bundle_id"
-	"query-handler/internal/repo/domain/capability"
-	"query-handler/internal/repo/domain/certificate"
-	"query-handler/internal/repo/domain/device"
-	"query-handler/internal/repo/domain/integration"
-	"query-handler/internal/repo/domain/profile"
-	"query-handler/internal/repo/domain/tenant"
-	"query-handler/internal/repo/domain/user"
-	"query-handler/internal/usecase"
 )
 
 type PostgresDomainRepo struct {

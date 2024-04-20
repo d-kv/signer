@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"query-handler/internal/entity"
+	"d-kv/signer/query-handler/internal/entity"
 )
 
 type (
