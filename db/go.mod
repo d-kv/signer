@@ -1,11 +1,10 @@
-module command-executor
+module db
 
-go 1.22rc1
+go 1.22.2
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.1
 	gorm.io/driver/postgres v1.5.7
-	gorm.io/gorm v1.25.8
+	gorm.io/gorm v1.25.9
 )
 
 require (

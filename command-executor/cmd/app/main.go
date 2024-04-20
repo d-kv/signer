@@ -1,10 +1,10 @@
 package main
 
 import (
-	"command-executor/internal/config"
 	"command-executor/internal/repo/command"
 	"command-executor/internal/services"
 	"context"
+	"db/config"
 )
 
 func main() {

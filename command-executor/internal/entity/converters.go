@@ -1,5 +1,7 @@
 package entity
 
+import _ "db/entity"
+
 func (input CreateDevice) Convert() ApiEntity {
 	newDeviceData := ApiCreateDevice{
 		Data: DeviceData{
