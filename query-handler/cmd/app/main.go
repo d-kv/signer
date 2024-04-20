@@ -1,19 +1,19 @@
 package main
 
 import (
+	"db/repo/domain/bundle_id"
+	"db/repo/domain/capability"
+	"db/repo/domain/certificate"
+	"db/repo/domain/device"
+	"db/repo/domain/integration"
+	"db/repo/domain/profile"
+	"db/repo/domain/tenant"
+	"db/repo/domain/user"
+	"db/services"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 	"net/url"
-	"query-handler/internal/repo/domain/bundle_id"
-	"query-handler/internal/repo/domain/capability"
-	"query-handler/internal/repo/domain/certificate"
-	"query-handler/internal/repo/domain/device"
-	"query-handler/internal/repo/domain/integration"
-	"query-handler/internal/repo/domain/profile"
-	"query-handler/internal/repo/domain/tenant"
-	"query-handler/internal/repo/domain/user"
-	"query-handler/internal/services"
 	"query-handler/pkg/httpserver"
 	"query-handler/pkg/httpserver/handlers"
 )
