@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	repo "db/entity"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	repo "query-handler/internal/entity"
 	"query-handler/pkg/httpserver/entities"
 )
 

@@ -1,6 +1,6 @@
 package services
 
-import "query-handler/internal/usecase"
+import "db/usecase"
 
 type QueryProcessor struct {
 	TenantRepo      usecase.TenantRepo
