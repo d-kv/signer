@@ -19,7 +19,7 @@ func (repo *GormRepo) Create(ctx context.Context, tenant *entity.Tenant) error {
 	return err
 }
 
-func (repo *GormRepo) FindById(ctx context.Context, ID uint) (entity.Tenant, error) {
+func (repo *GormRepo) FindById(ctx context.Context, ID string) (entity.Tenant, error) {
 	var tenant = entity.Tenant{}
 	err := repo.DB.WithContext(ctx).First(&tenant, ID).Error
 	return tenant, err
@@ -30,7 +30,13 @@ func (repo *GormRepo) Update(ctx context.Context, tenant *entity.Tenant) error {
 	return err
 }
 
-func (repo *GormRepo) DeleteById(ctx context.Context, ID uint) error {
+func (repo *GormRepo) DeleteById(ctx context.Context, ID string) error {
 	err := repo.DB.WithContext(ctx).Delete(&entity.Tenant{}, ID).Error
 	return err
+}
+
+func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.Tenant, error) {
+	var tenants []entity.Tenant
+	err := repo.DB.WithContext(ctx).Find(&tenants).Error
+	return tenants, err
 }

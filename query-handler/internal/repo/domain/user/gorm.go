@@ -19,7 +19,7 @@ func (repo *GormRepo) Create(ctx context.Context, user *entity.User) error {
 	return err
 }
 
-func (repo *GormRepo) FindById(ctx context.Context, ID uint) (entity.User, error) {
+func (repo *GormRepo) FindById(ctx context.Context, ID string) (entity.User, error) {
 	var user = entity.User{}
 	err := repo.DB.WithContext(ctx).First(&user, ID).Error
 	return user, err
@@ -30,7 +30,7 @@ func (repo *GormRepo) Update(ctx context.Context, user *entity.User) error {
 	return err
 }
 
-func (repo *GormRepo) DeleteById(ctx context.Context, ID uint) error {
+func (repo *GormRepo) DeleteById(ctx context.Context, ID string) error {
 	err := repo.DB.WithContext(ctx).Delete(&entity.User{}, ID).Error
 	return err
 }

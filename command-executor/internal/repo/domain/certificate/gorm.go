@@ -19,7 +19,7 @@ func (repo *GormRepo) Create(ctx context.Context, certificate *entity.Certificat
 	return err
 }
 
-func (repo *GormRepo) FindById(ctx context.Context, ID uint) (entity.Certificate, error) {
+func (repo *GormRepo) FindById(ctx context.Context, ID string) (entity.Certificate, error) {
 	var certificate = entity.Certificate{}
 	err := repo.DB.WithContext(ctx).First(&certificate, ID).Error
 	return certificate, err
@@ -30,7 +30,13 @@ func (repo *GormRepo) Update(ctx context.Context, certificate *entity.Certificat
 	return err
 }
 
-func (repo *GormRepo) DeleteById(ctx context.Context, ID uint) error {
+func (repo *GormRepo) DeleteById(ctx context.Context, ID string) error {
 	err := repo.DB.WithContext(ctx).Delete(&entity.Certificate{}, ID).Error
 	return err
+}
+
+func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.Certificate, error) {
+	var certificates []entity.Certificate
+	err := repo.DB.WithContext(ctx).Find(&certificates).Error
+	return certificates, err
 }

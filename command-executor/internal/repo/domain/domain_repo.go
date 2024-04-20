@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"command-executor/internal/config"
 	"command-executor/internal/entity"
 	"command-executor/internal/repo/domain/bundle_id"
 	"command-executor/internal/repo/domain/capability"
@@ -29,7 +28,15 @@ type PostgresDomainRepo struct {
 	CapabilityRepo  usecase.CapabilityRepo
 }
 
-func New(conf config.PostgresConfig) *PostgresDomainRepo {
+type PostgresConfig struct {
+	Host     string
+	User     string
+	Password string
+	Name     string
+	Port     string
+}
+
+func New(conf PostgresConfig) *PostgresDomainRepo {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		conf.Host,
