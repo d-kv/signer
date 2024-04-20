@@ -1,9 +1,9 @@
 package command
 
 import (
-	"command-executor/internal/config"
-	"command-executor/internal/entity"
 	"context"
+	"d-kv/signer/command-executor/internal/config"
+	"d-kv/signer/command-executor/internal/entity"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

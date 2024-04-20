@@ -1,8 +1,8 @@
 package user
 
 import (
-	"command-executor/internal/entity"
 	"context"
+	"d-kv/signer/command-executor/internal/entity"
 	"gorm.io/gorm"
 )
 

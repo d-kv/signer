@@ -2,7 +2,7 @@ package services
 
 import (
 	"bytes"
-	"command-executor/internal/entity"
+	"d-kv/signer/command-executor/internal/entity"
 	"encoding/json"
 	"fmt"
 	"io"
