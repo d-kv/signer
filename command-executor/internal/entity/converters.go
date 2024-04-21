@@ -1,6 +1,8 @@
 package entity
 
-func (input CreateDevice) Convert() ApiEntity {
+import "d-kv/signer/db-common/entity"
+
+func ConvertCreateDevice(input entity.CreateDevice) ApiEntity {
 	newDeviceData := ApiCreateDevice{
 		Data: DeviceData{
 			Type: "devices",
@@ -14,7 +16,7 @@ func (input CreateDevice) Convert() ApiEntity {
 	return &newDeviceData
 }
 
-func (input CreateBundleId) Convert() ApiEntity {
+func ConvertCreateBundleId(input entity.CreateBundleId) ApiEntity {
 	newBid := ApiCreateBundleId{
 		Data: BundleIdData{
 			Type: "bundleIds",
@@ -29,7 +31,7 @@ func (input CreateBundleId) Convert() ApiEntity {
 	return &newBid
 }
 
-func (enableCap EnableCapabilityType) Convert() ApiEntity {
+func ConvertEnableCapabilityType(enableCap entity.EnableCapabilityType) ApiEntity {
 	settingData := SettingData{}
 
 	optionData := OptionData{}

@@ -11,10 +11,10 @@ func mapProfiles(profiles []repo.Profile) []entities.Profile {
 	var result []entities.Profile
 	for _, profile := range profiles {
 		result = append(result, entities.Profile{
-			Identifier:    parseStr(profile.ID),
+			Identifier:    profile.ID,
 			Name:          profile.Name,
-			BundleId:      parseStr(profile.BundleId.ID),
-			IntegrationId: parseStr(profile.Integration.ID),
+			BundleId:      profile.BundleId.ID,
+			IntegrationId: profile.Integration.ID,
 		})
 	}
 	return result
@@ -31,13 +31,7 @@ func (h *Handler) getProfiles(c *gin.Context) {
 }
 
 func (h *Handler) getProfileByID(c *gin.Context) {
-	idStr := c.Param("id")
-
-	id, err := parseUint(idStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be integer"})
-		return
-	}
+	id := c.Param("id")
 
 	repoProfile, err := h.QueryProcessor.ProfileRepo.FindById(c, id)
 	if err != nil {
@@ -45,11 +39,11 @@ func (h *Handler) getProfileByID(c *gin.Context) {
 		return
 	}
 
-	bundleId := parseStr(repoProfile.BundleId.ID)
-	integrationId := parseStr(repoProfile.Integration.ID)
+	bundleId := repoProfile.BundleId.ID
+	integrationId := repoProfile.Integration.ID
 
 	profile := entities.Profile{
-		Identifier:    idStr,
+		Identifier:    id,
 		Name:          repoProfile.Name,
 		BundleId:      bundleId,
 		IntegrationId: integrationId,

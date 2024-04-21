@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/entity"
 	"fmt"
 	"gorm.io/driver/postgres"
@@ -13,22 +14,14 @@ type Repo struct {
 	db *gorm.DB
 }
 
-type PostgresConfig struct {
-	Host     string
-	User     string
-	Password string
-	Name     string
-	Port     string
-}
-
-func New(conf PostgresConfig) *Repo {
+func New(conf config.PostgresConfig) *Repo {
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		conf.Host,
+		conf.Port,
 		conf.User,
 		conf.Password,
 		conf.Name,
-		conf.Port,
 	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -45,17 +38,35 @@ func New(conf PostgresConfig) *Repo {
 	return &Repo{db: db}
 }
 
-func (repo *Repo) CreateBundleIdCommand(ctx context.Context, command *entity.CreateBundleId) error {
-	result := repo.db.WithContext(ctx).Create(command)
-	return result.Error
+func (repo *Repo) FindByStatusBundleIdCommand(ctx context.Context, status entity.Status) []entity.CreateBundleId {
+	var commands []entity.CreateBundleId
+	repo.db.WithContext(ctx).Where("status = ?", status).Find(&commands)
+	return commands
 }
 
-func (repo *Repo) CreateDeviceCommand(ctx context.Context, command *entity.CreateDevice) error {
-	result := repo.db.WithContext(ctx).Create(command)
-	return result.Error
+func (repo *Repo) FindByStatusDeviceCommand(ctx context.Context, status entity.Status) []entity.CreateDevice {
+	var commands []entity.CreateDevice
+	repo.db.WithContext(ctx).Where("status = ?", status).Find(&commands)
+	return commands
 }
 
-func (repo *Repo) CreateEnableCapabilityTypeCommand(ctx context.Context, command *entity.EnableCapabilityType) error {
-	result := repo.db.WithContext(ctx).Create(command)
-	return result.Error
+func (repo *Repo) FindByStatusEnableCapabilityTypeCommand(ctx context.Context, status entity.Status) []entity.EnableCapabilityType {
+	var commands []entity.EnableCapabilityType
+	repo.db.WithContext(ctx).Where("status = ?", status).Find(&commands)
+	return commands
+}
+
+func (repo *Repo) SetStatusByIdBundleIdCommand(ctx context.Context, ID uint, status entity.Status) error {
+	err := repo.db.WithContext(ctx).Model(&entity.CreateBundleId{}).Where("id = ?", ID).Update("status", status).Error
+	return err
+}
+
+func (repo *Repo) SetStatusByIdDeviceCommand(ctx context.Context, ID uint, status entity.Status) error {
+	err := repo.db.WithContext(ctx).Model(&entity.CreateDevice{}).Where("id = ?", ID).Update("status", status).Error
+	return err
+}
+
+func (repo *Repo) SetStatusByIdEnableCapabilityTypeCommand(ctx context.Context, ID uint, status entity.Status) error {
+	err := repo.db.WithContext(ctx).Model(&entity.EnableCapabilityType{}).Where("id = ?", ID).Update("status", status).Error
+	return err
 }

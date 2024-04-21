@@ -11,7 +11,7 @@ func mapBundleIds(bundleIds []repo.BundleId) []entities.BundleId {
 	result := make([]entities.BundleId, len(bundleIds))
 	for _, bundleId := range bundleIds {
 		result = append(result, entities.BundleId{
-			Identifier: parseStr(bundleId.ID),
+			Identifier: bundleId.ID,
 			Name:       bundleId.Name,
 		})
 	}
@@ -29,13 +29,7 @@ func (h *Handler) getBundleIds(c *gin.Context) {
 }
 
 func (h *Handler) getBundleIdByID(c *gin.Context) {
-	idStr := c.Param("id")
-
-	id, err := parseUint(idStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be integer"})
-		return
-	}
+	id := c.Param("id")
 
 	repoBundleId, err := h.QueryProcessor.BundleIdRepo.FindById(c, id)
 	if err != nil {
@@ -44,7 +38,7 @@ func (h *Handler) getBundleIdByID(c *gin.Context) {
 	}
 
 	bundleId := entities.BundleId{
-		Identifier: idStr,
+		Identifier: id,
 		Name:       repoBundleId.Name,
 	}
 
