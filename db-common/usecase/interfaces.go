@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"d-kv/signer/query-handler/internal/entity"
+	"d-kv/signer/db-common/entity"
 )
 
 type (
@@ -70,3 +70,13 @@ type (
 		FindAll(context.Context) ([]entity.Capability, error)
 	}
 )
+
+type CommandRepo interface {
+	FindByStatusBundleIdCommand(context.Context, entity.Status) []entity.CreateBundleId
+	FindByStatusDeviceCommand(context.Context, entity.Status) []entity.CreateDevice
+	FindByStatusEnableCapabilityTypeCommand(context.Context, entity.Status) []entity.EnableCapabilityType
+
+	SetStatusByIdBundleIdCommand(context.Context, uint, entity.Status) error
+	SetStatusByIdDeviceCommand(context.Context, uint, entity.Status) error
+	SetStatusByIdEnableCapabilityTypeCommand(context.Context, uint, entity.Status) error
+}

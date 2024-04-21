@@ -1,6 +1,6 @@
 package services
 
-import "d-kv/signer/query-handler/internal/usecase"
+import "d-kv/signer/db-common/usecase"
 
 type QueryProcessor struct {
 	TenantRepo      usecase.TenantRepo
