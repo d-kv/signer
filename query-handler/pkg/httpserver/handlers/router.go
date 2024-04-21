@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"d-kv/signer/query-handler/internal/services"
+	"d-kv/signer/db-common/services"
 	"github.com/gin-gonic/gin"
 )
 
