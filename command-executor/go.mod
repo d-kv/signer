@@ -1,14 +1,14 @@
-module command-executor
+module d-kv/signer/command-executor
 
 go 1.22rc1
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	gorm.io/driver/postgres v1.5.7
 	gorm.io/gorm v1.25.8
 )
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.4.3 // indirect

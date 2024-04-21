@@ -1,13 +1,13 @@
 package services
 
 import (
-	_ "command-executor/internal/config"
-	"command-executor/internal/entity"
-	_ "command-executor/internal/entity"
-	"command-executor/internal/repo/command"
-	_ "command-executor/internal/repo/command"
-	_ "command-executor/internal/repo/domain"
 	"context"
+	_ "d-kv/signer/command-executor/internal/config"
+	"d-kv/signer/command-executor/internal/entity"
+	_ "d-kv/signer/command-executor/internal/entity"
+	"d-kv/signer/command-executor/internal/repo/command"
+	_ "d-kv/signer/command-executor/internal/repo/command"
+	_ "d-kv/signer/command-executor/internal/repo/domain"
 	"fmt"
 )
 

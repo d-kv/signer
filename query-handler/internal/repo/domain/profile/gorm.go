@@ -2,8 +2,8 @@ package profile
 
 import (
 	"context"
+	"d-kv/signer/query-handler/internal/entity"
 	"gorm.io/gorm"
-	"query-handler/internal/entity"
 )
 
 type GormRepo struct {

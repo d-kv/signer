@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"api/pkg/httpserver/entities"
+	"d-kv/signer/api/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

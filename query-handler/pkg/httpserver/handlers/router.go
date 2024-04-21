@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"d-kv/signer/query-handler/internal/services"
 	"github.com/gin-gonic/gin"
-	"query-handler/internal/services"
 )
 
 type Handler struct {

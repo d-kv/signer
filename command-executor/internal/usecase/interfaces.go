@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"command-executor/internal/entity"
 	"context"
+	"d-kv/signer/command-executor/internal/entity"
 )
 
 type (
