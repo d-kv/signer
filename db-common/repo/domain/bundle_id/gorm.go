@@ -2,7 +2,7 @@ package bundle_id
 
 import (
 	"context"
-	"d-kv/signer/command-executor/internal/entity"
+	"d-kv/signer/db-common/entity"
 	"gorm.io/gorm"
 )
 

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	repo "d-kv/signer/query-handler/internal/entity"
+	repo "d-kv/signer/db-common/entity"
 	"d-kv/signer/query-handler/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"

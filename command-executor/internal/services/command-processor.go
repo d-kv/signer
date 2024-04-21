@@ -2,12 +2,12 @@ package services
 
 import (
 	"context"
-	_ "d-kv/signer/command-executor/internal/config"
-	"d-kv/signer/command-executor/internal/entity"
-	_ "d-kv/signer/command-executor/internal/entity"
-	"d-kv/signer/command-executor/internal/repo/command"
-	_ "d-kv/signer/command-executor/internal/repo/command"
-	_ "d-kv/signer/command-executor/internal/repo/domain"
+	_ "d-kv/signer/db-common/config"
+	"d-kv/signer/db-common/entity"
+	_ "d-kv/signer/db-common/entity"
+	"d-kv/signer/db-common/repo/command"
+	_ "d-kv/signer/db-common/repo/command"
+	_ "d-kv/signer/db-common/repo/domain"
 	"fmt"
 )
 

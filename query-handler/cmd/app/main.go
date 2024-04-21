@@ -1,14 +1,14 @@
 package main
 
 import (
-	"d-kv/signer/query-handler/internal/repo/domain/bundle_id"
-	"d-kv/signer/query-handler/internal/repo/domain/capability"
-	"d-kv/signer/query-handler/internal/repo/domain/certificate"
-	"d-kv/signer/query-handler/internal/repo/domain/device"
-	"d-kv/signer/query-handler/internal/repo/domain/integration"
-	"d-kv/signer/query-handler/internal/repo/domain/profile"
-	"d-kv/signer/query-handler/internal/repo/domain/tenant"
-	"d-kv/signer/query-handler/internal/repo/domain/user"
+	"d-kv/signer/db-common/repo/domain/bundle_id"
+	"d-kv/signer/db-common/repo/domain/capability"
+	"d-kv/signer/db-common/repo/domain/certificate"
+	"d-kv/signer/db-common/repo/domain/device"
+	"d-kv/signer/db-common/repo/domain/integration"
+	"d-kv/signer/db-common/repo/domain/profile"
+	"d-kv/signer/db-common/repo/domain/tenant"
+	"d-kv/signer/db-common/repo/domain/user"
 	"d-kv/signer/query-handler/internal/services"
 	"d-kv/signer/query-handler/pkg/httpserver"
 	"d-kv/signer/query-handler/pkg/httpserver/handlers"

@@ -9,7 +9,7 @@ import (
 	"log"
 )
 
-type CommandRepo struct {
+type Repo struct {
 	db *gorm.DB
 }
 
@@ -21,7 +21,7 @@ type PostgresConfig struct {
 	Port     string
 }
 
-func New(conf PostgresConfig) *CommandRepo {
+func New(conf PostgresConfig) *Repo {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		conf.Host,
@@ -42,20 +42,20 @@ func New(conf PostgresConfig) *CommandRepo {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &CommandRepo{db: db}
+	return &Repo{db: db}
 }
 
-func (repo *CommandRepo) CreateBundleIdCommand(ctx context.Context, command *entity.CreateBundleId) error {
+func (repo *Repo) CreateBundleIdCommand(ctx context.Context, command *entity.CreateBundleId) error {
 	result := repo.db.WithContext(ctx).Create(command)
 	return result.Error
 }
 
-func (repo *CommandRepo) CreateDeviceCommand(ctx context.Context, command *entity.CreateDevice) error {
+func (repo *Repo) CreateDeviceCommand(ctx context.Context, command *entity.CreateDevice) error {
 	result := repo.db.WithContext(ctx).Create(command)
 	return result.Error
 }
 
-func (repo *CommandRepo) CreateEnableCapabilityTypeCommand(ctx context.Context, command *entity.EnableCapabilityType) error {
+func (repo *Repo) CreateEnableCapabilityTypeCommand(ctx context.Context, command *entity.EnableCapabilityType) error {
 	result := repo.db.WithContext(ctx).Create(command)
 	return result.Error
 }
