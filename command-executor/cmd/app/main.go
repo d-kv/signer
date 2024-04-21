@@ -1,10 +1,10 @@
 package main
 
 import (
-	"command-executor/internal/config"
-	"command-executor/internal/repo/command"
-	"command-executor/internal/services"
 	"context"
+	"d-kv/signer/command-executor/internal/services"
+	"d-kv/signer/db-common/config"
+	"d-kv/signer/db-common/repo/command"
 )
 
 func main() {

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"api/internal/client-service"
-	"api/pkg/httpserver"
-	"api/pkg/httpserver/handlers"
+	clientservice "d-kv/signer/api/internal/client-service"
+	"d-kv/signer/api/pkg/httpserver"
+	"d-kv/signer/api/pkg/httpserver/handlers"
 	"log"
 )
 
@@ -15,7 +15,7 @@ import (
 // @BasePath /v1/{tenantId}/{integrationId}
 
 func main() {
-	services := client_service.NewService()
+	services := clientservice.NewService()
 	handler := handlers.NewHandler(services)
 	server := new(httpserver.Server)
 	err := server.Run("8080", handler.InitRoutes())

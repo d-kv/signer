@@ -1,4 +1,4 @@
-module query-handler
+module d-kv/signer/query-handler
 
 go 1.22rc1
 

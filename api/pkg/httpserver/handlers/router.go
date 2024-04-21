@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	_ "api/docs"
-	"api/internal/client-service"
+	_ "d-kv/signer/api/docs"
+	"d-kv/signer/api/internal/client-service"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
