@@ -2,7 +2,7 @@ package entity
 
 func ConvertBundleId(integration *Integration, id *CreateBundleId) *BundleId {
 	newBid := &BundleId{
-		ID:          id.ID,
+		ID:          id.BundleIdentifier,
 		Name:        id.BundleName,
 		Integration: *integration,
 	}

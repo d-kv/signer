@@ -1,5 +1,12 @@
 package entity
 
+import "d-kv/signer/command-executor/pkg/entity"
+
+type DataBaseCommand interface {
+	Convert() entity.ApiEntity
+	GetId() uint
+}
+
 type EnableCapabilityType struct {
 	ID             uint
 	TenantId       uint
@@ -7,6 +14,10 @@ type EnableCapabilityType struct {
 	BundleId       string
 	CapabilityType CapabilityType
 	Status         Status
+}
+
+func (input *EnableCapabilityType) GetId() uint {
+	return input.ID
 }
 
 type CreateBundleId struct {
@@ -20,6 +31,10 @@ type CreateBundleId struct {
 	Status           Status
 }
 
+func (input *CreateBundleId) GetId() uint {
+	return input.ID
+}
+
 type CreateDevice struct {
 	ID             uint
 	TenantId       uint
@@ -28,6 +43,10 @@ type CreateDevice struct {
 	DevicePlatform Platform
 	DeviceUdid     string
 	Status         Status
+}
+
+func (input *CreateDevice) GetId() uint {
+	return input.ID
 }
 
 type Platform string
@@ -50,6 +69,7 @@ const (
 type Status string
 
 const (
+	Error      Status = "ERROR"
 	Created    Status = "CREATED"
 	Processing Status = "PROCESSING"
 	Completed  Status = "COMPLETED"

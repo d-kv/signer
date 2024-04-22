@@ -1,10 +1,5 @@
 package entity
 
-type DataBaseCommand interface {
-	Convert() ApiEntity
-	GetId() uint
-}
-
 type URL string
 
 const (

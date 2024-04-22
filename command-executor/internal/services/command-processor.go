@@ -3,11 +3,12 @@ package services
 import (
 	"bytes"
 	"context"
+	"d-kv/signer/command-executor/pkg/entity"
 	_ "d-kv/signer/db-common/config"
-	"d-kv/signer/db-common/entity"
-	_ "d-kv/signer/db-common/entity"
+	dbentity "d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
 	_ "d-kv/signer/db-common/repo/command"
+	"d-kv/signer/db-common/repo/domain"
 	_ "d-kv/signer/db-common/repo/domain"
 	"encoding/json"
 	"errors"
@@ -18,14 +19,14 @@ import (
 
 const accessToken = "CHANGEME"
 
-func SetStatusByIdAnything(ctx context.Context, baseCommand *entity.DataBaseCommand, status entity.Status, queue *command.Repo) error {
+func SetStatusByIdAnything(ctx context.Context, baseCommand *dbentity.DataBaseCommand, status dbentity.Status, queue *command.Repo) error {
 	err := error(nil)
 	switch (*baseCommand).(type) {
-	case *entity.CreateDevice:
+	case *dbentity.CreateDevice:
 		err = queue.SetStatusByIdDeviceCommand(ctx, (*baseCommand).GetId(), status)
-	case *entity.CreateBundleId:
+	case *dbentity.CreateBundleId:
 		err = queue.SetStatusByIdBundleIdCommand(ctx, (*baseCommand).GetId(), status)
-	case *entity.EnableCapabilityType:
+	case *dbentity.EnableCapabilityType:
 		err = queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, (*baseCommand).GetId(), status)
 	default:
 		err = errors.New("unknown type")
@@ -33,19 +34,19 @@ func SetStatusByIdAnything(ctx context.Context, baseCommand *entity.DataBaseComm
 	return err
 }
 
-func Processing(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo, operation entity.DataBaseCommand) error {
-	err := SetStatusByIdAnything(ctx, &operation, entity.Processing, queue)
+func Processing(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo, operation dbentity.DataBaseCommand) error {
+	err := SetStatusByIdAnything(ctx, &operation, dbentity.Processing, queue)
 	if err != nil {
 		return err
 	}
 	err = SendCommand(ctx, operation.Convert())
 	if err != nil {
-		err = SetStatusByIdAnything(ctx, &operation, entity.Error, queue)
+		err = SetStatusByIdAnything(ctx, &operation, dbentity.Error, queue)
 		if err != nil {
 			return err
 		}
 	}
-	err = SetStatusByIdAnything(ctx, &operation, entity.Completed, queue)
+	err = SetStatusByIdAnything(ctx, &operation, dbentity.Completed, queue)
 	if err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func Processing(ctx context.Context, queue *command.Repo, repo *domain.PostgresD
 
 func StartProcessor(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo) {
 	for {
-		commands := queue.FindByStatusDeviceCommand(ctx, entity.Created)
+		commands := queue.FindByStatusDeviceCommand(ctx, dbentity.Created)
 		for _, operation := range commands {
 			err := Processing(ctx, queue, repo, &operation)
 			if err != nil {
@@ -64,24 +65,24 @@ func StartProcessor(ctx context.Context, queue *command.Repo, repo *domain.Postg
 			device := entity.ConvertDevice(operation)
 			repo.DeviceRepo.Create(ctx, device)*/
 		}
-		bundleIdCommand := queue.FindByStatusBundleIdCommand(ctx, entity.Created)
+		bundleIdCommand := queue.FindByStatusBundleIdCommand(ctx, dbentity.Created)
 		for _, operation := range bundleIdCommand {
 			err := Processing(ctx, queue, repo, &operation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
 			}
 
-			id, err := repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
+			/*id, err := repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
 			if err != nil {
 				fmt.Println("Error while matching integration", err)
 			}
-			converted := entity.ConvertBundleId(&id, &operation)
+			converted := dbentity.ConvertBundleId(&id, &operation)
 			err = repo.BundleIdRepo.Create(ctx, converted)
 			if err != nil {
 				fmt.Println("Error while creating record in db")
-			}
+			}*/
 		}
-		capabilityCommand := queue.FindByStatusEnableCapabilityTypeCommand(ctx, entity.Created)
+		capabilityCommand := queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbentity.Created)
 		for _, operation := range capabilityCommand {
 			err := Processing(ctx, queue, repo, &operation)
 			if err != nil {
