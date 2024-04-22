@@ -1,17 +1,17 @@
 package handlers
 
 import (
+	repo "d-kv/signer/db-common/entity"
+	"d-kv/signer/query-handler/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	repo "query-handler/internal/entity"
-	"query-handler/pkg/httpserver/entities"
 )
 
 func mapCertificates(certificates []repo.Certificate) []entities.Certificate {
 	var result []entities.Certificate
 	for _, cert := range certificates {
 		result = append(result, entities.Certificate{
-			Identifier: parseStr(cert.ID),
+			Identifier: cert.ID,
 			Name:       cert.Name,
 			Type:       cert.Type,
 		})
@@ -30,13 +30,7 @@ func (h *Handler) getCertificates(c *gin.Context) {
 }
 
 func (h *Handler) getCertificateByID(c *gin.Context) {
-	idStr := c.Param("id")
-
-	id, err := parseUint(idStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be integer"})
-		return
-	}
+	id := c.Param("id")
 
 	repoCertificate, err := h.QueryProcessor.CertificateRepo.FindById(c, id)
 	if err != nil {
@@ -45,7 +39,7 @@ func (h *Handler) getCertificateByID(c *gin.Context) {
 	}
 
 	certificate := entities.Certificate{
-		Identifier: idStr,
+		Identifier: id,
 		Name:       repoCertificate.Name,
 		Type:       repoCertificate.Type,
 	}

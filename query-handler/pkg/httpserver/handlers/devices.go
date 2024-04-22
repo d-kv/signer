@@ -1,19 +1,19 @@
 package handlers
 
 import (
+	repo "d-kv/signer/db-common/entity"
+	"d-kv/signer/query-handler/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	repo "query-handler/internal/entity"
-	"query-handler/pkg/httpserver/entities"
 )
 
 func mapDevices(devices []repo.Device) []entities.Device {
 	var result []entities.Device
 	for _, device := range devices {
 		result = append(result, entities.Device{
-			Identifier: parseStr(device.ID),
+			Identifier: device.ID,
 			Name:       device.Name,
-			UserId:     parseStr(device.User.ID),
+			UserId:     device.User.ID,
 		})
 	}
 	return result
@@ -30,13 +30,7 @@ func (h *Handler) getDevices(c *gin.Context) {
 }
 
 func (h *Handler) getDeviceByID(c *gin.Context) {
-	idStr := c.Param("id")
-
-	id, err := parseUint(idStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be integer"})
-		return
-	}
+	id := c.Param("id")
 
 	repoDevice, err := h.QueryProcessor.DeviceRepo.FindById(c, id)
 	if err != nil {
@@ -44,10 +38,10 @@ func (h *Handler) getDeviceByID(c *gin.Context) {
 		return
 	}
 
-	userId := parseStr(repoDevice.User.ID)
+	userId := repoDevice.User.ID
 
 	device := entities.Device{
-		Identifier: idStr,
+		Identifier: id,
 		Name:       repoDevice.Name,
 		UserId:     userId,
 	}
