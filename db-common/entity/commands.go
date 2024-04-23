@@ -40,6 +40,8 @@ type CreateDevice struct {
 	TenantId       string
 	IntegrationId  string
 	DeviceName     string
+	UserID         string
+	UserName       string
 	DevicePlatform Platform
 	DeviceUdid     string
 	Status         Status

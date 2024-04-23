@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"context"
+	repo2 "d-kv/signer/command-executor/internal/repo"
 	"d-kv/signer/command-executor/pkg/entity"
 	_ "d-kv/signer/db-common/config"
 	dbentity "d-kv/signer/db-common/entity"
@@ -34,7 +35,7 @@ func SetStatusByIdAnything(ctx context.Context, baseCommand *dbentity.DataBaseCo
 	return err
 }
 
-func Processing(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo, operation dbentity.DataBaseCommand) error {
+func Processing(ctx context.Context, queue *command.Repo, operation dbentity.DataBaseCommand) error {
 	err := SetStatusByIdAnything(ctx, &operation, dbentity.Processing, queue)
 	if err != nil {
 		return err
@@ -46,10 +47,6 @@ func Processing(ctx context.Context, queue *command.Repo, repo *domain.PostgresD
 			return err
 		}
 	}
-	err = SetStatusByIdAnything(ctx, &operation, dbentity.Completed, queue)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -57,47 +54,44 @@ func StartProcessor(ctx context.Context, queue *command.Repo, repo *domain.Postg
 	for {
 		commands := queue.FindByStatusDeviceCommand(ctx, dbentity.Created)
 		for _, operation := range commands {
-			err := Processing(ctx, queue, repo, &operation)
+			err := Processing(ctx, queue, &operation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
+				continue
 			}
-			/*if not repo.DeviceRepo.FindById(ctx, operation.DeviceUdid), create, else update
-			device := entity.ConvertDevice(operation)
-			repo.DeviceRepo.Create(ctx, device)*/
+			err = repo2.WriteDevice(ctx, queue, repo, operation)
+			if err != nil {
+				fmt.Println("Error while writing to db", err)
+				continue
+			}
 		}
+
 		bundleIdCommand := queue.FindByStatusBundleIdCommand(ctx, dbentity.Created)
 		for _, operation := range bundleIdCommand {
-			err := Processing(ctx, queue, repo, &operation)
+			err := Processing(ctx, queue, &operation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
+				continue
 			}
-
-			/*id, err := repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
+			err = repo2.WriteBundleId(ctx, queue, repo, operation)
 			if err != nil {
-				fmt.Println("Error while matching integration", err)
+				fmt.Println("Error while writing to db", err)
+				continue
 			}
-			converted := dbentity.ConvertBundleId(&id, &operation)
-			err = repo.BundleIdRepo.Create(ctx, converted)
-			if err != nil {
-				fmt.Println("Error while creating record in db")
-			}*/
 		}
+
 		capabilityCommand := queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbentity.Created)
 		for _, operation := range capabilityCommand {
-			err := Processing(ctx, queue, repo, &operation)
+			err := Processing(ctx, queue, &operation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
+				continue
 			}
-
-			/*id, err := repo.BundleIdRepo.FindById(ctx, operation.BundleId)
+			err = repo2.WriteCapability(ctx, queue, repo, err, operation)
 			if err != nil {
-				fmt.Println("Error while matching integration", err)
+				fmt.Println("Error while writing to db", err)
+				continue
 			}
-			converted := entity.ConvertBundleId(&id, &operation)
-			err = repo.BundleIdRepo.Create(ctx, converted)
-			if err != nil {
-				fmt.Println("Error while creating record in db")
-			}*/
 		}
 	}
 }
@@ -125,7 +119,7 @@ func SendCommand(ctx context.Context, e entity.ApiEntity) error {
 		return err
 	}
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
+		err = Body.Close()
 		if err != nil {
 			fmt.Println("Error closing response body:", err)
 			return
@@ -134,13 +128,13 @@ func SendCommand(ctx context.Context, e entity.ApiEntity) error {
 
 	if resp.StatusCode != http.StatusCreated {
 		fmt.Println("Error: Unexpected response status code", resp.Status)
-		responseBody, err := io.ReadAll(resp.Body)
-		if err != nil {
-			fmt.Println("Error reading response body:", err)
-			return err
+		responseBody, err1 := io.ReadAll(resp.Body)
+		if err1 != nil {
+			fmt.Println("Error reading response body:", err1)
+			return err1
 		}
 		fmt.Println("Response Body:", string(responseBody))
-		fmt.Println("New instance created successfully!")
 	}
+	fmt.Println("New instance created successfully!")
 	return nil
 }

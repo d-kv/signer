@@ -17,13 +17,13 @@ func ConvertCapability(id *BundleId, capability *EnableCapabilityType) *Capabili
 	return newCap
 }
 
-func ConvertDevice(device *Device, user *User, profile *Profile, integration *Integration) *Device {
+func ConvertDevice(device *CreateDevice, user *User, profile []Profile, integration []Integration) *Device {
 	newDevice := &Device{
-		ID:           device.ID,
-		Name:         device.Name,
+		ID:           device.DeviceUdid,
+		Name:         device.DeviceName,
 		User:         *user,
-		Profiles:     []Profile{*profile},
-		Integrations: []Integration{*integration},
+		Profiles:     profile,
+		Integrations: integration,
 	}
 	return newDevice
 }

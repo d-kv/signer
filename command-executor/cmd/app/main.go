@@ -5,6 +5,7 @@ import (
 	"d-kv/signer/command-executor/internal/services"
 	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/repo/command"
+	"d-kv/signer/db-common/repo/domain"
 )
 
 func main() {
@@ -13,9 +14,13 @@ func main() {
 	//	time.Sleep(1 * time.Minute)
 	//	cancel()
 	//	token generation
-	pgConfig := config.PostgresConfig{Host: "localhost", User: "postgres",
+	pgQueue := config.PostgresConfig{Host: "localhost", User: "postgres",
 		Password: "postgres", Name: "command_queue", Port: "54321"}
-	repo := command.New(pgConfig)
+	pgRepo := domain.PostgresConfig{Host: "localhost", User: "postgres",
+		Password: "postgres", Name: "postgres", Port: "54331"}
+
+	queue := command.New(pgQueue)
+	repo := domain.New(pgRepo)
 	ctx := context.Background()
-	services.StartProcessor(ctx, repo)
+	services.StartProcessor(ctx, queue, repo)
 }
