@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"d-kv/signer/api/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // @Summary Add new capability
@@ -12,6 +10,8 @@ import (
 // @ID add-capability
 // @Accept json
 // @Produce json
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param input body entities.Capability true "capability params"
 // @Success 200 {object} entities.Capability
 // @Failure 400,404 {object} errorResponse
@@ -19,25 +19,20 @@ import (
 // @Failure default {object} errorResponse
 // @Router /capabilities [post]
 func (h *Handler) postCapability(c *gin.Context) {
-	var inp entities.Capability
-
-	err := c.BindJSON(&inp)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, inp)
+	h.services.CommandExecutorService.PostCapability(c)
 }
 
 // @Summary Delete capability
 // @Description Capability deletion by id
 // @Tags capability
 // @ID delete-capability
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param id path string true "capability identifier"
 // @Produce  json
 // @Success 204 {string} string "Deletion success"
 // @Failure 404 {string} string "Capability not found"
 // @Router /capabilities/{id} [delete]
 func (h *Handler) deleteCapabilityByID(c *gin.Context) {
-	c.Status(http.StatusNoContent)
+	h.services.CommandExecutorService.DelCapability(c)
 }

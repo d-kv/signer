@@ -60,6 +60,16 @@ paths:
       description: BundleId deletion by id
       operationId: delete-bundleId
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: bundleId identifier
         in: path
         name: id
@@ -83,6 +93,17 @@ paths:
     get:
       description: Get all bundleIds
       operationId: get-bundleIds-list
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -103,6 +124,16 @@ paths:
       description: Create new bundleId instance
       operationId: add-bundleId
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: bundleId params
         in: body
         name: input
@@ -140,6 +171,16 @@ paths:
       description: Get bundleId instance by id
       operationId: get-bundleId
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: bundleId identifier
         in: path
         name: id
@@ -162,6 +203,16 @@ paths:
       description: Create new capability instance
       operationId: add-capability
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: capability params
         in: body
         name: input
@@ -199,6 +250,16 @@ paths:
       description: Capability deletion by id
       operationId: delete-capability
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: capability identifier
         in: path
         name: id
@@ -279,6 +340,16 @@ paths:
       description: Certificate deletion by id
       operationId: delete-certificate
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: certificate identifier
         in: path
         name: id
@@ -321,6 +392,17 @@ paths:
     get:
       description: Get all devices
       operationId: get-devices-list
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -341,6 +423,16 @@ paths:
       description: Create new device instance
       operationId: add-device
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: device params
         in: body
         name: input
@@ -378,6 +470,16 @@ paths:
       description: Get device instance by id
       operationId: get-device
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: device identifier
         in: path
         name: id
@@ -397,6 +499,17 @@ paths:
     get:
       description: Get all profiles
       operationId: get-profiles-list
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -417,6 +530,16 @@ paths:
       description: Create new profile instance
       operationId: add-profile
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: profile params
         in: body
         name: input
@@ -454,6 +577,16 @@ paths:
       description: Profile deletion by id
       operationId: delete-profile
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: profile identifier
         in: path
         name: id
@@ -477,6 +610,16 @@ paths:
       description: Get profile instance by id
       operationId: get-profile
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: profile identifier
         in: path
         name: id

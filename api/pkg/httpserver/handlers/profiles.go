@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"d-kv/signer/api/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-// @Summary Add new profile
+// @Summary (NOT IMPLEMENTED) Add new profile
 // @Tags profile
 // @Description Create new profile instance
 // @ID add-profile
 // @Accept json
 // @Produce json
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param input body entities.Profile true "profile params"
 // @Success 200 {object} entities.Profile
 // @Failure 400,404 {object} errorResponse
@@ -19,20 +19,16 @@ import (
 // @Failure default {object} errorResponse
 // @Router /profiles [post]
 func (h *Handler) postProfile(c *gin.Context) {
-	var inp entities.Profile
-
-	err := c.BindJSON(&inp)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, inp)
+	//TODO implement me
+	panic("implement me")
 }
 
 // @Summary Get profiles list
 // @Description Get all profiles
 // @Tags profile
 // @ID get-profiles-list
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Produce  json
 // @Success 200 {array} []entities.Profile
 // @Router /profiles [get]
@@ -44,6 +40,8 @@ func (h *Handler) getProfiles(c *gin.Context) {
 // @Description Get profile instance by id
 // @Tags profile
 // @ID get-profile
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param id path string true "profile identifier"
 // @Produce  json
 // @Success 200 {object} entities.Profile
@@ -52,15 +50,18 @@ func (h *Handler) getProfileByID(c *gin.Context) {
 	h.services.QueryHandlerService.GetProfileById(c)
 }
 
-// @Summary Delete profile
+// @Summary (NOT IMPLEMENTED) Delete profile
 // @Description Profile deletion by id
 // @Tags profile
 // @ID delete-profile
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param id path string true "profile identifier"
 // @Produce  json
 // @Success 204 {string} string "Deletion success"
 // @Failure 404 {string} string "Profile not found"
 // @Router /profiles/{id} [delete]
 func (h *Handler) deleteProfileByID(c *gin.Context) {
-	c.Status(http.StatusNoContent)
+	//TODO implement me
+	panic("implement me")
 }

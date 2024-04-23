@@ -29,6 +29,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "bundleId identifier",
                         "name": "id",
                         "in": "path",
@@ -62,6 +76,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get bundleIds list",
                 "operationId": "get-bundleIds-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -91,6 +121,20 @@ const docTemplate = `{
                 "summary": "Add new BundleId",
                 "operationId": "add-bundleId",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "bundleId params",
                         "name": "input",
@@ -149,6 +193,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "bundleId identifier",
                         "name": "id",
                         "in": "path",
@@ -180,6 +238,20 @@ const docTemplate = `{
                 "summary": "Add new capability",
                 "operationId": "add-capability",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "capability params",
                         "name": "input",
@@ -236,6 +308,20 @@ const docTemplate = `{
                 "summary": "Delete capability",
                 "operationId": "delete-capability",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "capability identifier",
@@ -386,6 +472,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "certificate identifier",
                         "name": "id",
                         "in": "path",
@@ -419,6 +519,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get devices list",
                 "operationId": "get-devices-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -448,6 +564,20 @@ const docTemplate = `{
                 "summary": "Add new device",
                 "operationId": "add-device",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "device params",
                         "name": "input",
@@ -506,6 +636,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "device identifier",
                         "name": "id",
                         "in": "path",
@@ -533,6 +677,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get profiles list",
                 "operationId": "get-profiles-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -562,6 +722,20 @@ const docTemplate = `{
                 "summary": "Add new profile",
                 "operationId": "add-profile",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "profile params",
                         "name": "input",
@@ -620,6 +794,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "profile identifier",
                         "name": "id",
                         "in": "path",
@@ -646,6 +834,20 @@ const docTemplate = `{
                 "summary": "Delete profile",
                 "operationId": "delete-profile",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "profile identifier",

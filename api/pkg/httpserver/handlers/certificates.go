@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"d-kv/signer/api/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-// @Summary Add new certificate
+// @Summary (NOT IMPLEMENTED) Add new certificate
 // @Tags certificate
 // @Description Create new certificate instance
 // @ID add-certificate
 // @Accept json
 // @Produce json
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param input body entities.Certificate true "certificate params"
 // @Success 200 {object} entities.Certificate
 // @Failure 400,404 {object} errorResponse
@@ -19,20 +19,16 @@ import (
 // @Failure default {object} errorResponse
 // @Router /certificates [post]
 func (h *Handler) postCertificate(c *gin.Context) {
-	var inp entities.Certificate
-
-	err := c.BindJSON(&inp)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, inp)
+	//TODO implement me
+	panic("implement me")
 }
 
 // @Summary Get certificates list
 // @Description Get all certificates
 // @Tags certificate
 // @ID get-certificates-list
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Produce  json
 // @Success 200 {array} []entities.Profile
 // @Router /certificates [get]
@@ -44,6 +40,8 @@ func (h *Handler) getCertificates(c *gin.Context) {
 // @Description Get certificate instance by id
 // @Tags certificate
 // @ID get-certificate
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param id path string true "certificate identifier"
 // @Produce  json
 // @Success 200 {object} entities.Certificate
@@ -52,15 +50,18 @@ func (h *Handler) getCertificateByID(c *gin.Context) {
 	h.services.QueryHandlerService.GetCertificateById(c)
 }
 
-// @Summary Delete certificate
+// @Summary (NOT IMPLEMENTED) Delete certificate
 // @Description Certificate deletion by id
 // @Tags certificate
 // @ID delete-certificate
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
 // @Param id path string true "certificate identifier"
 // @Produce  json
 // @Success 204 {string} string "Deletion success"
 // @Failure 404 {string} string "Certificate not found"
 // @Router /certificates/{id} [delete]
 func (h *Handler) deleteCertificateByID(c *gin.Context) {
-	c.Status(http.StatusNoContent)
+	//TODO implement me
+	panic("implement me")
 }
