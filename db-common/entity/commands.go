@@ -9,8 +9,8 @@ type DataBaseCommand interface {
 
 type EnableCapabilityType struct {
 	ID             uint
-	TenantId       uint
-	IntegrationId  uint
+	TenantId       string
+	IntegrationId  string
 	BundleId       string
 	CapabilityType CapabilityType
 	Status         Status
@@ -22,8 +22,8 @@ func (input *EnableCapabilityType) GetId() uint {
 
 type CreateBundleId struct {
 	ID               uint
-	TenantId         uint
-	IntegrationId    uint
+	TenantId         string
+	IntegrationId    string
 	BundleIdentifier string
 	BundleName       string
 	BundlePlatform   Platform
@@ -37,8 +37,8 @@ func (input *CreateBundleId) GetId() uint {
 
 type CreateDevice struct {
 	ID             uint
-	TenantId       uint
-	IntegrationId  uint
+	TenantId       string
+	IntegrationId  string
 	DeviceName     string
 	DevicePlatform Platform
 	DeviceUdid     string
