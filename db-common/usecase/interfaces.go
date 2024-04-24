@@ -76,6 +76,10 @@ type CommandRepo interface {
 	FindByStatusDeviceCommand(context.Context, entity.Status) []entity.CreateDevice
 	FindByStatusEnableCapabilityTypeCommand(context.Context, entity.Status) []entity.EnableCapabilityType
 
+	GetStatusByIdBundleIdCommand(context.Context, uint) (error, entity.Status)
+	GetStatusByIdDeviceCommand(context.Context, uint) (error, entity.Status)
+	GetStatusByIdEnableCapabilityTypeCommand(context.Context, uint) (error, entity.Status)
+
 	SetStatusByIdBundleIdCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdDeviceCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdEnableCapabilityTypeCommand(context.Context, uint, entity.Status) error
