@@ -14,7 +14,7 @@ func main() {
 	//	cancel()
 	//	token generation
 	pgConfig := config.PostgresConfig{Host: "localhost", User: "postgres",
-		Password: "postgres", Name: "command_queue", Port: "54321"}
+		Password: "postgres", Name: "command_queue", Port: "5432"}
 	repo := command.New(pgConfig)
 	ctx := context.Background()
 	services.StartProcessor(ctx, repo)
