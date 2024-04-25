@@ -80,3 +80,8 @@ type CommandRepo interface {
 	SetStatusByIdDeviceCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdEnableCapabilityTypeCommand(context.Context, uint, entity.Status) error
 }
+
+type VaultRepo interface {
+	FindTokenByIntegrationId(context.Context, string) (error, *entity.IntegrationToken)
+	SaveIntegrationToken(context.Context, *entity.IntegrationToken) error
+}
