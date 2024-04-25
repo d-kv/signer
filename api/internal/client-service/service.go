@@ -1,6 +1,7 @@
 package client_service
 
 import (
+	"d-kv/signer/db-common/entity"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,11 +17,14 @@ type QueryHandlerService interface {
 }
 
 type CommandExecutorService interface {
-	PostBundleId(c *gin.Context)
-	DelBundleIdById(c *gin.Context)
-	PostCapability(c *gin.Context)
-	DelCapability(c *gin.Context)
-	PostDevice(c *gin.Context)
+	PostBundleId(c *gin.Context, ent *entity.CreateBundleId) error
+	GetBundleIdStatusByID(c *gin.Context) (entity.Status, error)
+	DelBundleIdById(c *gin.Context) error
+	PostCapability(c *gin.Context) error
+	GetCapabilityStatusByID(c *gin.Context) (entity.Status, error)
+	DelCapability(c *gin.Context) error
+	PostDevice(c *gin.Context) error
+	GetDeviceStatusByID(c *gin.Context) (entity.Status, error)
 }
 
 type Service struct {
@@ -31,5 +35,6 @@ type Service struct {
 func NewService() *Service {
 	return &Service{
 		QueryHandlerService: NewQueryService(),
+		//CommandExecutorService: NewCommandService(),
 	}
 }

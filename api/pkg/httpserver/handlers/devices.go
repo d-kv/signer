@@ -22,6 +22,10 @@ func (h *Handler) postDevice(c *gin.Context) {
 	h.services.CommandExecutorService.PostDevice(c)
 }
 
+func (h *Handler) getDeviceStatusByID(c *gin.Context) {
+
+}
+
 // @Summary Get devices list
 // @Description Get all devices
 // @Tags device

@@ -22,6 +22,10 @@ func (h *Handler) postCapability(c *gin.Context) {
 	h.services.CommandExecutorService.PostCapability(c)
 }
 
+func (h *Handler) getCapabilityStatusByID(c *gin.Context) {
+
+}
+
 // @Summary Delete capability
 // @Description Capability deletion by id
 // @Tags capability

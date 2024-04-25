@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"d-kv/signer/api/pkg/httpserver/entities"
+	"d-kv/signer/db-common/entity"
 	_ "d-kv/signer/db-common/entity"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // @Summary Add new BundleId
@@ -13,14 +16,52 @@ import (
 // @Produce json
 // @Param tenantId path string true "tenantId"
 // @Param integrationId path string true "integrationId"
-// @Param input body entities.BundleId true "bundleId params"
-// @Success 200 {object} entities.BundleId
+// @Param input body entities.InputCreateBundleId true "bundleId params"
+// @Success 200 {string} string "commandID"
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /bundleIds [post]
 func (h *Handler) postBundleId(c *gin.Context) {
-	h.services.CommandExecutorService.PostBundleId(c)
+	var input entities.InputCreateBundleId
+	tenantId := c.Param("tenantId")
+	integrationId := c.Param("integrationId")
+	err := c.BindJSON(&input)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		return
+	}
+	bundleInput, err := ConvertBundleInput(&input, tenantId, integrationId)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		return
+	}
+	err = h.services.CommandExecutorService.PostBundleId(c, bundleInput)
+	if err != nil {
+		return
+	}
+}
+
+func ConvertBundleInput(input *entities.InputCreateBundleId, tenantId string, integrationId string) (*entity.CreateBundleId, error) {
+	newCommand := &entity.CreateBundleId{}
+	return newCommand, nil
+}
+
+// @Summary Check status
+// @Tags bundleId
+// @Description Get command status by command id
+// @ID get-status-bundleId
+// @Produce json
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
+// @Param id path string true "command identifier"
+// @Success 200 {string} string "status"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /bundleIds/status/{id} [post]
+func (h *Handler) getBundleIdStatusByID(c *gin.Context) {
+
 }
 
 // @Summary Get bundleIds list
@@ -62,5 +103,8 @@ func (h *Handler) getBundleIdByID(c *gin.Context) {
 // @Failure 404 {string} string "BundleId not found"
 // @Router /bundleId/{id} [delete]
 func (h *Handler) deleteBundleIdByID(c *gin.Context) {
-	h.services.CommandExecutorService.DelBundleIdById(c)
+	err := h.services.CommandExecutorService.DelBundleIdById(c)
+	if err != nil {
+		return
+	}
 }
