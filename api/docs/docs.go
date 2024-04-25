@@ -141,15 +141,77 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.BundleId"
+                            "$ref": "#/definitions/entities.InputCreateBundleId"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.BundleId"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bundleIds/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "bundleId"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-bundleId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -258,15 +320,77 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.Capability"
+                            "$ref": "#/definitions/entities.InputEnableCapability"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.Capability"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/capabilities/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "capability"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-capability",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -357,6 +481,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get certificates list",
                 "operationId": "get-certificates-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -383,9 +523,23 @@ const docTemplate = `{
                 "tags": [
                     "certificate"
                 ],
-                "summary": "Add new certificate",
+                "summary": "(NOT IMPLEMENTED) Add new certificate",
                 "operationId": "add-certificate",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "certificate params",
                         "name": "input",
@@ -444,6 +598,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "certificate identifier",
                         "name": "id",
                         "in": "path",
@@ -467,7 +635,7 @@ const docTemplate = `{
                 "tags": [
                     "certificate"
                 ],
-                "summary": "Delete certificate",
+                "summary": "(NOT IMPLEMENTED) Delete certificate",
                 "operationId": "delete-certificate",
                 "parameters": [
                     {
@@ -590,9 +758,71 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.Device"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/devices/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -719,7 +949,7 @@ const docTemplate = `{
                 "tags": [
                     "profile"
                 ],
-                "summary": "Add new profile",
+                "summary": "(NOT IMPLEMENTED) Add new profile",
                 "operationId": "add-profile",
                 "parameters": [
                     {
@@ -831,7 +1061,7 @@ const docTemplate = `{
                 "tags": [
                     "profile"
                 ],
-                "summary": "Delete profile",
+                "summary": "(NOT IMPLEMENTED) Delete profile",
                 "operationId": "delete-profile",
                 "parameters": [
                     {
@@ -885,17 +1115,6 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.Capability": {
-            "type": "object",
-            "properties": {
-                "bundleId": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "entities.Certificate": {
             "type": "object",
             "properties": {
@@ -920,6 +1139,34 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.InputCreateBundleId": {
+            "type": "object",
+            "properties": {
+                "bundleId": {
+                    "type": "string"
+                },
+                "bundleName": {
+                    "type": "string"
+                },
+                "platform": {
+                    "type": "string"
+                },
+                "seedId": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.InputEnableCapability": {
+            "type": "object",
+            "properties": {
+                "bundleId": {
+                    "type": "string"
+                },
+                "capabilityType": {
                     "type": "string"
                 }
             }

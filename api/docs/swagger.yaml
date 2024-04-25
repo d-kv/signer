@@ -7,13 +7,6 @@ definitions:
       name:
         type: string
     type: object
-  entities.Capability:
-    properties:
-      bundleId:
-        type: string
-      name:
-        type: string
-    type: object
   entities.Certificate:
     properties:
       identifier:
@@ -30,6 +23,24 @@ definitions:
       name:
         type: string
       userId:
+        type: string
+    type: object
+  entities.InputCreateBundleId:
+    properties:
+      bundleId:
+        type: string
+      bundleName:
+        type: string
+      platform:
+        type: string
+      seedId:
+        type: string
+    type: object
+  entities.InputEnableCapability:
+    properties:
+      bundleId:
+        type: string
+      capabilityType:
         type: string
     type: object
   entities.Profile:
@@ -139,24 +150,20 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/entities.BundleId'
+          $ref: '#/definitions/entities.InputCreateBundleId'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: commandID
           schema:
-            $ref: '#/definitions/entities.BundleId'
+            type: string
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
+        "503":
+          description: Service Unavailable
           schema:
             $ref: '#/definitions/handlers.errorResponse'
         default:
@@ -196,6 +203,52 @@ paths:
       summary: Get bundleId
       tags:
       - bundleId
+  /bundleIds/status/{id}:
+    post:
+      description: Get command status by command id
+      operationId: get-status-bundleId
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
+      - description: command identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Check status
+      tags:
+      - bundleId
   /capabilities:
     post:
       consumes:
@@ -218,24 +271,20 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/entities.Capability'
+          $ref: '#/definitions/entities.InputEnableCapability'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: commandID
           schema:
-            $ref: '#/definitions/entities.Capability'
+            type: string
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
+        "503":
+          description: Service Unavailable
           schema:
             $ref: '#/definitions/handlers.errorResponse'
         default:
@@ -279,10 +328,67 @@ paths:
       summary: Delete capability
       tags:
       - capability
+  /capabilities/status/{id}:
+    post:
+      description: Get command status by command id
+      operationId: get-status-capability
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
+      - description: command identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Check status
+      tags:
+      - capability
   /certificates:
     get:
       description: Get all certificates
       operationId: get-certificates-list
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -303,6 +409,16 @@ paths:
       description: Create new certificate instance
       operationId: add-certificate
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: certificate params
         in: body
         name: input
@@ -332,7 +448,7 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handlers.errorResponse'
-      summary: Add new certificate
+      summary: (NOT IMPLEMENTED) Add new certificate
       tags:
       - certificate
   /certificates/{id}:
@@ -366,13 +482,23 @@ paths:
           description: Certificate not found
           schema:
             type: string
-      summary: Delete certificate
+      summary: (NOT IMPLEMENTED) Delete certificate
       tags:
       - certificate
     get:
       description: Get certificate instance by id
       operationId: get-certificate
       parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
       - description: certificate identifier
         in: path
         name: id
@@ -443,19 +569,15 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: commandID
           schema:
-            $ref: '#/definitions/entities.Device'
+            type: string
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
+        "503":
+          description: Service Unavailable
           schema:
             $ref: '#/definitions/handlers.errorResponse'
         default:
@@ -493,6 +615,52 @@ paths:
           schema:
             $ref: '#/definitions/entities.Device'
       summary: Get device
+      tags:
+      - device
+  /devices/status/{id}:
+    post:
+      description: Get command status by command id
+      operationId: get-status-device
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
+      - description: command identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      summary: Check status
       tags:
       - device
   /profiles:
@@ -569,7 +737,7 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handlers.errorResponse'
-      summary: Add new profile
+      summary: (NOT IMPLEMENTED) Add new profile
       tags:
       - profile
   /profiles/{id}:
@@ -603,7 +771,7 @@ paths:
           description: Profile not found
           schema:
             type: string
-      summary: Delete profile
+      summary: (NOT IMPLEMENTED) Delete profile
       tags:
       - profile
     get:

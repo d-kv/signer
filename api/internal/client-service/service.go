@@ -17,13 +17,13 @@ type QueryHandlerService interface {
 }
 
 type CommandExecutorService interface {
-	PostBundleId(c *gin.Context, ent *entity.CreateBundleId) error
+	PostBundleId(c *gin.Context, ent *entity.CreateBundleId) (uint, error)
 	GetBundleIdStatusByID(c *gin.Context) (entity.Status, error)
 	DelBundleIdById(c *gin.Context) error
-	PostCapability(c *gin.Context) error
+	PostCapability(c *gin.Context, ent *entity.EnableCapabilityType) (uint, error)
 	GetCapabilityStatusByID(c *gin.Context) (entity.Status, error)
 	DelCapability(c *gin.Context) error
-	PostDevice(c *gin.Context) error
+	PostDevice(c *gin.Context, ent *entity.CreateDevice) (uint, error)
 	GetDeviceStatusByID(c *gin.Context) (entity.Status, error)
 }
 

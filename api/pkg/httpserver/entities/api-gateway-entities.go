@@ -1,6 +1,6 @@
 package entities
 
-type InputEnableCapabilityInput struct {
+type InputEnableCapability struct {
 	BundleId       string `json:"bundleId"`
 	CapabilityType string `json:"capabilityType"`
 }

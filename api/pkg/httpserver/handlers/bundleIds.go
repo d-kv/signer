@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"d-kv/signer/api/pkg/httpserver/entities"
-	"d-kv/signer/db-common/entity"
-	_ "d-kv/signer/db-common/entity"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -18,8 +16,8 @@ import (
 // @Param integrationId path string true "integrationId"
 // @Param input body entities.InputCreateBundleId true "bundleId params"
 // @Success 200 {string} string "commandID"
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 400 {object} errorResponse
+// @Failure 503 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /bundleIds [post]
 func (h *Handler) postBundleId(c *gin.Context) {
@@ -31,20 +29,17 @@ func (h *Handler) postBundleId(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
-	bundleInput, err := ConvertBundleInput(&input, tenantId, integrationId)
+	bundleInput, err := entities.ConvertBundleInput(&input, tenantId, integrationId)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
-	err = h.services.CommandExecutorService.PostBundleId(c, bundleInput)
+	opId, err := h.services.CommandExecutorService.PostBundleId(c, bundleInput)
 	if err != nil {
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
 		return
 	}
-}
-
-func ConvertBundleInput(input *entities.InputCreateBundleId, tenantId string, integrationId string) (*entity.CreateBundleId, error) {
-	newCommand := &entity.CreateBundleId{}
-	return newCommand, nil
+	c.JSON(http.StatusOK, opId)
 }
 
 // @Summary Check status
