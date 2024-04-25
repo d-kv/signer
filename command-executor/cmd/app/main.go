@@ -14,6 +14,7 @@ func main() {
 	//	time.Sleep(1 * time.Minute)
 	//	cancel()
 	//	token generation
+
 	pgQueue := config.PostgresConfig{Host: "localhost", User: "postgres",
 		Password: "postgres", Name: "command_queue", Port: "54321"}
 	pgRepo := domain.PostgresConfig{Host: "localhost", User: "postgres",
@@ -21,6 +22,7 @@ func main() {
 
 	queue := command.New(pgQueue)
 	repo := domain.New(pgRepo)
+
 	ctx := context.Background()
 	services.StartProcessor(ctx, queue, repo)
 }
