@@ -88,3 +88,18 @@ func (repo *Repo) SetStatusByIdEnableCapabilityTypeCommand(ctx context.Context, 
 	err := repo.db.WithContext(ctx).Model(&entity.EnableCapabilityType{}).Where("id = ?", ID).Update("status", status).Error
 	return err
 }
+
+func (repo *Repo) CreateBundleIdCommand(ctx context.Context, entity entity.CreateBundleId) (error, entity.CreateBundleId) {
+	err := repo.db.WithContext(ctx).Create(&entity).Error
+	return err, entity
+}
+
+func (repo *Repo) CreateDeviceCommand(ctx context.Context, entity entity.CreateDevice) (error, entity.CreateDevice) {
+	err := repo.db.WithContext(ctx).Create(&entity).Error
+	return err, entity
+}
+
+func (repo *Repo) CreateEnableCapabilityTypeCommand(ctx context.Context, entity entity.EnableCapabilityType) (error, entity.EnableCapabilityType) {
+	err := repo.db.WithContext(ctx).Create(&entity).Error
+	return err, entity
+}
