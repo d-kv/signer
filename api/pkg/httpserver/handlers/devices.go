@@ -56,7 +56,12 @@ func (h *Handler) postDevice(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /devices/status/{id} [post]
 func (h *Handler) getDeviceStatusByID(c *gin.Context) {
-
+	status, err := h.services.CommandExecutorService.GetDeviceStatusByID(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		return
+	}
+	c.JSON(http.StatusOK, status)
 }
 
 // @Summary Get devices list

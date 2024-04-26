@@ -56,7 +56,12 @@ func (h *Handler) postBundleId(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /bundleIds/status/{id} [post]
 func (h *Handler) getBundleIdStatusByID(c *gin.Context) {
-
+	status, err := h.services.CommandExecutorService.GetBundleIdStatusByID(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		return
+	}
+	c.JSON(http.StatusOK, status)
 }
 
 // @Summary Get bundleIds list
@@ -98,8 +103,4 @@ func (h *Handler) getBundleIdByID(c *gin.Context) {
 // @Failure 404 {string} string "BundleId not found"
 // @Router /bundleId/{id} [delete]
 func (h *Handler) deleteBundleIdByID(c *gin.Context) {
-	err := h.services.CommandExecutorService.DelBundleIdById(c)
-	if err != nil {
-		return
-	}
 }

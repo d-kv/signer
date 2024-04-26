@@ -9,14 +9,15 @@ import (
 )
 
 type QueryService struct {
+	url string
 }
 
-func NewQueryService() *QueryService {
-	return &QueryService{}
+func NewQueryService(queryURL string) *QueryService {
+	return &QueryService{url: queryURL}
 }
 
 func (s *QueryService) GetBundleIds(c *gin.Context) {
-	res, err := http.Get("http://localhost:8081/v1/query/bundleIds")
+	res, err := http.Get(s.url + "/bundleIds")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,7 +33,7 @@ func (s *QueryService) GetBundleIds(c *gin.Context) {
 
 func (s *QueryService) GetBundleIdById(c *gin.Context) {
 	id := c.Param("id")
-	res, err := http.Get("http://localhost:8081/v1/query/bundleIds" + "/" + id)
+	res, err := http.Get(s.url + "/bundleIds" + "/" + id)
 
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +49,8 @@ func (s *QueryService) GetBundleIdById(c *gin.Context) {
 }
 
 func (s *QueryService) GetDevices(c *gin.Context) {
-	res, err := http.Get("http://localhost:8081/v1/query/devices")
+	res, err := http.Get(s.url + "/devices")
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +66,7 @@ func (s *QueryService) GetDevices(c *gin.Context) {
 
 func (s *QueryService) GetDeviceById(c *gin.Context) {
 	id := c.Param("id")
-	res, err := http.Get("http://localhost:8081/v1/query/devices" + "/" + id)
+	res, err := http.Get(s.url + "/devices/" + id)
 
 	if err != nil {
 		log.Fatal(err)
@@ -80,7 +82,7 @@ func (s *QueryService) GetDeviceById(c *gin.Context) {
 }
 
 func (s *QueryService) GetCertificates(c *gin.Context) {
-	res, err := http.Get("http://localhost:8081/v1/query/certificates")
+	res, err := http.Get(s.url + "/certificates")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,7 +98,7 @@ func (s *QueryService) GetCertificates(c *gin.Context) {
 
 func (s *QueryService) GetCertificateById(c *gin.Context) {
 	id := c.Param("id")
-	res, err := http.Get("http://localhost:8081/v1/query/certificates" + "/" + id)
+	res, err := http.Get(s.url + "/certificates" + "/" + id)
 
 	if err != nil {
 		log.Fatal(err)
@@ -112,7 +114,7 @@ func (s *QueryService) GetCertificateById(c *gin.Context) {
 }
 
 func (s *QueryService) GetProfiles(c *gin.Context) {
-	res, err := http.Get("http://localhost:8081/v1/query/profiles")
+	res, err := http.Get(s.url + "/profiles")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -128,7 +130,7 @@ func (s *QueryService) GetProfiles(c *gin.Context) {
 
 func (s *QueryService) GetProfileById(c *gin.Context) {
 	id := c.Param("id")
-	res, err := http.Get("http://localhost:8081/v1/query/profiles" + "/" + id)
+	res, err := http.Get(s.url + "/profiles" + "/" + id)
 
 	if err != nil {
 		log.Fatal(err)

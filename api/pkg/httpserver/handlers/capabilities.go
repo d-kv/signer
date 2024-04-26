@@ -56,7 +56,12 @@ func (h *Handler) postCapability(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /capabilities/status/{id} [post]
 func (h *Handler) getCapabilityStatusByID(c *gin.Context) {
-
+	status, err := h.services.CommandExecutorService.GetCapabilityStatusByID(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		return
+	}
+	c.JSON(http.StatusOK, status)
 }
 
 // @Summary Delete capability
@@ -71,5 +76,4 @@ func (h *Handler) getCapabilityStatusByID(c *gin.Context) {
 // @Failure 404 {string} string "Capability not found"
 // @Router /capabilities/{id} [delete]
 func (h *Handler) deleteCapabilityByID(c *gin.Context) {
-	h.services.CommandExecutorService.DelCapability(c)
 }
