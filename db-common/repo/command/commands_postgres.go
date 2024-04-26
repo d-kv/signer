@@ -56,6 +56,24 @@ func (repo *Repo) FindByStatusEnableCapabilityTypeCommand(ctx context.Context, s
 	return commands
 }
 
+func (repo *Repo) GetStatusByIdBundleIdCommand(ctx context.Context, ID uint) (error, entity.Status) {
+	var command entity.CreateBundleId
+	err := repo.db.WithContext(ctx).Where("id = ?", ID).Find(command).Error
+	return err, command.Status
+}
+
+func (repo *Repo) GetStatusByIdDeviceCommand(ctx context.Context, ID uint) (error, entity.Status) {
+	var command entity.CreateDevice
+	err := repo.db.WithContext(ctx).Where("id = ?", ID).Find(command).Error
+	return err, command.Status
+}
+
+func (repo *Repo) GetStatusByIdEnableCapabilityTypeCommand(ctx context.Context, ID uint) (error, entity.Status) {
+	var command entity.EnableCapabilityType
+	err := repo.db.WithContext(ctx).Where("id = ?", ID).Find(command).Error
+	return err, command.Status
+}
+
 func (repo *Repo) SetStatusByIdBundleIdCommand(ctx context.Context, ID uint, status entity.Status) error {
 	err := repo.db.WithContext(ctx).Model(&entity.CreateBundleId{}).Where("id = ?", ID).Update("status", status).Error
 	return err
