@@ -16,8 +16,11 @@ func NewCommandService(db *command.Repo) *CommandService {
 }
 
 func (s CommandService) PostBundleId(c *gin.Context, ent *entity.CreateBundleId) (uint, error) {
-	//TODO implement me
-	panic("implement me")
+	err, e := s.queue.CreateBundleIdCommand(c, *ent)
+	if err != nil {
+		return 0, err
+	}
+	return e.ID, err
 }
 
 func (s CommandService) GetBundleIdStatusByID(c *gin.Context) (entity.Status, error) {
@@ -39,8 +42,11 @@ func (s CommandService) DelBundleIdById(c *gin.Context) (uint, error) {
 }
 
 func (s CommandService) PostCapability(c *gin.Context, ent *entity.EnableCapabilityType) (uint, error) {
-	//TODO implement me
-	panic("implement me")
+	err, e := s.queue.CreateEnableCapabilityTypeCommand(c, *ent)
+	if err != nil {
+		return 0, err
+	}
+	return e.ID, err
 }
 
 func (s CommandService) GetCapabilityStatusByID(c *gin.Context) (entity.Status, error) {
@@ -62,8 +68,11 @@ func (s CommandService) DelCapability(c *gin.Context) (uint, error) {
 }
 
 func (s CommandService) PostDevice(c *gin.Context, ent *entity.CreateDevice) (uint, error) {
-	//TODO implement me
-	panic("implement me")
+	err, e := s.queue.CreateDeviceCommand(c, *ent)
+	if err != nil {
+		return 0, err
+	}
+	return e.ID, err
 }
 
 func (s CommandService) GetDeviceStatusByID(c *gin.Context) (entity.Status, error) {
