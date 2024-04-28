@@ -11,7 +11,7 @@ type Handler struct {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	identification := router.Group("/v1/query/:tenantId/:integrationId")
+	identification := router.Group("/v1/:tenantId/:integrationId/query/")
 	{
 		bundleId := identification.Group("/bundleIds")
 		{
