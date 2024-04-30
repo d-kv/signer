@@ -11,7 +11,7 @@ type Handler struct {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	identification := router.Group("/v1/query")
+	identification := router.Group("/v1/query/:tenantId/:integrationId")
 	{
 		bundleId := identification.Group("/bundleIds")
 		{
@@ -23,16 +23,16 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			device.GET("/", h.getDevices)
 			device.GET("/:id", h.getDeviceByID)
 		}
-		certificate := identification.Group("/certificates")
-		{
-			certificate.GET("/", h.getCertificates)
-			certificate.GET("/:id", h.getCertificateByID)
-		}
-		profile := identification.Group("/profiles")
-		{
-			profile.GET("/", h.getProfiles)
-			profile.GET("/:id", h.getProfileByID)
-		}
+		//certificate := identification.Group("/certificates")
+		//{
+		//	certificate.GET("/", h.getCertificates)
+		//	certificate.GET("/:id", h.getCertificateByID)
+		//}
+		//profile := identification.Group("/profiles")
+		//{
+		//	profile.GET("/", h.getProfiles)
+		//	profile.GET("/:id", h.getProfileByID)
+		//}
 
 	}
 	return router
