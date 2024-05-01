@@ -5,6 +5,7 @@ import (
 	"context"
 	repo2 "d-kv/signer/command-executor/internal/repo"
 	"d-kv/signer/command-executor/pkg/entity"
+	"d-kv/signer/command-executor/pkg/usecase"
 	_ "d-kv/signer/db-common/config"
 	dbentity "d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
@@ -20,7 +21,7 @@ import (
 
 const accessToken = "CHANGEME"
 
-func SetStatusByIdAnything(ctx context.Context, baseCommand *dbentity.DataBaseCommand, status dbentity.Status, queue *command.Repo) error {
+func SetStatusByIdAnything(ctx context.Context, baseCommand *usecase.DataBaseCommand, status dbentity.Status, queue *command.Repo) error {
 	err := error(nil)
 	switch (*baseCommand).(type) {
 	case *dbentity.CreateDevice:
@@ -35,19 +36,17 @@ func SetStatusByIdAnything(ctx context.Context, baseCommand *dbentity.DataBaseCo
 	return err
 }
 
-func Processing(ctx context.Context, queue *command.Repo, operation dbentity.DataBaseCommand) error {
+func Processing(ctx context.Context, queue *command.Repo, operation usecase.DataBaseCommand) error {
 	err := SetStatusByIdAnything(ctx, &operation, dbentity.Processing, queue)
 	if err != nil {
+		err = SetStatusByIdAnything(ctx, &operation, dbentity.Error, queue)
 		return err
 	}
 	err = SendCommand(ctx, operation.Convert())
 	if err != nil {
 		err = SetStatusByIdAnything(ctx, &operation, dbentity.Error, queue)
-		if err != nil {
-			return err
-		}
 	}
-	return nil
+	return err
 }
 
 func StartProcessor(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo) {
