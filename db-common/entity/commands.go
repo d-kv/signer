@@ -37,6 +37,8 @@ const (
 	MacOs Platform = "MAC_OS"
 )
 
+var PlatformValues = []string{"IOS", "MAC_OS"}
+
 type CapabilityType string
 
 const (
@@ -47,6 +49,8 @@ const (
 	AppleIdAuth       CapabilityType = "APPLE_ID_AUTH"
 )
 
+var CapabilityTypeValues = []string{"IN_APP_PURCHASE", "PUSH_NOTIFICATIONS", "APPLE_PAY", "NFC_TAG_READING", "APPLE_ID_AUTH"}
+
 type Status string
 
 const (
@@ -54,3 +58,5 @@ const (
 	Processing Status = "PROCESSING"
 	Completed  Status = "COMPLETED"
 )
+
+var StatusValues = []string{"CREATED", "PROCESSING", "COMPLETED", "ERROR"}
