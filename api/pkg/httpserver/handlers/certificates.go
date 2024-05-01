@@ -20,7 +20,6 @@ import (
 // @Router /certificates [post]
 func (h *Handler) postCertificate(c *gin.Context) {
 	//TODO implement me
-	panic("implement me")
 }
 
 // @Summary Get certificates list
@@ -63,5 +62,4 @@ func (h *Handler) getCertificateByID(c *gin.Context) {
 // @Router /certificates/{id} [delete]
 func (h *Handler) deleteCertificateByID(c *gin.Context) {
 	//TODO implement me
-	panic("implement me")
 }

@@ -20,7 +20,7 @@ import (
 // @Router /profiles [post]
 func (h *Handler) postProfile(c *gin.Context) {
 	//TODO implement me
-	panic("implement me")
+
 }
 
 // @Summary Get profiles list
@@ -63,5 +63,5 @@ func (h *Handler) getProfileByID(c *gin.Context) {
 // @Router /profiles/{id} [delete]
 func (h *Handler) deleteProfileByID(c *gin.Context) {
 	//TODO implement me
-	panic("implement me")
+
 }

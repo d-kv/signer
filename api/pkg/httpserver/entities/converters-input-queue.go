@@ -8,7 +8,7 @@ import (
 
 func ConvertBundleInput(input *InputCreateBundleId, tenantId string, integrationId string) (*entity.CreateBundleId, error) {
 	var platform entity.Platform
-	if slices.Contains(entity.ValidPlatforms, input.BundlePlatform) {
+	if slices.Contains(entity.PlatformValues, input.BundlePlatform) {
 		platform = entity.Platform(input.BundlePlatform)
 	} else {
 		return nil, errors.InvalidArgumentError("")
@@ -26,7 +26,7 @@ func ConvertBundleInput(input *InputCreateBundleId, tenantId string, integration
 }
 func ConvertCapability(input *InputEnableCapability, tenantId string, integrationId string) (*entity.EnableCapabilityType, error) {
 	var c entity.CapabilityType
-	if slices.Contains(entity.ValidCapabilities, input.CapabilityType) {
+	if slices.Contains(entity.CapabilityTypeValues, input.CapabilityType) {
 		c = entity.CapabilityType(input.CapabilityType)
 	} else {
 		return nil, errors.InvalidArgumentError("")
@@ -42,7 +42,7 @@ func ConvertCapability(input *InputEnableCapability, tenantId string, integratio
 }
 func ConvertDevice(input *InputCreateDevice, tenantId string, integrationId string) (*entity.CreateDevice, error) {
 	var platform entity.Platform
-	if slices.Contains(entity.ValidPlatforms, input.DevicePlatform) {
+	if slices.Contains(entity.PlatformValues, input.DevicePlatform) {
 		platform = entity.Platform(input.DevicePlatform)
 	} else {
 		return nil, errors.InvalidArgumentError("")

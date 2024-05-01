@@ -38,7 +38,7 @@ func (s CommandService) GetBundleIdStatusByID(c *gin.Context) (entity.Status, er
 
 func (s CommandService) DelBundleIdById(c *gin.Context) (uint, error) {
 	//TODO implement me
-	panic("implement me")
+	return 0, nil
 }
 
 func (s CommandService) PostCapability(c *gin.Context, ent *entity.EnableCapabilityType) (uint, error) {
@@ -64,7 +64,7 @@ func (s CommandService) GetCapabilityStatusByID(c *gin.Context) (entity.Status, 
 
 func (s CommandService) DelCapability(c *gin.Context) (uint, error) {
 	//TODO implement me
-	panic("implement me")
+	return 0, nil
 }
 
 func (s CommandService) PostDevice(c *gin.Context, ent *entity.CreateDevice) (uint, error) {
