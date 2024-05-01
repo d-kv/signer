@@ -4,7 +4,11 @@ import (
 	"context"
 	"d-kv/signer/command-executor/internal/services"
 	"d-kv/signer/db-common/config"
+	"d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
+	"d-kv/signer/db-common/repo/vault"
+	"log"
+	"time"
 )
 
 func main() {
@@ -13,9 +17,34 @@ func main() {
 	//	time.Sleep(1 * time.Minute)
 	//	cancel()
 	//	token generation
+	ctx := context.Background()
+
+	vaultConfig := config.VaultConfig{
+		Token:   "my-token",
+		Address: "http://localhost:8200",
+		Timout:  time.Second * 5,
+	}
+	err, vaultRepo := vault.New(vaultConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = vaultRepo.SaveIntegrationToken(ctx, &entity.IntegrationToken{
+		IntegrationId: "ios-team",
+		Token:         "NJI32NJ434U3I4U94JN",
+		KeyId:         "MF43IMFF3",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err, integrationToken := vaultRepo.FindTokenByIntegrationId(ctx, "ios-team")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("integrationToken: %v", integrationToken)
+
 	pgConfig := config.PostgresConfig{Host: "localhost", User: "postgres",
 		Password: "postgres", Name: "command_queue", Port: "5432"}
 	repo := command.New(pgConfig)
-	ctx := context.Background()
 	services.StartProcessor(ctx, repo)
 }
