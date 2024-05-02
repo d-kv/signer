@@ -25,6 +25,8 @@ type CreateDevice struct {
 	TenantId       string
 	IntegrationId  string
 	DeviceName     string
+	UserID         string
+	UserName       string
 	DevicePlatform Platform
 	DeviceUdid     string
 	Status         Status
@@ -54,6 +56,7 @@ var CapabilityTypeValues = []string{"IN_APP_PURCHASE", "PUSH_NOTIFICATIONS", "AP
 type Status string
 
 const (
+	Error      Status = "ERROR"
 	Created    Status = "CREATED"
 	Processing Status = "PROCESSING"
 	Completed  Status = "COMPLETED"

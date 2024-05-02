@@ -6,6 +6,7 @@ import (
 	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
+	"d-kv/signer/db-common/repo/domain"
 	"d-kv/signer/db-common/repo/vault"
 	"log"
 	"time"
@@ -43,8 +44,15 @@ func main() {
 	}
 	log.Printf("integrationToken: %v", integrationToken)
 
-	pgConfig := config.PostgresConfig{Host: "localhost", User: "postgres",
+	pgQueue := config.PostgresConfig{Host: "localhost", User: "postgres",
 		Password: "postgres", Name: "command_queue", Port: "5432"}
-	repo := command.New(pgConfig)
-	services.StartProcessor(ctx, repo)
+	pgRepo := domain.PostgresConfig{Host: "localhost", User: "postgres",
+		Password: "postgres", Name: "postgres", Port: "5433"}
+
+	queue := command.New(pgQueue)
+	repo := domain.New(pgRepo)
+
+	log.Println("Server successfully started!")
+
+	services.StartProcessor(ctx, queue, repo)
 }
