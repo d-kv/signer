@@ -11,17 +11,23 @@ type Integration struct {
 	TeamId   string
 	Tenant   Tenant
 	Devices  []Device `gorm:"many2many:integration_devices"`
+	// Ids
+	TenantId string
 }
 
 type BundleId struct {
 	ID          string
 	Name        string
 	Integration Integration
+	// Ids
+	IntegrationId string
 }
 
 type Capability struct {
 	BundleId BundleId
 	Type     string
+	// Ids
+	BundleIdId string
 }
 
 type User struct {
@@ -35,6 +41,8 @@ type Device struct {
 	User         User
 	Profiles     []Profile     `gorm:"many2many:profile_devices;"`
 	Integrations []Integration `gorm:"many2many:integration_devices"`
+	// Ids
+	UserID string
 }
 
 type Certificate struct {
@@ -43,6 +51,8 @@ type Certificate struct {
 	Type        string
 	Integration Integration
 	Profiles    []Profile `gorm:"many2many:profile_certificates;"`
+	// Ids
+	IntegrationId string
 }
 
 type Profile struct {
@@ -52,4 +62,7 @@ type Profile struct {
 	Integration  Integration
 	Devices      []Device      `gorm:"many2many:profile_devices;"`
 	Certificates []Certificate `gorm:"many2many:profile_certificates;"`
+	// Ids
+	BundleIdId    string
+	IntegrationId string
 }
