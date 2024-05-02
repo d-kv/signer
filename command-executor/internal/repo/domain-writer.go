@@ -2,7 +2,7 @@ package repo
 
 import (
 	"context"
-	entity2 "d-kv/signer/command-executor/pkg/entity"
+	pkgEntity "d-kv/signer/command-executor/pkg/entity"
 	"d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
 	"d-kv/signer/db-common/repo/domain"
@@ -15,12 +15,12 @@ func WriteCapability(ctx context.Context, queue *command.Repo, repo *domain.Post
 	if err != nil {
 		return err
 	}
-	converted := entity2.ConvertCapability(&id, &operation)
+	converted := pkgEntity.ConvertCapability(&id, &operation)
 	err = repo.CapabilityRepo.Create(ctx, converted)
 	if err != nil {
 		return err
 	}
-	err = queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.GetId(), entity.Completed)
+	err = queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, entity.Completed)
 	return err
 }
 func WriteDevice(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo, operation entity.CreateDevice) error {
@@ -45,7 +45,7 @@ func WriteDevice(ctx context.Context, queue *command.Repo, repo *domain.Postgres
 				return err1
 			}
 			integrations = append(integrations, integration)
-			converted := entity2.ConvertDevice(&operation, &userid, profiles, integrations)
+			converted := pkgEntity.ConvertDevice(&operation, &userid, profiles, integrations)
 			err = repo.DeviceRepo.Create(ctx, converted)
 			if err != nil {
 				return err
@@ -63,7 +63,7 @@ func WriteDevice(ctx context.Context, queue *command.Repo, repo *domain.Postgres
 		if err != nil {
 			return err
 		}
-		err = queue.SetStatusByIdDeviceCommand(ctx, operation.GetId(), entity.Completed)
+		err = queue.SetStatusByIdDeviceCommand(ctx, operation.ID, entity.Completed)
 		if err != nil {
 			return err
 		}
@@ -77,12 +77,12 @@ func WriteBundleId(ctx context.Context, queue *command.Repo, repo *domain.Postgr
 	if err != nil {
 		return err
 	}
-	converted := entity2.ConvertBundleId(&id, &operation)
+	converted := pkgEntity.ConvertBundleId(&id, &operation)
 	err = repo.BundleIdRepo.Create(ctx, converted)
 	if err != nil {
 		return err
 	}
-	err = queue.SetStatusByIdBundleIdCommand(ctx, operation.GetId(), entity.Completed)
+	err = queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, entity.Completed)
 	if err != nil {
 		return err
 	}

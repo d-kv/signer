@@ -3,11 +3,10 @@ package services
 import (
 	"bytes"
 	"context"
-	repo2 "d-kv/signer/command-executor/internal/repo"
+	repoWriter "d-kv/signer/command-executor/internal/repo"
 	"d-kv/signer/command-executor/pkg/entity"
-	"d-kv/signer/command-executor/pkg/usecase"
 	_ "d-kv/signer/db-common/config"
-	dbentity "d-kv/signer/db-common/entity"
+	dbEntity "d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
 	_ "d-kv/signer/db-common/repo/command"
 	"d-kv/signer/db-common/repo/domain"
@@ -21,14 +20,14 @@ import (
 
 const accessToken = "CHANGEME"
 
-func SetStatusByIdAnything(ctx context.Context, baseCommand *usecase.DataBaseCommand, status dbentity.Status, queue *command.Repo) error {
+func SetStatusById(ctx context.Context, baseCommand *entity.DataBaseCommand, status dbEntity.Status, queue *command.Repo) error {
 	err := error(nil)
 	switch (*baseCommand).(type) {
-	case *dbentity.CreateDevice:
+	case *entity.CreateDevice:
 		err = queue.SetStatusByIdDeviceCommand(ctx, (*baseCommand).GetId(), status)
-	case *dbentity.CreateBundleId:
+	case *entity.CreateBundleId:
 		err = queue.SetStatusByIdBundleIdCommand(ctx, (*baseCommand).GetId(), status)
-	case *dbentity.EnableCapabilityType:
+	case *entity.EnableCapabilityType:
 		err = queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, (*baseCommand).GetId(), status)
 	default:
 		err = errors.New("unknown type")
@@ -36,57 +35,60 @@ func SetStatusByIdAnything(ctx context.Context, baseCommand *usecase.DataBaseCom
 	return err
 }
 
-func Processing(ctx context.Context, queue *command.Repo, operation usecase.DataBaseCommand) error {
-	err := SetStatusByIdAnything(ctx, &operation, dbentity.Processing, queue)
+func Processing(ctx context.Context, queue *command.Repo, operation entity.DataBaseCommand) error {
+	err := SetStatusById(ctx, &operation, dbEntity.Processing, queue)
 	if err != nil {
-		err = SetStatusByIdAnything(ctx, &operation, dbentity.Error, queue)
+		err = SetStatusById(ctx, &operation, dbEntity.Error, queue)
 		return err
 	}
 	err = SendCommand(ctx, operation.Convert())
 	if err != nil {
-		err = SetStatusByIdAnything(ctx, &operation, dbentity.Error, queue)
+		err = SetStatusById(ctx, &operation, dbEntity.Error, queue)
 	}
 	return err
 }
 
 func StartProcessor(ctx context.Context, queue *command.Repo, repo *domain.PostgresDomainRepo) {
 	for {
-		commands := queue.FindByStatusDeviceCommand(ctx, dbentity.Created)
+		commands := queue.FindByStatusDeviceCommand(ctx, dbEntity.Created)
 		for _, operation := range commands {
-			err := Processing(ctx, queue, &operation)
+			localOperation := &entity.CreateDevice{Outer: operation}
+			err := Processing(ctx, queue, localOperation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				continue
 			}
-			err = repo2.WriteDevice(ctx, queue, repo, operation)
+			err = repoWriter.WriteDevice(ctx, queue, repo, operation)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
 				continue
 			}
 		}
 
-		bundleIdCommand := queue.FindByStatusBundleIdCommand(ctx, dbentity.Created)
+		bundleIdCommand := queue.FindByStatusBundleIdCommand(ctx, dbEntity.Created)
 		for _, operation := range bundleIdCommand {
-			err := Processing(ctx, queue, &operation)
+			localOperation := &entity.CreateBundleId{Outer: operation}
+			err := Processing(ctx, queue, localOperation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				continue
 			}
-			err = repo2.WriteBundleId(ctx, queue, repo, operation)
+			err = repoWriter.WriteBundleId(ctx, queue, repo, operation)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
 				continue
 			}
 		}
 
-		capabilityCommand := queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbentity.Created)
+		capabilityCommand := queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbEntity.Created)
 		for _, operation := range capabilityCommand {
-			err := Processing(ctx, queue, &operation)
+			localOperation := entity.EnableCapabilityType{Outer: operation}
+			err := Processing(ctx, queue, &localOperation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				continue
 			}
-			err = repo2.WriteCapability(ctx, queue, repo, err, operation)
+			err = repoWriter.WriteCapability(ctx, queue, repo, err, operation)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
 				continue

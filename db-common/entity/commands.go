@@ -9,10 +9,6 @@ type EnableCapabilityType struct {
 	Status         Status
 }
 
-func (input *EnableCapabilityType) GetId() uint {
-	return input.ID
-}
-
 type CreateBundleId struct {
 	ID               uint
 	TenantId         string
@@ -22,10 +18,6 @@ type CreateBundleId struct {
 	BundlePlatform   Platform
 	SeedId           string
 	Status           Status
-}
-
-func (input *CreateBundleId) GetId() uint {
-	return input.ID
 }
 
 type CreateDevice struct {
@@ -38,10 +30,6 @@ type CreateDevice struct {
 	DevicePlatform Platform
 	DeviceUdid     string
 	Status         Status
-}
-
-func (input *CreateDevice) GetId() uint {
-	return input.ID
 }
 
 type Platform string
