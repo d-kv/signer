@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/domain/bundle_id"
 	"d-kv/signer/db-common/repo/domain/capability"
@@ -28,15 +29,7 @@ type PostgresDomainRepo struct {
 	CapabilityRepo  usecase.CapabilityRepo
 }
 
-type PostgresConfig struct {
-	Host     string
-	User     string
-	Password string
-	Name     string
-	Port     string
-}
-
-func New(conf PostgresConfig) *PostgresDomainRepo {
+func New(conf config.PostgresConfig) *PostgresDomainRepo {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		conf.Host,
@@ -45,6 +38,10 @@ func New(conf PostgresConfig) *PostgresDomainRepo {
 		conf.Name,
 		conf.Port,
 	)
+	return NewFromDsn(dsn)
+}
+
+func NewFromDsn(dsn string) *PostgresDomainRepo {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error open gorm connection wti db", err)
