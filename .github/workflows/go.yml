@@ -7,7 +7,8 @@ on:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
+    types: [opened, synchronize, reopened] # Запуск при открытии, синхронизации и повторном открытии pull request
+
 
 jobs:
 
