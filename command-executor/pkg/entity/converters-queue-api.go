@@ -5,6 +5,7 @@ import "d-kv/signer/db-common/entity"
 type DataBaseCommand interface {
 	GetId() uint
 	Convert() ApiEntity
+	GetIntegrationId() string
 }
 
 type CreateDevice struct {
@@ -13,6 +14,22 @@ type CreateDevice struct {
 
 func (input *CreateDevice) GetId() uint {
 	return input.Outer.ID
+}
+func (input *CreateBundleId) GetId() uint {
+	return input.Outer.ID
+}
+func (input *EnableCapabilityType) GetId() uint {
+	return input.Outer.ID
+}
+
+func (input *CreateDevice) GetIntegrationId() string {
+	return input.Outer.IntegrationId
+}
+func (input *CreateBundleId) GetIntegrationId() string {
+	return input.Outer.IntegrationId
+}
+func (input *EnableCapabilityType) GetIntegrationId() string {
+	return input.Outer.IntegrationId
 }
 
 func (input *CreateDevice) Convert() ApiEntity {
@@ -33,10 +50,6 @@ type CreateBundleId struct {
 	Outer entity.CreateBundleId
 }
 
-func (input *CreateBundleId) GetId() uint {
-	return input.Outer.ID
-}
-
 func (input *CreateBundleId) Convert() ApiEntity {
 	newBid := ApiCreateBundleId{
 		Data: BundleIdData{
@@ -54,10 +67,6 @@ func (input *CreateBundleId) Convert() ApiEntity {
 
 type EnableCapabilityType struct {
 	Outer entity.EnableCapabilityType
-}
-
-func (input *EnableCapabilityType) GetId() uint {
-	return input.Outer.ID
 }
 
 func (input *EnableCapabilityType) Convert() ApiEntity {

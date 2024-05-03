@@ -51,8 +51,9 @@ func main() {
 
 	queue := command.New(pgQueue)
 	repo := domain.New(pgRepo)
+	service := services.NewProcessorService(queue, repo, vaultRepo)
 
 	log.Println("Server successfully started!")
 
-	services.StartProcessor(ctx, queue, repo)
+	service.StartProcessor(ctx)
 }
