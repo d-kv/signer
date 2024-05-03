@@ -12,7 +12,6 @@ import (
 	"d-kv/signer/db-common/repo/domain/tenant"
 	"d-kv/signer/db-common/repo/domain/user"
 	"d-kv/signer/db-common/usecase"
-	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -30,14 +29,7 @@ type PostgresDomainRepo struct {
 }
 
 func New(conf config.PostgresConfig) *PostgresDomainRepo {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		conf.Host,
-		conf.User,
-		conf.Password,
-		conf.Name,
-		conf.Port,
-	)
+	dsn := conf.ToConnectionString()
 	return NewFromDsn(dsn)
 }
 
