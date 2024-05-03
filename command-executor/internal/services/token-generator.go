@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/base64"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"log"
 	"time"
 )
 
@@ -16,13 +16,13 @@ const (
 func (s *ProcessorService) generateECDSAPrivateKey(base64PrivateKey string) (*ecdsa.PrivateKey, error) {
 	PEMPrivateKey, err := base64.StdEncoding.DecodeString(base64PrivateKey)
 	if err != nil {
-		log.Fatal("Ошибка при декодировании приватного ключа:", err)
+		fmt.Println("Ошибка при декодировании приватного ключа:", err)
 		return nil, err
 	}
 
 	key, err := jwt.ParseECPrivateKeyFromPEM(PEMPrivateKey)
 	if err != nil {
-		log.Fatal("Не удалось создать экземпляр приватного ключа:", err)
+		fmt.Println("Не удалось создать экземпляр приватного ключа:", err)
 		return nil, err
 	}
 
@@ -45,12 +45,12 @@ func (s *ProcessorService) getJWT(ctx context.Context, IntegrationId string) (st
 
 	key, err := s.generateECDSAPrivateKey(tokenInfo.Token)
 	if err != nil {
-		log.Fatal("Error generating ECDSA private key:", err)
+		fmt.Println("Error generating ECDSA private key:", err)
 		return "", err
 	}
 	tokenString, err := token.SignedString(key)
 	if err != nil {
-		log.Fatal("Не удалось подписать токен:", err)
+		fmt.Println("Не удалось подписать токен:", err)
 		return "", err
 	}
 	return tokenString, nil
@@ -59,7 +59,7 @@ func (s *ProcessorService) getJWT(ctx context.Context, IntegrationId string) (st
 func (s *ProcessorService) GetTokenByIntegrationID(ctx context.Context, IntegrationId string) (string, error) {
 	jwtToken, err := s.getJWT(ctx, IntegrationId)
 	if err != nil {
-		log.Fatal("Error generate JWT")
+		fmt.Println("Error generate JWT")
 		return "", err
 	}
 	return jwtToken, err

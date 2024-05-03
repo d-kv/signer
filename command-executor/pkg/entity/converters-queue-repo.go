@@ -2,9 +2,10 @@ package entity
 
 import "d-kv/signer/db-common/entity"
 
-func ConvertBundleId(integration *entity.Integration, id *entity.CreateBundleId) *entity.BundleId {
+func ConvertBundleId(integration *entity.Integration, id *entity.CreateBundleId, response *BundleIdResponse) *entity.BundleId {
 	newBid := &entity.BundleId{
-		ID:          id.BundleIdentifier,
+		ID: response.Id,
+		/*Identifier: id.BundleIdentifier,*/
 		Name:        id.BundleName,
 		Integration: *integration,
 	}

@@ -30,15 +30,15 @@ func main() {
 		log.Fatal(err)
 	}
 	err = vaultRepo.SaveIntegrationToken(ctx, &entity.IntegrationToken{
-		IntegrationId: "ios-team",
-		Token:         "NJI32NJ434U3I4U94JN",
-		KeyId:         "MF43IMFF3",
+		IntegrationId: "iosteam",
+		Token:         "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR1RBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEJIa3dkd0lCQVFRZ3lFVFZlRmdSQmdCTlpIZlEKUmZ1NUtGMG50T0twUTJwNCtQdjV5bUUwZnoyZ0NnWUlLb1pJemowREFRZWhSQU5DQUFSWktEa2xER2hGdzk1WgovSUNqS1RJUFJ6NU1ucGd5ajZkS29UTkZXdHF3Y1BhSnAzdU1EZitUbG1ZNFJlZitSNmw2QmlnREFSR2t0bFNRCkRRUVNscWJlCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=",
+		KeyId:         "CHNPV39B43",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err, integrationToken := vaultRepo.FindTokenByIntegrationId(ctx, "ios-team")
+	err, integrationToken := vaultRepo.FindTokenByIntegrationId(ctx, "iosteam")
 	if err != nil {
 		log.Fatal(err)
 	}

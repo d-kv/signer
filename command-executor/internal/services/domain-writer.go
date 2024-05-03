@@ -70,12 +70,12 @@ func (s *ProcessorService) WriteDevice(ctx context.Context, operation entity.Cre
 	return err
 }
 
-func (s *ProcessorService) WriteBundleId(ctx context.Context, operation entity.CreateBundleId) error {
+func (s *ProcessorService) WriteBundleId(ctx context.Context, operation entity.CreateBundleId, response *pkgEntity.BundleIdResponse) error {
 	id, err := s.Repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
 	if err != nil {
 		return err
 	}
-	converted := pkgEntity.ConvertBundleId(&id, &operation)
+	converted := pkgEntity.ConvertBundleId(&id, &operation, response)
 	err = s.Repo.BundleIdRepo.Create(ctx, converted)
 	if err != nil {
 		return err

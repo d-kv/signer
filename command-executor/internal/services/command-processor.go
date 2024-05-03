@@ -15,7 +15,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -48,17 +47,23 @@ func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *entit
 	return err
 }
 
-func (s *ProcessorService) Processing(ctx context.Context, operation entity.DataBaseCommand) error {
+func (s *ProcessorService) Processing(ctx context.Context, operation entity.DataBaseCommand) (*http.Response, error) {
 	err := s.SetStatusById(ctx, &operation, dbEntity.Processing)
 	if err != nil {
-		err = s.SetStatusById(ctx, &operation, dbEntity.Error)
-		return err
+		err1 := s.SetStatusById(ctx, &operation, dbEntity.Error)
+		if err1 != nil {
+			return nil, err1
+		}
+		return nil, err
 	}
-	err = s.SendCommand(ctx, operation.Convert(), operation.GetIntegrationId())
+	resp, err := s.SendCreateCommand(ctx, operation.Convert(), operation.GetIntegrationId())
 	if err != nil {
-		err = s.SetStatusById(ctx, &operation, dbEntity.Error)
+		err1 := s.SetStatusById(ctx, &operation, dbEntity.Error)
+		if err1 != nil {
+			return resp, err1
+		}
 	}
-	return err
+	return resp, err
 }
 
 func (s *ProcessorService) StartProcessor(ctx context.Context) {
@@ -66,7 +71,11 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		commands := s.Queue.FindByStatusDeviceCommand(ctx, dbEntity.Created)
 		for _, operation := range commands {
 			localOperation := &entity.CreateDevice{Outer: operation}
-			err := s.Processing(ctx, localOperation)
+			resp, err := s.Processing(ctx, localOperation)
+			err = resp.Body.Close()
+			if err != nil {
+				return
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				continue
@@ -81,12 +90,23 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		bundleIdCommand := s.Queue.FindByStatusBundleIdCommand(ctx, dbEntity.Created)
 		for _, operation := range bundleIdCommand {
 			localOperation := &entity.CreateBundleId{Outer: operation}
-			err := s.Processing(ctx, localOperation)
+			resp, err := s.Processing(ctx, localOperation)
+			responseObj := entity.BundleIdResponse{}
+			decoder := json.NewDecoder(resp.Body)
+			err = decoder.Decode(&responseObj)
+			if err != nil {
+				fmt.Println("Error while decoding api answer", err, responseObj.Id)
+				continue
+			}
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error closing body")
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				continue
 			}
-			err = s.WriteBundleId(ctx, operation)
+			err = s.WriteBundleId(ctx, operation, &responseObj)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
 				continue
@@ -96,7 +116,11 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		capabilityCommand := s.Queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbEntity.Created)
 		for _, operation := range capabilityCommand {
 			localOperation := entity.EnableCapabilityType{Outer: operation}
-			err := s.Processing(ctx, &localOperation)
+			resp, err := s.Processing(ctx, &localOperation)
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error closing body")
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				continue
@@ -110,21 +134,22 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 	}
 }
 
-func (s *ProcessorService) SendCommand(ctx context.Context, e entity.ApiEntity, IntegrationId string) error {
+func (s *ProcessorService) SendCreateCommand(ctx context.Context, e entity.ApiEntity, IntegrationId string) (*http.Response, error) {
 	payload, err := json.Marshal(e)
 	if err != nil {
 		fmt.Println("Error marshalling JSON:", err)
-		return err
+		return nil, err
 	}
 
 	req, err := http.NewRequest("POST", string(e.GetURL()), bytes.NewBuffer(payload))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
-		return err
+		return nil, err
 	}
 	token, err := s.GetTokenByIntegrationID(ctx, IntegrationId)
 	if err != nil {
-		return err
+		fmt.Println("Error searching token:", err)
+		return nil, err
 	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
@@ -132,26 +157,20 @@ func (s *ProcessorService) SendCommand(ctx context.Context, e entity.ApiEntity, 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal("Error making request:")
-		return err
+		fmt.Println("Error making request:", err)
+		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err = Body.Close()
-		if err != nil {
-			log.Fatal("Error closing response body:")
-			return
-		}
-	}(resp.Body)
 
 	if resp.StatusCode != http.StatusCreated {
 		fmt.Println("Error: Unexpected response status code", resp.Status)
 		responseBody, err1 := io.ReadAll(resp.Body)
 		if err1 != nil {
-			log.Fatalf("Error reading response body:")
-			return err1
+			fmt.Println("Error reading response body:", err1)
+			return resp, err1
 		}
 		fmt.Println("Response Body:", string(responseBody))
+		return resp, errors.New(resp.Status)
 	}
 	fmt.Println("New instance created successfully!")
-	return nil
+	return resp, err
 }
