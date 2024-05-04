@@ -37,10 +37,8 @@ func TestPostgresDomainRepo(t *testing.T) {
 
 		foundTenant, err := repo.TenantRepo.FindById(ctx, "tenant_id")
 		require.NoError(t, err)
+		require.NotNil(t, foundTenant)
 		require.Equal(t, tenant, foundTenant)
-
-		err = repo.TenantRepo.DeleteById(ctx, "tenant_id")
-		require.NoError(t, err)
 	})
 
 	t.Run("TestDeviceRepo", func(t *testing.T) {
@@ -48,7 +46,14 @@ func TestPostgresDomainRepo(t *testing.T) {
 	})
 
 	t.Run("TestIntegrationRepo", func(t *testing.T) {
-		// Здесь вы можете добавить тесты для IntegrationRepo
+		integration := entity.Integration{
+			ID:       "integrationId",
+			IssuerId: "issuerId",
+			TeamId:   "teamId",
+			TenantId: "tenant_id",
+		}
+		err := repo.IntegrationRepo.Create(ctx, &integration)
+		require.NoError(t, err)
 	})
 
 	t.Run("TestProfileRepo", func(t *testing.T) {
@@ -56,7 +61,18 @@ func TestPostgresDomainRepo(t *testing.T) {
 	})
 
 	t.Run("TestBundleIdRepo", func(t *testing.T) {
-		// Здесь вы можете добавить тесты для BundleIdRepo
+		bundleId := entity.BundleId{
+			ID:            "bundleID",
+			Identifier:    "bundleIdentifier",
+			Name:          "bundleName",
+			IntegrationId: "integrationId",
+		}
+		err := repo.BundleIdRepo.Create(ctx, &bundleId)
+		require.NoError(t, err)
+
+		foundBundleId, err := repo.BundleIdRepo.FindById(ctx, bundleId.ID)
+		require.NoError(t, err)
+		require.Equal(t, bundleId, foundBundleId)
 	})
 
 	t.Run("TestCertificateRepo", func(t *testing.T) {
