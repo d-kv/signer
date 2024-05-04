@@ -9,7 +9,7 @@ import (
 	"d-kv/signer/db-common/repo/domain/profile"
 	"d-kv/signer/db-common/repo/domain/tenant"
 	"d-kv/signer/db-common/repo/domain/user"
-	"d-kv/signer/query-handler/internal/services"
+	"d-kv/signer/db-common/usecase"
 	"d-kv/signer/query-handler/pkg/httpserver"
 	"d-kv/signer/query-handler/pkg/httpserver/handlers"
 	"gorm.io/driver/postgres"
@@ -29,7 +29,7 @@ func main() {
 	db, err := gorm.Open(postgres.Open(dsn.String()))
 
 	h := handlers.Handler{
-		QueryProcessor: &services.QueryProcessor{
+		DomainRepos: &usecase.DomainRepos{
 			TenantRepo:      &tenant.GormRepo{DB: db},
 			DeviceRepo:      &device.GormRepo{DB: db},
 			IntegrationRepo: &integration.GormRepo{DB: db},
