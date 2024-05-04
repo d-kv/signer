@@ -21,7 +21,7 @@ func ConvertCapability(id *entity.BundleId, capability *entity.EnableCapabilityT
 
 func ConvertDevice(device *entity.CreateDevice, user *entity.User, profile []entity.Profile, integration []entity.Integration) *entity.Device {
 	newDevice := &entity.Device{
-		ID:           device.DeviceUdid,
+		UDID:         device.DeviceUdid,
 		Name:         device.DeviceName,
 		User:         *user,
 		Profiles:     profile,
