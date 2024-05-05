@@ -37,7 +37,7 @@ func mapCapabilitiesToTypes(capabilities []entity.Capability) []entity.Capabilit
 
 func mapStringCapabilityType(stringType string) entity.CapabilityType {
 	if !slices.Contains(entity.CapabilityTypeValues, stringType) {
-		return entity.CapabilityType("Undefined")
+		return "Undefined"
 	}
 	return entity.CapabilityType(stringType)
 }
