@@ -4,7 +4,6 @@ import (
 	"context"
 	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/entity"
-	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -15,14 +14,7 @@ type Repo struct {
 }
 
 func New(conf config.PostgresConfig) *Repo {
-	dsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		conf.Host,
-		conf.Port,
-		conf.User,
-		conf.Password,
-		conf.Name,
-	)
+	dsn := conf.ToConnectionString()
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error open gorm connection wti db", err)

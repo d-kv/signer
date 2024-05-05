@@ -19,10 +19,10 @@ func (repo *GormRepo) Create(ctx context.Context, capability *entity.Capability)
 	return err
 }
 
-func (repo *GormRepo) FindById(ctx context.Context, ID string) (entity.Capability, error) {
-	var capability = entity.Capability{}
-	err := repo.DB.WithContext(ctx).First(&capability, ID).Error
-	return capability, err
+func (repo *GormRepo) FindByBundleIdId(ctx context.Context, ID string) ([]entity.Capability, error) {
+	var capabilities []entity.Capability
+	err := repo.DB.WithContext(ctx).Where("bundle_id_id = ?", ID).Find(&capabilities).Error
+	return capabilities, err
 }
 
 func (repo *GormRepo) Update(ctx context.Context, capability *entity.Capability) error {
@@ -31,7 +31,7 @@ func (repo *GormRepo) Update(ctx context.Context, capability *entity.Capability)
 }
 
 func (repo *GormRepo) DeleteById(ctx context.Context, ID string) error {
-	err := repo.DB.WithContext(ctx).Delete(&entity.Capability{}, ID).Error
+	err := repo.DB.WithContext(ctx).Where("id = ?", ID).Delete(&entity.Capability{}).Error
 	return err
 }
 

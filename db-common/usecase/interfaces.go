@@ -20,6 +20,7 @@ type (
 		Update(context.Context, *entity.Device) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Device, error)
+		FindByIntegrationId(context.Context, string) ([]entity.Device, error)
 	}
 
 	IntegrationRepo interface {
@@ -41,6 +42,7 @@ type (
 	BundleIdRepo interface {
 		Create(context.Context, *entity.BundleId) error
 		FindById(context.Context, string) (entity.BundleId, error)
+		FindByIntegrationId(context.Context, string) (entity.BundleId, error)
 		Update(context.Context, *entity.BundleId) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.BundleId, error)
@@ -64,7 +66,7 @@ type (
 
 	CapabilityRepo interface {
 		Create(context.Context, *entity.Capability) error
-		FindById(context.Context, string) (entity.Capability, error)
+		FindByBundleIdId(context.Context, string) ([]entity.Capability, error)
 		Update(context.Context, *entity.Capability) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Capability, error)

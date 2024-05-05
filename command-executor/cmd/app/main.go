@@ -43,7 +43,7 @@ func main() {
 
 	pgQueue := config.PostgresConfig{Host: "localhost", User: "postgres",
 		Password: "postgres", Name: "command_queue", Port: "5432"}
-	pgRepo := domain.PostgresConfig{Host: "localhost", User: "postgres",
+	pgRepo := config.PostgresConfig{Host: "localhost", User: "postgres",
 		Password: "postgres", Name: "postgres", Port: "5433"}
 
 	queue := command.New(pgQueue)

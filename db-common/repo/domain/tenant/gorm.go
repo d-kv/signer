@@ -21,7 +21,7 @@ func (repo *GormRepo) Create(ctx context.Context, tenant *entity.Tenant) error {
 
 func (repo *GormRepo) FindById(ctx context.Context, ID string) (entity.Tenant, error) {
 	var tenant = entity.Tenant{}
-	err := repo.DB.WithContext(ctx).First(&tenant, ID).Error
+	err := repo.DB.WithContext(ctx).Where("id = ?", ID).First(&tenant).Error
 	return tenant, err
 }
 
@@ -31,7 +31,7 @@ func (repo *GormRepo) Update(ctx context.Context, tenant *entity.Tenant) error {
 }
 
 func (repo *GormRepo) DeleteById(ctx context.Context, ID string) error {
-	err := repo.DB.WithContext(ctx).Delete(&entity.Tenant{}, ID).Error
+	err := repo.DB.WithContext(ctx).Where("id = ?", ID).Delete(&entity.Tenant{}).Error
 	return err
 }
 

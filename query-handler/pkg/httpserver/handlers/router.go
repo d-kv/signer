@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"d-kv/signer/query-handler/internal/services"
+	"d-kv/signer/db-common/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	QueryProcessor *services.QueryProcessor
+	DomainRepos *usecase.DomainRepos
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
