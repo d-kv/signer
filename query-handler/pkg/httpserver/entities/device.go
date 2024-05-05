@@ -3,9 +3,9 @@ package entities
 import "d-kv/signer/db-common/entity"
 
 type Device struct {
-	Identifier string          `json:"identifier"`
+	UDID       string          `json:"udid"`
 	Name       string          `json:"name"`
 	UserId     string          `json:"userId"`
-	UDID       string          `json:"udid"`
+	Identifier string          `json:"id"`
 	Platform   entity.Platform `json:"platform"`
 }

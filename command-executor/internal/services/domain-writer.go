@@ -2,30 +2,39 @@ package services
 
 import (
 	"context"
-	pkgEntity "d-kv/signer/command-executor/pkg/entity"
-	"d-kv/signer/db-common/entity"
+	"d-kv/signer/command-executor/pkg/entity"
+	dbEntity "d-kv/signer/db-common/entity"
+	"d-kv/signer/db-common/repo/domain"
 	"errors"
 	"gorm.io/gorm"
 )
 
-func (s *ProcessorService) WriteCapability(ctx context.Context, err error, operation entity.EnableCapabilityType) error {
+type DataBaseService struct {
+	Repo *domain.PostgresDomainRepo
+}
+
+func NewDataBaseService(repo *domain.PostgresDomainRepo) *DataBaseService {
+	return &DataBaseService{Repo: repo}
+}
+
+func (s *DataBaseService) WriteCapability(ctx context.Context, err error, operation dbEntity.EnableCapabilityType) error {
 	id, err := s.Repo.BundleIdRepo.FindById(ctx, operation.BundleId)
 	if err != nil {
 		return err
 	}
-	converted := pkgEntity.ConvertCapability(&id, &operation)
+	converted := entity.ConvertCapability(&id, &operation)
 	err = s.Repo.CapabilityRepo.Create(ctx, converted)
 	if err != nil {
 		return err
 	}
-	err = s.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, entity.Completed)
+
 	return err
 }
-func (s *ProcessorService) WriteDevice(ctx context.Context, operation entity.CreateDevice) error {
+func (s *DataBaseService) WriteDevice(ctx context.Context, operation dbEntity.CreateDevice) error {
 	userid, err := s.Repo.UserRepo.FindById(ctx, operation.UserID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			userid = entity.User{
+			userid = dbEntity.User{
 				ID:   operation.UserID,
 				Name: operation.UserName,
 			}
@@ -36,14 +45,14 @@ func (s *ProcessorService) WriteDevice(ctx context.Context, operation entity.Cre
 	deviceId, err := s.Repo.DeviceRepo.FindById(ctx, operation.DeviceUdid)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			var profiles []entity.Profile
-			var integrations []entity.Integration
+			var profiles []dbEntity.Profile
+			var integrations []dbEntity.Integration
 			integration, err1 := s.Repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
 			if err1 != nil {
 				return err1
 			}
 			integrations = append(integrations, integration)
-			converted := pkgEntity.ConvertDevice(&operation, &userid, profiles, integrations)
+			converted := entity.ConvertDevice(&operation, &userid, profiles, integrations)
 			err = s.Repo.DeviceRepo.Create(ctx, converted)
 			if err != nil {
 				return err
@@ -61,26 +70,17 @@ func (s *ProcessorService) WriteDevice(ctx context.Context, operation entity.Cre
 		if err != nil {
 			return err
 		}
-		err = s.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, entity.Completed)
-		if err != nil {
-			return err
-		}
-
 	}
 	return err
 }
 
-func (s *ProcessorService) WriteBundleId(ctx context.Context, operation entity.CreateBundleId, response *pkgEntity.BundleIdResponse) error {
+func (s *DataBaseService) WriteBundleId(ctx context.Context, operation dbEntity.CreateBundleId, response *entity.BundleIdResponse) error {
 	id, err := s.Repo.IntegrationRepo.FindById(ctx, operation.IntegrationId)
 	if err != nil {
 		return err
 	}
-	converted := pkgEntity.ConvertBundleId(&id, &operation, response)
+	converted := entity.ConvertBundleId(&id, &operation, response)
 	err = s.Repo.BundleIdRepo.Create(ctx, converted)
-	if err != nil {
-		return err
-	}
-	err = s.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, entity.Completed)
 	if err != nil {
 		return err
 	}

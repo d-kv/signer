@@ -3,21 +3,18 @@ package main
 import (
 	"context"
 	"d-kv/signer/command-executor/internal/services"
+	ceUsecase "d-kv/signer/command-executor/pkg/usecase"
 	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/entity"
 	"d-kv/signer/db-common/repo/command"
 	"d-kv/signer/db-common/repo/domain"
 	"d-kv/signer/db-common/repo/vault"
 	"log"
+	"net/http"
 	"time"
 )
 
 func main() {
-	//	ctx, cancel := context.WithCancel(context.Background())
-	//	go services.Activate(ctx)
-	//	time.Sleep(1 * time.Minute)
-	//	cancel()
-	//	token generation
 	ctx := context.Background()
 
 	vaultConfig := config.VaultConfig{
@@ -51,9 +48,12 @@ func main() {
 
 	queue := command.New(pgQueue)
 	repo := domain.New(pgRepo)
-	service := services.NewProcessorService(queue, repo, vaultRepo)
-
+	api := services.NewApiService(&http.Client{})
+	token := services.NewTokenService(20 * time.Minute)
+	db := services.NewDataBaseService(repo)
+	service := ceUsecase.NewService(queue, vaultRepo, api, token, db)
+	processor := services.NewProcessorService(service)
 	log.Println("Server successfully started!")
 
-	service.StartProcessor(ctx)
+	processor.StartProcessor(ctx)
 }

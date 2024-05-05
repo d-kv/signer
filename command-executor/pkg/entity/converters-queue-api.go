@@ -2,12 +2,6 @@ package entity
 
 import "d-kv/signer/db-common/entity"
 
-type DataBaseCommand interface {
-	GetId() uint
-	Convert() ApiEntity
-	GetIntegrationId() string
-}
-
 type CreateDevice struct {
 	Outer entity.CreateDevice
 }

@@ -71,6 +71,7 @@ type (
 	}
 )
 
+//go:generate go run github.com/vektra/mockery/v2@v2.43.0 --name=CommandRepo
 type CommandRepo interface {
 	CreateBundleIdCommand(context.Context, entity.CreateBundleId) (error, entity.CreateBundleId)
 	CreateDeviceCommand(context.Context, entity.CreateDevice) (error, entity.CreateDevice)
