@@ -20,6 +20,7 @@ type (
 		Update(context.Context, *entity.Device) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Device, error)
+		FindByIntegrationId(context.Context, string) ([]entity.Device, error)
 	}
 
 	IntegrationRepo interface {
