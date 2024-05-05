@@ -25,6 +25,12 @@ func (repo *GormRepo) FindById(ctx context.Context, ID string) (entity.BundleId,
 	return bundleId, err
 }
 
+func (repo *GormRepo) FindByIntegrationId(ctx context.Context, ID string) (entity.BundleId, error) {
+	var bundleId = entity.BundleId{}
+	err := repo.DB.WithContext(ctx).Where("integration_id = ?", ID).First(&bundleId).Error
+	return bundleId, err
+}
+
 func (repo *GormRepo) Update(ctx context.Context, bundleId *entity.BundleId) error {
 	err := repo.DB.WithContext(ctx).Save(bundleId).Error
 	return err

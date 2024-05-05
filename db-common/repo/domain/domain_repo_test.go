@@ -73,6 +73,19 @@ func TestPostgresDomainRepo(t *testing.T) {
 		foundBundleId, err := repo.BundleIdRepo.FindById(ctx, bundleId.ID)
 		require.NoError(t, err)
 		require.Equal(t, bundleId, foundBundleId)
+
+		foundBundleId, err = repo.BundleIdRepo.FindByIntegrationId(ctx, "integrationId")
+		require.NoError(t, err)
+		require.Equal(t, bundleId, foundBundleId)
+
+		bundleId = entity.BundleId{
+			ID:            "bundleID.2",
+			Identifier:    "bundleIdentifier",
+			Name:          "bundleName",
+			IntegrationId: "invalidIntegrationId",
+		}
+		err = repo.BundleIdRepo.Create(ctx, &bundleId)
+		require.Error(t, err)
 	})
 
 	t.Run("TestCertificateRepo", func(t *testing.T) {
@@ -84,6 +97,15 @@ func TestPostgresDomainRepo(t *testing.T) {
 	})
 
 	t.Run("TestCapabilityRepo", func(t *testing.T) {
-		// Здесь вы можете добавить тесты для CapabilityRepo
+		capability := entity.Capability{
+			Type:       string(entity.InAppPurchase),
+			BundleIdId: "bundleID",
+		}
+		err := repo.CapabilityRepo.Create(ctx, &capability)
+		require.NoError(t, err)
+
+		foundCapabilities, err := repo.CapabilityRepo.FindByBundleIdId(ctx, "bundleID")
+		require.NoError(t, err)
+		require.Equal(t, string(entity.InAppPurchase), foundCapabilities[0].Type)
 	})
 }
