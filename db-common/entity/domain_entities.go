@@ -39,6 +39,7 @@ type User struct {
 type Device struct {
 	UDID         string `gorm:"primary_key"`
 	Name         string
+	Platform     string
 	User         User          `gorm:"references:ID"`
 	Profiles     []Profile     `gorm:"many2many:profile_devices;"`
 	Integrations []Integration `gorm:"many2many:integration_devices"`

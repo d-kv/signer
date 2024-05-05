@@ -5,8 +5,8 @@ echo "Starting docker-compose..."
 docker-compose up -d &> /dev/null
 
 # Пауза перед стартом docker-compose
-echo "Waiting for 5 seconds before starting docker-compose..."
-sleep 5
+echo "Waiting for 10 seconds before starting docker-compose..."
+sleep 10
 
 # Запускаем тесты для всех модулей
 echo "Running tests for db-common module..."

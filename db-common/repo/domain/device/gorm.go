@@ -40,3 +40,17 @@ func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.Device, error) {
 	err := repo.DB.WithContext(ctx).Find(&devices).Error
 	return devices, err
 }
+
+func (repo *GormRepo) FindByIntegrationId(ctx context.Context, ID string) ([]entity.Device, error) {
+	var integration = entity.Integration{}
+	err := repo.DB.
+		WithContext(ctx).
+		Model(&entity.Integration{}).
+		Preload("Devices").
+		Where("id = ?", ID).
+		First(&integration).Error
+	if err != nil {
+		return []entity.Device{}, err
+	}
+	return integration.Devices, nil
+}
