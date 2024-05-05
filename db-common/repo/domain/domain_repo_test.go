@@ -41,8 +41,13 @@ func TestPostgresDomainRepo(t *testing.T) {
 		require.Equal(t, tenant, foundTenant)
 	})
 
-	t.Run("TestDeviceRepo", func(t *testing.T) {
-		// Здесь вы можете добавить тесты для DeviceRepo
+	t.Run("TestUserRepo", func(t *testing.T) {
+		user := entity.User{
+			ID:   "userId",
+			Name: "Maks",
+		}
+		err := repo.UserRepo.Create(ctx, &user)
+		require.NoError(t, err)
 	})
 
 	t.Run("TestIntegrationRepo", func(t *testing.T) {
@@ -54,6 +59,29 @@ func TestPostgresDomainRepo(t *testing.T) {
 		}
 		err := repo.IntegrationRepo.Create(ctx, &integration)
 		require.NoError(t, err)
+	})
+
+	t.Run("TestDeviceRepo", func(t *testing.T) {
+		integration := entity.Integration{
+			ID:       "integrationId",
+			IssuerId: "issuerId",
+			TeamId:   "teamId",
+			TenantId: "tenant_id",
+		}
+		device := entity.Device{
+			UDID:         "UDID",
+			Name:         "deviceName",
+			Platform:     string(entity.Ios),
+			Integrations: []entity.Integration{integration},
+			UserID:       "userId",
+		}
+		err := repo.DeviceRepo.Create(ctx, &device)
+		require.NoError(t, err)
+
+		foundDevices, err := repo.DeviceRepo.FindByIntegrationId(ctx, "integrationId")
+		require.NoError(t, err)
+		require.Len(t, foundDevices, 1)
+		require.Equal(t, device.UDID, foundDevices[0].UDID)
 	})
 
 	t.Run("TestProfileRepo", func(t *testing.T) {
@@ -90,10 +118,6 @@ func TestPostgresDomainRepo(t *testing.T) {
 
 	t.Run("TestCertificateRepo", func(t *testing.T) {
 		// Здесь вы можете добавить тесты для CertificateRepo
-	})
-
-	t.Run("TestUserRepo", func(t *testing.T) {
-		// Здесь вы можете добавить тесты для UserRepo
 	})
 
 	t.Run("TestCapabilityRepo", func(t *testing.T) {
