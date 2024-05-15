@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Запускаем docker-compose
 echo "Starting docker-compose..."
 docker-compose up -d &> /dev/null

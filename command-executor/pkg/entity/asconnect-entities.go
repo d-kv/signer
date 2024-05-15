@@ -3,7 +3,9 @@ package entity
 type ApiEntity interface {
 	GetURL() URL
 }
-
+type BundleIdResponse struct {
+	Id string `json:"id"`
+}
 type ApiCreateBundleId struct {
 	Data BundleIdData `json:"data"`
 }

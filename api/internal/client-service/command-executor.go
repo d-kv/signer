@@ -15,7 +15,7 @@ func NewCommandService(db *command.Repo) *CommandService {
 	return &CommandService{queue: db}
 }
 
-func (s CommandService) PostBundleId(c *gin.Context, ent *entity.CreateBundleId) (uint, error) {
+func (s *CommandService) PostBundleId(c *gin.Context, ent *entity.CreateBundleId) (uint, error) {
 	err, e := s.queue.CreateBundleIdCommand(c, *ent)
 	if err != nil {
 		return 0, err
@@ -23,7 +23,7 @@ func (s CommandService) PostBundleId(c *gin.Context, ent *entity.CreateBundleId)
 	return e.ID, err
 }
 
-func (s CommandService) GetBundleIdStatusByID(c *gin.Context) (entity.Status, error) {
+func (s *CommandService) GetBundleIdStatusByID(c *gin.Context) (entity.Status, error) {
 	strId := c.Param("id")
 	id, err := strconv.ParseUint(strId, 10, 32)
 	if err != nil {
@@ -36,12 +36,12 @@ func (s CommandService) GetBundleIdStatusByID(c *gin.Context) (entity.Status, er
 	return status, err
 }
 
-func (s CommandService) DelBundleIdById(c *gin.Context) (uint, error) {
+func (s *CommandService) DelBundleIdById(c *gin.Context) (uint, error) {
 	//TODO implement me
 	return 0, nil
 }
 
-func (s CommandService) PostCapability(c *gin.Context, ent *entity.EnableCapabilityType) (uint, error) {
+func (s *CommandService) PostCapability(c *gin.Context, ent *entity.EnableCapabilityType) (uint, error) {
 	err, e := s.queue.CreateEnableCapabilityTypeCommand(c, *ent)
 	if err != nil {
 		return 0, err
@@ -49,7 +49,7 @@ func (s CommandService) PostCapability(c *gin.Context, ent *entity.EnableCapabil
 	return e.ID, err
 }
 
-func (s CommandService) GetCapabilityStatusByID(c *gin.Context) (entity.Status, error) {
+func (s *CommandService) GetCapabilityStatusByID(c *gin.Context) (entity.Status, error) {
 	strId := c.Param("id")
 	id, err := strconv.ParseUint(strId, 10, 32)
 	if err != nil {
@@ -62,12 +62,12 @@ func (s CommandService) GetCapabilityStatusByID(c *gin.Context) (entity.Status, 
 	return status, err
 }
 
-func (s CommandService) DelCapability(c *gin.Context) (uint, error) {
+func (s *CommandService) DelCapability(c *gin.Context) (uint, error) {
 	//TODO implement me
 	return 0, nil
 }
 
-func (s CommandService) PostDevice(c *gin.Context, ent *entity.CreateDevice) (uint, error) {
+func (s *CommandService) PostDevice(c *gin.Context, ent *entity.CreateDevice) (uint, error) {
 	err, e := s.queue.CreateDeviceCommand(c, *ent)
 	if err != nil {
 		return 0, err
@@ -75,7 +75,7 @@ func (s CommandService) PostDevice(c *gin.Context, ent *entity.CreateDevice) (ui
 	return e.ID, err
 }
 
-func (s CommandService) GetDeviceStatusByID(c *gin.Context) (entity.Status, error) {
+func (s *CommandService) GetDeviceStatusByID(c *gin.Context) (entity.Status, error) {
 	strId := c.Param("id")
 	id, err := strconv.ParseUint(strId, 10, 32)
 	if err != nil {

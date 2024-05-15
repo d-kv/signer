@@ -20,7 +20,7 @@ func ConvertBundleInput(input *InputCreateBundleId, tenantId string, integration
 		BundleName:       input.BundleName,
 		BundlePlatform:   platform,
 		SeedId:           input.SeedId,
-		Status:           entity.Completed,
+		Status:           entity.Created,
 	}
 	return newCommand, nil
 }

@@ -1,157 +1,186 @@
 package services
 
 import (
-	"bytes"
 	"context"
 	"d-kv/signer/command-executor/pkg/entity"
+	"d-kv/signer/command-executor/pkg/usecase"
 	_ "d-kv/signer/db-common/config"
 	dbEntity "d-kv/signer/db-common/entity"
-	"d-kv/signer/db-common/repo/command"
 	_ "d-kv/signer/db-common/repo/command"
-	"d-kv/signer/db-common/repo/domain"
 	_ "d-kv/signer/db-common/repo/domain"
-	"d-kv/signer/db-common/repo/vault"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
 )
 
 type ProcessorService struct {
-	Queue *command.Repo
-	Repo  *domain.PostgresDomainRepo
-	vault *vault.Repo
+	service *usecase.Service
 }
 
-func NewProcessorService(queue *command.Repo, repo *domain.PostgresDomainRepo, vault *vault.Repo) *ProcessorService {
+func NewProcessorService(service *usecase.Service) *ProcessorService {
 	return &ProcessorService{
-		Queue: queue,
-		Repo:  repo,
-		vault: vault,
+		service: service,
 	}
 }
 
-func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *entity.DataBaseCommand, status dbEntity.Status) error {
+func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *usecase.DataBaseCommand, status dbEntity.Status) error {
 	err := error(nil)
 	switch (*baseCommand).(type) {
 	case *entity.CreateDevice:
-		err = s.Queue.SetStatusByIdDeviceCommand(ctx, (*baseCommand).GetId(), status)
+		err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, (*baseCommand).GetId(), status)
 	case *entity.CreateBundleId:
-		err = s.Queue.SetStatusByIdBundleIdCommand(ctx, (*baseCommand).GetId(), status)
+		err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, (*baseCommand).GetId(), status)
 	case *entity.EnableCapabilityType:
-		err = s.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, (*baseCommand).GetId(), status)
+		err = s.service.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, (*baseCommand).GetId(), status)
 	default:
 		err = errors.New("unknown type")
 	}
 	return err
 }
 
-func (s *ProcessorService) Processing(ctx context.Context, operation entity.DataBaseCommand) error {
+func (s *ProcessorService) Processing(ctx context.Context, operation usecase.DataBaseCommand) (*http.Response, error) {
 	err := s.SetStatusById(ctx, &operation, dbEntity.Processing)
 	if err != nil {
-		err = s.SetStatusById(ctx, &operation, dbEntity.Error)
-		return err
+		return nil, err
 	}
-	err = s.SendCommand(ctx, operation.Convert(), operation.GetIntegrationId())
+	err, tokenInfo := s.service.Vault.FindTokenByIntegrationId(ctx, operation.GetIntegrationId())
 	if err != nil {
-		err = s.SetStatusById(ctx, &operation, dbEntity.Error)
+		fmt.Println("Incorrect integration:", err)
+		return nil, err
 	}
-	return err
+	token, err := s.service.Token.GetJwtToken(tokenInfo)
+	if err != nil {
+		fmt.Println("Error searching token:", err)
+		return nil, err
+	}
+	resp, err := s.service.Api.SendCreateCommand(ctx, operation.Convert(), token)
+	if err != nil {
+	}
+	return resp, err
 }
 
 func (s *ProcessorService) StartProcessor(ctx context.Context) {
 	for {
-		commands := s.Queue.FindByStatusDeviceCommand(ctx, dbEntity.Created)
+		commands := s.service.Queue.FindByStatusDeviceCommand(ctx, dbEntity.Created)
 		for _, operation := range commands {
 			localOperation := &entity.CreateDevice{Outer: operation}
-			err := s.Processing(ctx, localOperation)
+			resp, err := s.Processing(ctx, localOperation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
 				continue
 			}
-			err = s.WriteDevice(ctx, operation)
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error while closing response body", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = s.service.Db.WriteDevice(ctx, operation)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Completed)
+			if err != nil {
+				fmt.Println("Error while changing status", err)
 				continue
 			}
 		}
 
-		bundleIdCommand := s.Queue.FindByStatusBundleIdCommand(ctx, dbEntity.Created)
+		bundleIdCommand := s.service.Queue.FindByStatusBundleIdCommand(ctx, dbEntity.Created)
 		for _, operation := range bundleIdCommand {
 			localOperation := &entity.CreateBundleId{Outer: operation}
-			err := s.Processing(ctx, localOperation)
+			resp, err := s.Processing(ctx, localOperation)
 			if err != nil {
 				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
 				continue
 			}
-			err = s.WriteBundleId(ctx, operation)
+			responseObj := entity.BundleIdResponse{}
+			decoder := json.NewDecoder(resp.Body)
+			err = decoder.Decode(&responseObj)
+			if err != nil {
+				fmt.Println("Error while decoding api answer", err, responseObj.Id)
+				err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error closing body", err)
+				err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+			}
+			err = s.service.Db.WriteBundleId(ctx, operation, &responseObj)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
+				err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, dbEntity.Completed)
+			if err != nil {
+				fmt.Println("Error while changing status", err)
 				continue
 			}
 		}
 
-		capabilityCommand := s.Queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbEntity.Created)
+		capabilityCommand := s.service.Queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbEntity.Created)
 		for _, operation := range capabilityCommand {
 			localOperation := entity.EnableCapabilityType{Outer: operation}
-			err := s.Processing(ctx, &localOperation)
+			resp, err := s.Processing(ctx, &localOperation)
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error closing body")
+				err = s.service.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
 				continue
 			}
-			err = s.WriteCapability(ctx, err, operation)
+			err = s.service.Db.WriteCapability(ctx, err, operation)
 			if err != nil {
 				fmt.Println("Error while writing to db", err)
+				err = s.service.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = s.service.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, dbEntity.Completed)
+			if err != nil {
+				fmt.Println("Error while changing status", err)
 				continue
 			}
 		}
 	}
-}
-
-func (s *ProcessorService) SendCommand(ctx context.Context, e entity.ApiEntity, IntegrationId string) error {
-	payload, err := json.Marshal(e)
-	if err != nil {
-		fmt.Println("Error marshalling JSON:", err)
-		return err
-	}
-
-	req, err := http.NewRequest("POST", string(e.GetURL()), bytes.NewBuffer(payload))
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return err
-	}
-	token, err := s.GetTokenByIntegrationID(ctx, IntegrationId)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal("Error making request:")
-		return err
-	}
-	defer func(Body io.ReadCloser) {
-		err = Body.Close()
-		if err != nil {
-			log.Fatal("Error closing response body:")
-			return
-		}
-	}(resp.Body)
-
-	if resp.StatusCode != http.StatusCreated {
-		fmt.Println("Error: Unexpected response status code", resp.Status)
-		responseBody, err1 := io.ReadAll(resp.Body)
-		if err1 != nil {
-			log.Fatalf("Error reading response body:")
-			return err1
-		}
-		fmt.Println("Response Body:", string(responseBody))
-	}
-	fmt.Println("New instance created successfully!")
-	return nil
 }
