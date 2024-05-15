@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"d-kv/signer/command-executor/pkg/entity"
-	usecase2 "d-kv/signer/command-executor/pkg/usecase"
+	"d-kv/signer/command-executor/pkg/usecase"
 	_ "d-kv/signer/db-common/config"
 	dbEntity "d-kv/signer/db-common/entity"
 	_ "d-kv/signer/db-common/repo/command"
@@ -15,16 +15,16 @@ import (
 )
 
 type ProcessorService struct {
-	service *usecase2.Service
+	service *usecase.Service
 }
 
-func NewProcessorService(service *usecase2.Service) *ProcessorService {
+func NewProcessorService(service *usecase.Service) *ProcessorService {
 	return &ProcessorService{
 		service: service,
 	}
 }
 
-func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *usecase2.DataBaseCommand, status dbEntity.Status) error {
+func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *usecase.DataBaseCommand, status dbEntity.Status) error {
 	err := error(nil)
 	switch (*baseCommand).(type) {
 	case *entity.CreateDevice:
@@ -39,7 +39,7 @@ func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *useca
 	return err
 }
 
-func (s *ProcessorService) Processing(ctx context.Context, operation usecase2.DataBaseCommand) (*http.Response, error) {
+func (s *ProcessorService) Processing(ctx context.Context, operation usecase.DataBaseCommand) (*http.Response, error) {
 	err := s.SetStatusById(ctx, &operation, dbEntity.Processing)
 	if err != nil {
 		return nil, err
