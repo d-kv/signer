@@ -1,6 +1,7 @@
 package main
 
 import (
+	"d-kv/signer/db-common/config"
 	"d-kv/signer/db-common/repo/domain/bundle_id"
 	"d-kv/signer/db-common/repo/domain/capability"
 	"d-kv/signer/db-common/repo/domain/certificate"
@@ -15,18 +16,18 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"net/url"
+	"os"
 )
 
 func main() {
-	dsn := url.URL{
-		User:     url.UserPassword("postgres", "postgres"),
-		Scheme:   "postgres",
-		Host:     "localhost:5433",
-		Path:     "postgres",
-		RawQuery: "sslmode=disable",
+	pgRepo := config.PostgresConfig{
+		Host:     os.Getenv("DOMAIN_POSTGRES_HOST"),
+		User:     os.Getenv("DOMAIN_POSTGRES_USER"),
+		Password: os.Getenv("DOMAIN_POSTGRES_PASSWORD"),
+		Name:     os.Getenv("DOMAIN_POSTGRES_DB"),
+		Port:     os.Getenv("DOMAIN_POSTGRES_PORT"),
 	}
-	db, err := gorm.Open(postgres.Open(dsn.String()))
+	db, err := gorm.Open(postgres.Open(pgRepo.ToConnectionString()))
 
 	h := handlers.Handler{
 		DomainRepos: &usecase.DomainRepos{
