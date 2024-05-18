@@ -87,3 +87,33 @@ func (s *CommandService) GetDeviceStatusByID(c *gin.Context) (entity.Status, err
 	}
 	return status, err
 }
+
+func (s *CommandService) PostProfile(c *gin.Context, ent *entity.CreateProfile) (uint, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *CommandService) GetProfileStatusByID(c *gin.Context) (entity.Status, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *CommandService) DelProfileById(c *gin.Context) (uint, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *CommandService) PostCertificate(c *gin.Context, ent *entity.CreateCertificate) (uint, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *CommandService) GetCertificateStatusByID(c *gin.Context) (entity.Status, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *CommandService) DelCertificateById(c *gin.Context) (uint, error) {
+	//TODO implement me
+	panic("implement me")
+}

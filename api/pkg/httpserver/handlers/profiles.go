@@ -20,7 +20,23 @@ import (
 // @Router /profiles [post]
 func (h *Handler) postProfile(c *gin.Context) {
 	//TODO implement me
+}
 
+// @Summary Check status
+// @Tags profile
+// @Description Get command status by command id
+// @ID get-status-profile
+// @Produce json
+// @Param tenantId path string true "tenantId"
+// @Param integrationId path string true "integrationId"
+// @Param id path string true "command identifier"
+// @Success 200 {string} string "status"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /profiles/status/{id} [post]
+func (h *Handler) getProfileStatusByID(c *gin.Context) {
+	//TODO implement me
 }
 
 // @Summary Get profiles list
@@ -63,5 +79,4 @@ func (h *Handler) getProfileByID(c *gin.Context) {
 // @Router /profiles/{id} [delete]
 func (h *Handler) deleteProfileByID(c *gin.Context) {
 	//TODO implement me
-
 }

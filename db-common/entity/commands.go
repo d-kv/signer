@@ -32,6 +32,14 @@ type CreateDevice struct {
 	Status         Status
 }
 
+type CreateProfile struct {
+	//TODO Maxim, fill me
+}
+
+type CreateCertificate struct {
+	//TODO Maxim, fill me
+}
+
 type Platform string
 
 const (

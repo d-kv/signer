@@ -17,3 +17,11 @@ type InputCreateDevice struct {
 	DevicePlatform string `json:"devicePlatform"`
 	DeviceUdid     string `json:"udid"`
 }
+
+type InputCreateProfile struct {
+	//TODO implement me
+}
+
+type InputCreateCertificate struct {
+	//TODO implement me
+}
