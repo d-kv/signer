@@ -7,29 +7,23 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
-      - db_command_queue
+      db_command_queue:
+        condition: "service_healthy"
     environment:
       COMMAND_QUEUE_POSTGRES_HOST: db_command_queue
       COMMAND_QUEUE_POSTGRES_USER: "postgres"
       COMMAND_QUEUE_POSTGRES_PASSWORD: "postgres"
       COMMAND_QUEUE_POSTGRES_DB: "command_queue"
       COMMAND_QUEUE_POSTGRES_PORT: "5432"
-      DOMAIN_POSTGRES_HOST: db
-      DOMAIN_POSTGRES_USER: "postgres"
-      DOMAIN_POSTGRES_PASSWORD: "postgres"
-      DOMAIN_POSTGRES_DB: "postgres"
-      DOMAIN_POSTGRES_PORT: "5433"
-      VAULT_TOKEN: "my-token"
-      VAULT_ADDRESS: "http://localhost:8200"
   command-executor:
     build:
       context: .
       dockerfile: docker/command-executor/Dockerfile
     depends_on:
-      - db
-      - db_command_queue
-      - vault
+      db:
+        condition: "service_healthy"
+      db_command_queue:
+        condition: "service_healthy"
     environment:
       COMMAND_QUEUE_POSTGRES_HOST: db_command_queue
       COMMAND_QUEUE_POSTGRES_USER: "postgres"
@@ -42,7 +36,20 @@ services:
       DOMAIN_POSTGRES_DB: "postgres"
       DOMAIN_POSTGRES_PORT: "5433"
       VAULT_TOKEN: "my-token"
-      VAULT_ADDRESS: "http://localhost:8200"
+      VAULT_ADDRESS: vault
+  query-handler:
+    build:
+      context: .
+      dockerfile: docker/query-handler/Dockerfile
+    depends_on:
+      db:
+        condition: "service_healthy"
+    environment:
+      DOMAIN_POSTGRES_HOST: db
+      DOMAIN_POSTGRES_USER: "postgres"
+      DOMAIN_POSTGRES_PASSWORD: "postgres"
+      DOMAIN_POSTGRES_DB: "postgres"
+      DOMAIN_POSTGRES_PORT: "5433"
 
   db_command_queue:
     image: postgres:14.1-alpine
