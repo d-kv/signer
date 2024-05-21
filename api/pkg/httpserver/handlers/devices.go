@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"d-kv/signer/api/pkg/httpserver/entities"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -52,13 +54,17 @@ func (h *Handler) postDevice(c *gin.Context) {
 // @Param id path string true "command identifier"
 // @Success 200 {string} string "status"
 // @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 503 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /devices/status/{id} [post]
 func (h *Handler) getDeviceStatusByID(c *gin.Context) {
 	status, err := h.services.CommandExecutorService.GetDeviceStatusByID(c)
 	if err != nil {
-		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No commands with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
+		}
 		return
 	}
 	c.JSON(http.StatusOK, status)
@@ -72,9 +78,21 @@ func (h *Handler) getDeviceStatusByID(c *gin.Context) {
 // @Param integrationId path string true "integrationId"
 // @Produce  json
 // @Success 200 {array} []entities.Device
+// @Failure 400,404 {object} errorResponse
+// @Failure 503 {object} errorResponse
+// @Failure default {object} errorResponse
 // @Router /devices [get]
 func (h *Handler) getDevices(c *gin.Context) {
-	h.services.QueryHandlerService.GetDevices(c)
+	response, err := h.services.QueryHandlerService.GetDevices(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No records with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary Get device
@@ -86,7 +104,19 @@ func (h *Handler) getDevices(c *gin.Context) {
 // @Param id path string true "device identifier"
 // @Produce  json
 // @Success 200 {object} entities.Device
+// @Failure 400,404 {object} errorResponse
+// @Failure 503 {object} errorResponse
+// @Failure default {object} errorResponse
 // @Router /devices/{id} [get]
 func (h *Handler) getDeviceByID(c *gin.Context) {
-	h.services.QueryHandlerService.GetDeviceById(c)
+	response, err := h.services.QueryHandlerService.GetDeviceById(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No records with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }

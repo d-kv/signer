@@ -104,6 +104,30 @@ const docTemplate = `{
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
                     }
                 }
             },
@@ -141,7 +165,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.InputCreateBundleId"
+                            "$ref": "#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputCreateBundleId"
                         }
                     }
                 ],
@@ -155,19 +179,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -217,25 +241,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -281,6 +305,30 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/entities.BundleId"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
                     }
                 }
             }
@@ -320,7 +368,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.InputEnableCapability"
+                            "$ref": "#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputEnableCapability"
                         }
                     }
                 ],
@@ -334,19 +382,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -396,25 +444,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -505,9 +553,33 @@ const docTemplate = `{
                             "items": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/definitions/entities.Profile"
+                                    "$ref": "#/definitions/entities.Certificate"
                                 }
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -546,39 +618,101 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.Certificate"
+                            "$ref": "#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.Certificate"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/certificates/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "certificate"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-certificate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -623,6 +757,30 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.Certificate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -715,6 +873,30 @@ const docTemplate = `{
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
                     }
                 }
             },
@@ -766,19 +948,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -828,25 +1010,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -892,6 +1074,30 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/entities.Device"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
                     }
                 }
             }
@@ -934,6 +1140,30 @@ const docTemplate = `{
                                     "$ref": "#/definitions/entities.Profile"
                                 }
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -986,25 +1216,93 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/profiles/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -1049,6 +1347,30 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.Profile"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -1104,46 +1426,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entities.BundleId": {
-            "type": "object",
-            "properties": {
-                "identifier": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.Certificate": {
-            "type": "object",
-            "properties": {
-                "identifier": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.Device": {
-            "type": "object",
-            "properties": {
-                "identifier": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.InputCreateBundleId": {
+        "d-kv_signer_api_pkg_httpserver_entities.InputCreateBundleId": {
             "type": "object",
             "properties": {
                 "bundleId": {
@@ -1160,7 +1443,15 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.InputEnableCapability": {
+        "d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate": {
+            "type": "object",
+            "properties": {
+                "NoContent": {
+                    "type": "string"
+                }
+            }
+        },
+        "d-kv_signer_api_pkg_httpserver_entities.InputEnableCapability": {
             "type": "object",
             "properties": {
                 "bundleId": {
@@ -1171,16 +1462,19 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.Profile": {
+        "entities.BundleId": {
             "type": "object",
             "properties": {
-                "bundleId": {
+                "capabilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.CapabilityType"
+                    }
+                },
+                "id": {
                     "type": "string"
                 },
                 "identifier": {
-                    "type": "string"
-                },
-                "integrationId": {
                     "type": "string"
                 },
                 "name": {
@@ -1188,7 +1482,68 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.errorResponse": {
+        "entities.Certificate": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Device": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "platform": {
+                    "$ref": "#/definitions/entity.Platform"
+                },
+                "udid": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Profile": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.CapabilityType": {
+            "type": "string",
+            "enum": [
+                "IN_APP_PURCHASE",
+                "PUSH_NOTIFICATIONS",
+                "APPLE_PAY",
+                "NFC_TAG_READING",
+                "APPLE_ID_AUTH"
+            ],
+            "x-enum-varnames": [
+                "InAppPurchase",
+                "PushNotifications",
+                "ApplePay",
+                "NfcTagReading",
+                "AppleIdAuth"
+            ]
+        },
+        "entity.Platform": {
+            "type": "string",
+            "enum": [
+                "IOS",
+                "MAC_OS"
+            ],
+            "x-enum-varnames": [
+                "Ios",
+                "MacOs"
+            ]
+        },
+        "pkg_httpserver_handlers.errorResponse": {
             "type": "object",
             "properties": {
                 "message": {

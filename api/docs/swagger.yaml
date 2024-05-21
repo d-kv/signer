@@ -1,31 +1,6 @@
 basePath: /v1/{tenantId}/{integrationId}
 definitions:
-  entities.BundleId:
-    properties:
-      identifier:
-        type: string
-      name:
-        type: string
-    type: object
-  entities.Certificate:
-    properties:
-      identifier:
-        type: string
-      name:
-        type: string
-      type:
-        type: string
-    type: object
-  entities.Device:
-    properties:
-      identifier:
-        type: string
-      name:
-        type: string
-      userId:
-        type: string
-    type: object
-  entities.InputCreateBundleId:
+  d-kv_signer_api_pkg_httpserver_entities.InputCreateBundleId:
     properties:
       bundleId:
         type: string
@@ -36,25 +11,75 @@ definitions:
       seedId:
         type: string
     type: object
-  entities.InputEnableCapability:
+  d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate:
+    properties:
+      NoContent:
+        type: string
+    type: object
+  d-kv_signer_api_pkg_httpserver_entities.InputEnableCapability:
     properties:
       bundleId:
         type: string
       capabilityType:
         type: string
     type: object
-  entities.Profile:
+  entities.BundleId:
     properties:
-      bundleId:
+      capabilities:
+        items:
+          $ref: '#/definitions/entity.CapabilityType'
+        type: array
+      id:
         type: string
       identifier:
-        type: string
-      integrationId:
         type: string
       name:
         type: string
     type: object
-  handlers.errorResponse:
+  entities.Certificate:
+    properties:
+      content:
+        type: string
+    type: object
+  entities.Device:
+    properties:
+      name:
+        type: string
+      platform:
+        $ref: '#/definitions/entity.Platform'
+      udid:
+        type: string
+      userId:
+        type: string
+    type: object
+  entities.Profile:
+    properties:
+      content:
+        type: string
+    type: object
+  entity.CapabilityType:
+    enum:
+    - IN_APP_PURCHASE
+    - PUSH_NOTIFICATIONS
+    - APPLE_PAY
+    - NFC_TAG_READING
+    - APPLE_ID_AUTH
+    type: string
+    x-enum-varnames:
+    - InAppPurchase
+    - PushNotifications
+    - ApplePay
+    - NfcTagReading
+    - AppleIdAuth
+  entity.Platform:
+    enum:
+    - IOS
+    - MAC_OS
+    type: string
+    x-enum-varnames:
+    - Ios
+    - MacOs
+  pkg_httpserver_handlers.errorResponse:
     properties:
       message:
         type: string
@@ -126,6 +151,22 @@ paths:
                 $ref: '#/definitions/entities.BundleId'
               type: array
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get bundleIds list
       tags:
       - bundleId
@@ -150,7 +191,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/entities.InputCreateBundleId'
+          $ref: '#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputCreateBundleId'
       produces:
       - application/json
       responses:
@@ -161,15 +202,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Add new BundleId
       tags:
       - bundleId
@@ -200,6 +241,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/entities.BundleId'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get bundleId
       tags:
       - bundleId
@@ -233,19 +290,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Check status
       tags:
       - bundleId
@@ -271,7 +328,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/entities.InputEnableCapability'
+          $ref: '#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputEnableCapability'
       produces:
       - application/json
       responses:
@@ -282,15 +339,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Add new capability
       tags:
       - capability
@@ -358,19 +415,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Check status
       tags:
       - capability
@@ -397,9 +454,25 @@ paths:
           schema:
             items:
               items:
-                $ref: '#/definitions/entities.Profile'
+                $ref: '#/definitions/entities.Certificate'
               type: array
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get certificates list
       tags:
       - certificate
@@ -424,30 +497,26 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/entities.Certificate'
+          $ref: '#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: commandID
           schema:
-            $ref: '#/definitions/entities.Certificate'
+            type: string
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "404":
-          description: Not Found
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: (NOT IMPLEMENTED) Add new certificate
       tags:
       - certificate
@@ -511,7 +580,69 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/entities.Certificate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get certificate
+      tags:
+      - certificate
+  /certificates/status/{id}:
+    post:
+      description: Get command status by command id
+      operationId: get-status-certificate
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
+      - description: command identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+      summary: Check status
       tags:
       - certificate
   /devices:
@@ -540,6 +671,22 @@ paths:
                 $ref: '#/definitions/entities.Device'
               type: array
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get devices list
       tags:
       - device
@@ -575,15 +722,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Add new device
       tags:
       - device
@@ -614,6 +761,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/entities.Device'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get device
       tags:
       - device
@@ -647,19 +810,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Check status
       tags:
       - device
@@ -689,6 +852,22 @@ paths:
                 $ref: '#/definitions/entities.Profile'
               type: array
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get profiles list
       tags:
       - profile
@@ -724,19 +903,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: (NOT IMPLEMENTED) Add new profile
       tags:
       - profile
@@ -800,7 +979,69 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/entities.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
       summary: Get profile
+      tags:
+      - profile
+  /profiles/status/{id}:
+    post:
+      description: Get command status by command id
+      operationId: get-status-profile
+      parameters:
+      - description: tenantId
+        in: path
+        name: tenantId
+        required: true
+        type: string
+      - description: integrationId
+        in: path
+        name: integrationId
+        required: true
+        type: string
+      - description: command identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/pkg_httpserver_handlers.errorResponse'
+      summary: Check status
       tags:
       - profile
 swagger: "2.0"

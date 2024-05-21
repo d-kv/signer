@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"d-kv/signer/api/pkg/httpserver/entities"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -36,7 +38,7 @@ func (h *Handler) postBundleId(c *gin.Context) {
 	}
 	opId, err := h.services.CommandExecutorService.PostBundleId(c, bundleInput)
 	if err != nil {
-		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
 		return
 	}
 	c.JSON(http.StatusOK, opId)
@@ -52,13 +54,17 @@ func (h *Handler) postBundleId(c *gin.Context) {
 // @Param id path string true "command identifier"
 // @Success 200 {string} string "status"
 // @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 503 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /bundleIds/status/{id} [post]
 func (h *Handler) getBundleIdStatusByID(c *gin.Context) {
 	status, err := h.services.CommandExecutorService.GetBundleIdStatusByID(c)
 	if err != nil {
-		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No commands with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
+		}
 		return
 	}
 	c.JSON(http.StatusOK, status)
@@ -72,9 +78,21 @@ func (h *Handler) getBundleIdStatusByID(c *gin.Context) {
 // @Param integrationId path string true "integrationId"
 // @Produce  json
 // @Success 200 {array} []entities.BundleId
+// @Failure 400,404 {object} errorResponse
+// @Failure 503 {object} errorResponse
+// @Failure default {object} errorResponse
 // @Router /bundleIds [get]
 func (h *Handler) getBundleIds(c *gin.Context) {
-	h.services.QueryHandlerService.GetBundleIds(c)
+	response, err := h.services.QueryHandlerService.GetBundleIds(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No records with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary Get bundleId
@@ -86,9 +104,21 @@ func (h *Handler) getBundleIds(c *gin.Context) {
 // @Param id path string true "bundleId identifier"
 // @Produce  json
 // @Success 200 {object} entities.BundleId
+// @Failure 400,404 {object} errorResponse
+// @Failure 503 {object} errorResponse
+// @Failure default {object} errorResponse
 // @Router /bundleIds/{id} [get]
 func (h *Handler) getBundleIdByID(c *gin.Context) {
-	h.services.QueryHandlerService.GetBundleIdById(c)
+	response, err := h.services.QueryHandlerService.GetBundleIdById(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No records with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary Delete bundleId

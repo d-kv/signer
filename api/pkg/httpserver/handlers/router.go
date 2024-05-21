@@ -42,20 +42,22 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			device.GET("/", h.getDevices)
 			device.GET("/:id", h.getDeviceByID)
 		}
-		/*certificate := identification.Group("/certificates")
+		certificate := identification.Group("/certificates")
 		{
 			certificate.POST("/", h.postCertificate)
+			certificate.GET("/status/:id", h.getCertificateStatusByID)
 			certificate.GET("/", h.getCertificates)
 			certificate.GET("/:id", h.getCertificateByID)
-			certificate.DELETE("/:id", h.deleteCertificateByID)
-		}*/
-		/*profile := identification.Group("/profiles")
+			//certificate.DELETE("/:id", h.deleteCertificateByID)
+		}
+		profile := identification.Group("/profiles")
 		{
 			profile.POST("/", h.postProfile)
+			profile.GET("/status/:id", h.getProfileStatusByID)
 			profile.GET("/", h.getProfiles)
 			profile.GET("/:id", h.getProfileByID)
-			profile.DELETE("/:id", h.deleteProfileByID)
-		}*/
+			//profile.DELETE("/:id", h.deleteProfileByID)
+		}
 
 	}
 	return router
