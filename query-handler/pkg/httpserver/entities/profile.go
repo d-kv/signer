@@ -1,5 +1,5 @@
 package entities
 
 type Profile struct {
-	//TODO implement me
+	ProfileContent string `json:"content"`
 }

@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"net/http"
 )
 
 // @Summary (NOT IMPLEMENTED) Add new profile
@@ -32,11 +35,20 @@ func (h *Handler) postProfile(c *gin.Context) {
 // @Param id path string true "command identifier"
 // @Success 200 {string} string "status"
 // @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
+// @Failure 503 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /profiles/status/{id} [post]
 func (h *Handler) getProfileStatusByID(c *gin.Context) {
-	//TODO implement me
+	status, err := h.services.CommandExecutorService.GetDeviceStatusByID(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No commands with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, status)
 }
 
 // @Summary Get profiles list
@@ -47,9 +59,21 @@ func (h *Handler) getProfileStatusByID(c *gin.Context) {
 // @Param integrationId path string true "integrationId"
 // @Produce  json
 // @Success 200 {array} []entities.Profile
+// @Failure 400,404 {object} errorResponse
+// @Failure 503 {object} errorResponse
+// @Failure default {object} errorResponse
 // @Router /profiles [get]
 func (h *Handler) getProfiles(c *gin.Context) {
-	h.services.QueryHandlerService.GetProfiles(c)
+	response, err := h.services.QueryHandlerService.GetProfiles(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No records with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary Get profile
@@ -61,9 +85,21 @@ func (h *Handler) getProfiles(c *gin.Context) {
 // @Param id path string true "profile identifier"
 // @Produce  json
 // @Success 200 {object} entities.Profile
+// @Failure 400,404 {object} errorResponse
+// @Failure 503 {object} errorResponse
+// @Failure default {object} errorResponse
 // @Router /profiles/{id} [get]
 func (h *Handler) getProfileByID(c *gin.Context) {
-	h.services.QueryHandlerService.GetProfileById(c)
+	response, err := h.services.QueryHandlerService.GetProfileById(c)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			newErrorResponse(c, http.StatusNotFound, "No records with this status")
+		} else {
+			newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to QH")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }
 
 // @Summary (NOT IMPLEMENTED) Delete profile

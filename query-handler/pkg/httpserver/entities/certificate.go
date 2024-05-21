@@ -1,5 +1,5 @@
 package entities
 
 type Certificate struct {
-	//TODO implement me
+	CertificateContent string `json:"content"`
 }
