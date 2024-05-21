@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"d-kv/signer/api/pkg/httpserver/entities"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -22,7 +23,7 @@ import (
 // @Failure default {object} errorResponse
 // @Router /certificates [post]
 func (h *Handler) postCertificate(c *gin.Context) {
-	//TODO implement me
+	var _ entities.InputCreateCertificate
 }
 
 // @Summary Check status

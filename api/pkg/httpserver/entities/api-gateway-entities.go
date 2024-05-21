@@ -19,9 +19,9 @@ type InputCreateDevice struct {
 }
 
 type InputCreateProfile struct {
-	//TODO implement me
+	NoContent string `json:"NoContent"`
 }
 
 type InputCreateCertificate struct {
-	//TODO implement me
+	NoContent string `json:"NoContent"`
 }
