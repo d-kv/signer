@@ -1,4 +1,8 @@
 version: '3.8'
+
+networks:
+  signer-net:
+
 services:
   api:
     build:
@@ -15,6 +19,9 @@ services:
       COMMAND_QUEUE_POSTGRES_PASSWORD: "postgres"
       COMMAND_QUEUE_POSTGRES_DB: "command_queue"
       COMMAND_QUEUE_POSTGRES_PORT: "5432"
+    networks:
+      - signer-net
+
   command-executor:
     build:
       context: .
@@ -34,9 +41,12 @@ services:
       DOMAIN_POSTGRES_USER: "postgres"
       DOMAIN_POSTGRES_PASSWORD: "postgres"
       DOMAIN_POSTGRES_DB: "postgres"
-      DOMAIN_POSTGRES_PORT: "5433"
+      DOMAIN_POSTGRES_PORT: "5432"
       VAULT_TOKEN: "my-token"
-      VAULT_ADDRESS: vault
+      VAULT_ADDRESS: "http://vault:8200"
+    networks:
+      - signer-net
+
   query-handler:
     build:
       context: .
@@ -49,7 +59,9 @@ services:
       DOMAIN_POSTGRES_USER: "postgres"
       DOMAIN_POSTGRES_PASSWORD: "postgres"
       DOMAIN_POSTGRES_DB: "postgres"
-      DOMAIN_POSTGRES_PORT: "5433"
+      DOMAIN_POSTGRES_PORT: "5432"
+    networks:
+      - signer-net
 
   db_command_queue:
     image: postgres:14.1-alpine
@@ -67,6 +79,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - signer-net
 
   db:
     image: postgres:14.1-alpine
@@ -84,6 +98,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - signer-net
 
 
   vault:
@@ -98,6 +114,8 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: "my-token"
       VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
       VAULT_DEV_API_ADDR: "http://localhost:8200"
+    networks:
+      - signer-net
 
 volumes:
   db:
