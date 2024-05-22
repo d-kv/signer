@@ -11,6 +11,7 @@ import (
 	"d-kv/signer/db-common/repo/vault"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -18,8 +19,8 @@ func main() {
 	ctx := context.Background()
 
 	vaultConfig := config.VaultConfig{
-		Token:   "my-token",
-		Address: "http://localhost:8200",
+		Token:   os.Getenv("VAULT_TOKEN"),
+		Address: os.Getenv("VAULT_ADDRESS"),
 		Timout:  time.Second * 5,
 	}
 	err, vaultRepo := vault.New(vaultConfig)
@@ -41,10 +42,20 @@ func main() {
 	}
 	log.Printf("integrationToken: %v", integrationToken)
 
-	pgQueue := config.PostgresConfig{Host: "localhost", User: "postgres",
-		Password: "postgres", Name: "command_queue", Port: "5432"}
-	pgRepo := config.PostgresConfig{Host: "localhost", User: "postgres",
-		Password: "postgres", Name: "postgres", Port: "5433"}
+	pgQueue := config.PostgresConfig{
+		Host:     os.Getenv("COMMAND_QUEUE_POSTGRES_HOST"),
+		User:     os.Getenv("COMMAND_QUEUE_POSTGRES_USER"),
+		Password: os.Getenv("COMMAND_QUEUE_POSTGRES_PASSWORD"),
+		Name:     os.Getenv("COMMAND_QUEUE_POSTGRES_DB"),
+		Port:     os.Getenv("COMMAND_QUEUE_POSTGRES_PORT"),
+	}
+	pgRepo := config.PostgresConfig{
+		Host:     os.Getenv("DOMAIN_POSTGRES_HOST"),
+		User:     os.Getenv("DOMAIN_POSTGRES_USER"),
+		Password: os.Getenv("DOMAIN_POSTGRES_PASSWORD"),
+		Name:     os.Getenv("DOMAIN_POSTGRES_DB"),
+		Port:     os.Getenv("DOMAIN_POSTGRES_PORT"),
+	}
 
 	queue := command.New(pgQueue)
 	repo := domain.New(pgRepo)
