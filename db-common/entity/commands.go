@@ -70,6 +70,8 @@ var ProfileTypeValues = []string{
 
 type CreateProfile struct {
 	ID             uint
+	TenantId       string
+	IntegrationId  string
 	Name           string
 	ProfileType    ProfileType
 	BundleId       string
@@ -109,10 +111,12 @@ var CertificateTypeValues = []string{
 }
 
 type CreateCertificate struct {
-	ID         uint
-	CsrContent string
-	Type       CertificateType
-	Status     Status
+	ID            uint
+	TenantId      string
+	IntegrationId string
+	CsrContent    string
+	Type          CertificateType
+	Status        Status
 }
 
 type Platform string
