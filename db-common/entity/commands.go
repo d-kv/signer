@@ -33,11 +33,41 @@ type CreateDevice struct {
 }
 
 type CreateProfile struct {
-	//TODO Maxim, fill me
+}
+
+type CertificateType string
+
+const (
+	IosDevelopment           CertificateType = "IOS_DEVELOPMENT"
+	IosDistribution          CertificateType = "IOS_DISTRIBUTION"
+	MacAppDistribution       CertificateType = "MAC_APP_DISTRIBUTION"
+	MacInstallerDistribution CertificateType = "MAC_INSTALLER_DISTRIBUTION"
+	MacAppDevelopment        CertificateType = "MAC_APP_DEVELOPMENT"
+	DeveloperIdKext          CertificateType = "DEVELOPER_ID_KEXT"
+	DeveloperIdApplication   CertificateType = "DEVELOPER_ID_APPLICATION"
+	Development              CertificateType = "DEVELOPMENT"
+	Distribution             CertificateType = "DISTRIBUTION"
+	PassTypeId               CertificateType = "PASS_TYPE_ID"
+	PassTypeIdWithNfc        CertificateType = "PASS_TYPE_ID_WITH_NFC"
+)
+
+var CertificateTypeValues = []string{
+	"IOS_DEVELOPMENT",
+	"IOS_DISTRIBUTION",
+	"MAC_APP_DISTRIBUTION",
+	"MAC_INSTALLER_DISTRIBUTION",
+	"MAC_APP_DEVELOPMENT",
+	"DEVELOPER_ID_KEXT",
+	"DEVELOPER_ID_APPLICATION",
+	"DEVELOPMENT",
+	"DISTRIBUTION",
+	"PASS_TYPE_ID",
+	"PASS_TYPE_ID_WITH_NFC",
 }
 
 type CreateCertificate struct {
-	//TODO Maxim, fill me
+	CsrContent string
+	Type       CertificateType
 }
 
 type Platform string
