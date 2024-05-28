@@ -42,6 +42,34 @@ func (_m *CommandRepo) CreateBundleIdCommand(_a0 context.Context, _a1 entity.Cre
 	return r0, r1
 }
 
+// CreateCertificateCommand provides a mock function with given fields: _a0, _a1
+func (_m *CommandRepo) CreateCertificateCommand(_a0 context.Context, _a1 entity.CreateCertificate) (error, entity.CreateCertificate) {
+	ret := _m.Called(_a0, _a1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateCertificateCommand")
+	}
+
+	var r0 error
+	var r1 entity.CreateCertificate
+	if rf, ok := ret.Get(0).(func(context.Context, entity.CreateCertificate) (error, entity.CreateCertificate)); ok {
+		return rf(_a0, _a1)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, entity.CreateCertificate) error); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, entity.CreateCertificate) entity.CreateCertificate); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Get(1).(entity.CreateCertificate)
+	}
+
+	return r0, r1
+}
+
 // CreateDeviceCommand provides a mock function with given fields: _a0, _a1
 func (_m *CommandRepo) CreateDeviceCommand(_a0 context.Context, _a1 entity.CreateDevice) (error, entity.CreateDevice) {
 	ret := _m.Called(_a0, _a1)
@@ -98,6 +126,34 @@ func (_m *CommandRepo) CreateEnableCapabilityTypeCommand(_a0 context.Context, _a
 	return r0, r1
 }
 
+// CreateProfileCommand provides a mock function with given fields: _a0, _a1
+func (_m *CommandRepo) CreateProfileCommand(_a0 context.Context, _a1 entity.CreateProfile) (error, entity.CreateProfile) {
+	ret := _m.Called(_a0, _a1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateProfileCommand")
+	}
+
+	var r0 error
+	var r1 entity.CreateProfile
+	if rf, ok := ret.Get(0).(func(context.Context, entity.CreateProfile) (error, entity.CreateProfile)); ok {
+		return rf(_a0, _a1)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, entity.CreateProfile) error); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, entity.CreateProfile) entity.CreateProfile); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Get(1).(entity.CreateProfile)
+	}
+
+	return r0, r1
+}
+
 // FindByStatusBundleIdCommand provides a mock function with given fields: _a0, _a1
 func (_m *CommandRepo) FindByStatusBundleIdCommand(_a0 context.Context, _a1 entity.Status) []entity.CreateBundleId {
 	ret := _m.Called(_a0, _a1)
@@ -112,6 +168,26 @@ func (_m *CommandRepo) FindByStatusBundleIdCommand(_a0 context.Context, _a1 enti
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entity.CreateBundleId)
+		}
+	}
+
+	return r0
+}
+
+// FindByStatusCertificateCommand provides a mock function with given fields: _a0, _a1
+func (_m *CommandRepo) FindByStatusCertificateCommand(_a0 context.Context, _a1 entity.Status) []entity.CreateCertificate {
+	ret := _m.Called(_a0, _a1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindByStatusCertificateCommand")
+	}
+
+	var r0 []entity.CreateCertificate
+	if rf, ok := ret.Get(0).(func(context.Context, entity.Status) []entity.CreateCertificate); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entity.CreateCertificate)
 		}
 	}
 
@@ -158,12 +234,60 @@ func (_m *CommandRepo) FindByStatusEnableCapabilityTypeCommand(_a0 context.Conte
 	return r0
 }
 
+// FindByStatusProfileCommand provides a mock function with given fields: _a0, _a1
+func (_m *CommandRepo) FindByStatusProfileCommand(_a0 context.Context, _a1 entity.Status) []entity.CreateProfile {
+	ret := _m.Called(_a0, _a1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindByStatusProfileCommand")
+	}
+
+	var r0 []entity.CreateProfile
+	if rf, ok := ret.Get(0).(func(context.Context, entity.Status) []entity.CreateProfile); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]entity.CreateProfile)
+		}
+	}
+
+	return r0
+}
+
 // GetStatusByIdBundleIdCommand provides a mock function with given fields: _a0, _a1
 func (_m *CommandRepo) GetStatusByIdBundleIdCommand(_a0 context.Context, _a1 uint) (error, entity.Status) {
 	ret := _m.Called(_a0, _a1)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetStatusByIdBundleIdCommand")
+	}
+
+	var r0 error
+	var r1 entity.Status
+	if rf, ok := ret.Get(0).(func(context.Context, uint) (error, entity.Status)); ok {
+		return rf(_a0, _a1)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uint) error); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uint) entity.Status); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Get(1).(entity.Status)
+	}
+
+	return r0, r1
+}
+
+// GetStatusByIdCertificateCommand provides a mock function with given fields: _a0, _a1
+func (_m *CommandRepo) GetStatusByIdCertificateCommand(_a0 context.Context, _a1 uint) (error, entity.Status) {
+	ret := _m.Called(_a0, _a1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetStatusByIdCertificateCommand")
 	}
 
 	var r0 error
@@ -242,12 +366,58 @@ func (_m *CommandRepo) GetStatusByIdEnableCapabilityTypeCommand(_a0 context.Cont
 	return r0, r1
 }
 
+// GetStatusByIdProfileCommand provides a mock function with given fields: _a0, _a1
+func (_m *CommandRepo) GetStatusByIdProfileCommand(_a0 context.Context, _a1 uint) (error, entity.Status) {
+	ret := _m.Called(_a0, _a1)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetStatusByIdProfileCommand")
+	}
+
+	var r0 error
+	var r1 entity.Status
+	if rf, ok := ret.Get(0).(func(context.Context, uint) (error, entity.Status)); ok {
+		return rf(_a0, _a1)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uint) error); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uint) entity.Status); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Get(1).(entity.Status)
+	}
+
+	return r0, r1
+}
+
 // SetStatusByIdBundleIdCommand provides a mock function with given fields: _a0, _a1, _a2
 func (_m *CommandRepo) SetStatusByIdBundleIdCommand(_a0 context.Context, _a1 uint, _a2 entity.Status) error {
 	ret := _m.Called(_a0, _a1, _a2)
 
 	if len(ret) == 0 {
 		panic("no return value specified for SetStatusByIdBundleIdCommand")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uint, entity.Status) error); ok {
+		r0 = rf(_a0, _a1, _a2)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// SetStatusByIdCertificateCommand provides a mock function with given fields: _a0, _a1, _a2
+func (_m *CommandRepo) SetStatusByIdCertificateCommand(_a0 context.Context, _a1 uint, _a2 entity.Status) error {
+	ret := _m.Called(_a0, _a1, _a2)
+
+	if len(ret) == 0 {
+		panic("no return value specified for SetStatusByIdCertificateCommand")
 	}
 
 	var r0 error
@@ -284,6 +454,24 @@ func (_m *CommandRepo) SetStatusByIdEnableCapabilityTypeCommand(_a0 context.Cont
 
 	if len(ret) == 0 {
 		panic("no return value specified for SetStatusByIdEnableCapabilityTypeCommand")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uint, entity.Status) error); ok {
+		r0 = rf(_a0, _a1, _a2)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// SetStatusByIdProfileCommand provides a mock function with given fields: _a0, _a1, _a2
+func (_m *CommandRepo) SetStatusByIdProfileCommand(_a0 context.Context, _a1 uint, _a2 entity.Status) error {
+	ret := _m.Called(_a0, _a1, _a2)
+
+	if len(ret) == 0 {
+		panic("no return value specified for SetStatusByIdProfileCommand")
 	}
 
 	var r0 error

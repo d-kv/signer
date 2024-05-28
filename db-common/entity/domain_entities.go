@@ -39,6 +39,7 @@ type User struct {
 type Device struct {
 	UDID         string `gorm:"primary_key"`
 	Name         string
+	Identifier   string
 	Platform     string
 	User         User          `gorm:"references:ID"`
 	Profiles     []Profile     `gorm:"many2many:profile_devices;"`
@@ -48,22 +49,24 @@ type Device struct {
 }
 
 type Certificate struct {
-	ID          string `gorm:"primary_key"`
-	Name        string
-	Type        string
-	Integration Integration `gorm:"references:ID"`
-	Profiles    []Profile   `gorm:"many2many:profile_certificates;"`
+	ID                 string `gorm:"primary_key"`
+	Name               string
+	Type               string
+	Integration        Integration `gorm:"references:ID"`
+	CertificateContent string
+	Profiles           []Profile `gorm:"many2many:profile_certificates;"`
 	// Ids
 	IntegrationId string
 }
 
 type Profile struct {
-	ID           string `gorm:"primary_key"`
-	Name         string
-	BundleId     BundleId      `gorm:"references:ID"`
-	Integration  Integration   `gorm:"references:ID"`
-	Devices      []Device      `gorm:"many2many:profile_devices;"`
-	Certificates []Certificate `gorm:"many2many:profile_certificates;"`
+	ID             string `gorm:"primary_key"`
+	Name           string
+	BundleId       BundleId    `gorm:"references:ID"`
+	Integration    Integration `gorm:"references:ID"`
+	ProfileContent string
+	Devices        []Device      `gorm:"many2many:profile_devices;"`
+	Certificates   []Certificate `gorm:"many2many:profile_certificates;"`
 	// Ids
 	BundleIdId    string
 	IntegrationId string
