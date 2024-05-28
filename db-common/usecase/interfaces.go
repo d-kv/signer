@@ -78,18 +78,26 @@ type CommandRepo interface {
 	CreateBundleIdCommand(context.Context, entity.CreateBundleId) (error, entity.CreateBundleId)
 	CreateDeviceCommand(context.Context, entity.CreateDevice) (error, entity.CreateDevice)
 	CreateEnableCapabilityTypeCommand(context.Context, entity.EnableCapabilityType) (error, entity.EnableCapabilityType)
+	CreateCertificateCommand(context.Context, entity.CreateCertificate) (error, entity.CreateCertificate)
+	CreateProfileCommand(context.Context, entity.CreateProfile) (error, entity.CreateProfile)
 
 	FindByStatusBundleIdCommand(context.Context, entity.Status) []entity.CreateBundleId
 	FindByStatusDeviceCommand(context.Context, entity.Status) []entity.CreateDevice
 	FindByStatusEnableCapabilityTypeCommand(context.Context, entity.Status) []entity.EnableCapabilityType
+	FindByStatusCertificateCommand(context.Context, entity.Status) []entity.CreateCertificate
+	FindByStatusProfileCommand(context.Context, entity.Status) []entity.CreateProfile
 
 	GetStatusByIdBundleIdCommand(context.Context, uint) (error, entity.Status)
 	GetStatusByIdDeviceCommand(context.Context, uint) (error, entity.Status)
 	GetStatusByIdEnableCapabilityTypeCommand(context.Context, uint) (error, entity.Status)
+	GetStatusByIdCertificateCommand(context.Context, uint) (error, entity.Status)
+	GetStatusByIdProfileCommand(context.Context, uint) (error, entity.Status)
 
 	SetStatusByIdBundleIdCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdDeviceCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdEnableCapabilityTypeCommand(context.Context, uint, entity.Status) error
+	SetStatusByIdCertificateCommand(context.Context, uint, entity.Status) error
+	SetStatusByIdProfileCommand(context.Context, uint, entity.Status) error
 }
 
 type VaultRepo interface {
