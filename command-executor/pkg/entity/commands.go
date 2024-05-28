@@ -1,9 +1,5 @@
 package entity
 
-type DataBaseCommand interface {
-	Convert() ApiEntity
-}
-
 type URL string
 
 const (

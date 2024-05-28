@@ -1,50 +1,54 @@
 package handlers
 
 import (
-	repo "d-kv/signer/db-common/entity"
+	"d-kv/signer/db-common/entity"
 	"d-kv/signer/query-handler/pkg/httpserver/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"slices"
 )
 
-func mapDevices(devices []repo.Device) []entities.Device {
-	var result []entities.Device
-	for _, device := range devices {
-		result = append(result, entities.Device{
-			Identifier: device.ID,
-			Name:       device.Name,
-			UserId:     device.User.ID,
-		})
-	}
-	return result
-}
-
 func (h *Handler) getDevices(c *gin.Context) {
-	repoDevices, err := h.QueryProcessor.DeviceRepo.FindAll(c)
+	integrationId := c.Param("integrationId")
+	devices, err := h.DomainRepos.DeviceRepo.FindByIntegrationId(c.Request.Context(), integrationId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
-	devices := mapDevices(repoDevices)
-	c.JSON(http.StatusOK, devices)
+	c.JSON(http.StatusOK, mapDevices(devices))
+}
+
+func mapDevices(devices []entity.Device) []entities.Device {
+	var results []entities.Device
+	for _, device := range devices {
+		results = append(results, entities.Device{
+			UDID:     device.UDID,
+			Name:     device.Name,
+			UserId:   device.UserID,
+			Platform: mapStringPlatform(device.Platform),
+		})
+	}
+	return results
+}
+
+func mapStringPlatform(platform string) entity.Platform {
+	if !slices.Contains(entity.PlatformValues, platform) {
+		return "Undefined"
+	}
+	return entity.Platform(platform)
 }
 
 func (h *Handler) getDeviceByID(c *gin.Context) {
 	id := c.Param("id")
-
-	repoDevice, err := h.QueryProcessor.DeviceRepo.FindById(c, id)
+	device, err := h.DomainRepos.DeviceRepo.FindById(c.Request.Context(), id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "device not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
-
-	userId := repoDevice.User.ID
-
-	device := entities.Device{
-		Identifier: id,
-		Name:       repoDevice.Name,
-		UserId:     userId,
-	}
-
-	c.JSON(http.StatusOK, device)
+	c.JSON(http.StatusOK, entities.Device{
+		UDID:     device.UDID,
+		Name:     device.Name,
+		UserId:   device.UserID,
+		Platform: mapStringPlatform(device.Platform),
+	})
 }

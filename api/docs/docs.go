@@ -29,6 +29,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "bundleId identifier",
                         "name": "id",
                         "in": "path",
@@ -62,6 +76,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get bundleIds list",
                 "operationId": "get-bundleIds-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -73,6 +103,30 @@ const docTemplate = `{
                                     "$ref": "#/definitions/entities.BundleId"
                                 }
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -92,44 +146,120 @@ const docTemplate = `{
                 "operationId": "add-bundleId",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "bundleId params",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.BundleId"
+                            "$ref": "#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputCreateBundleId"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.BundleId"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bundleIds/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "bundleId"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-bundleId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -149,6 +279,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "bundleId identifier",
                         "name": "id",
                         "in": "path",
@@ -160,6 +304,30 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.BundleId"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -181,44 +349,120 @@ const docTemplate = `{
                 "operationId": "add-capability",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "capability params",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.Capability"
+                            "$ref": "#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputEnableCapability"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.Capability"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/capabilities/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "capability"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-capability",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -236,6 +480,20 @@ const docTemplate = `{
                 "summary": "Delete capability",
                 "operationId": "delete-capability",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "capability identifier",
@@ -271,6 +529,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get certificates list",
                 "operationId": "get-certificates-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -279,9 +553,33 @@ const docTemplate = `{
                             "items": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/definitions/entities.Profile"
+                                    "$ref": "#/definitions/entities.Certificate"
                                 }
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -297,48 +595,124 @@ const docTemplate = `{
                 "tags": [
                     "certificate"
                 ],
-                "summary": "Add new certificate",
+                "summary": "(NOT IMPLEMENTED) Add new certificate",
                 "operationId": "add-certificate",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "certificate params",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.Certificate"
+                            "$ref": "#/definitions/d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.Certificate"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/certificates/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "certificate"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-certificate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -358,6 +732,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "certificate identifier",
                         "name": "id",
                         "in": "path",
@@ -370,6 +758,30 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/entities.Certificate"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
                     }
                 }
             },
@@ -381,9 +793,23 @@ const docTemplate = `{
                 "tags": [
                     "certificate"
                 ],
-                "summary": "Delete certificate",
+                "summary": "(NOT IMPLEMENTED) Delete certificate",
                 "operationId": "delete-certificate",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "certificate identifier",
@@ -419,6 +845,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get devices list",
                 "operationId": "get-devices-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -430,6 +872,30 @@ const docTemplate = `{
                                     "$ref": "#/definitions/entities.Device"
                                 }
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -449,6 +915,20 @@ const docTemplate = `{
                 "operationId": "add-device",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "device params",
                         "name": "input",
                         "in": "body",
@@ -460,33 +940,95 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "commandID",
                         "schema": {
-                            "$ref": "#/definitions/entities.Device"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "503": {
+                        "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/devices/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -506,6 +1048,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "device identifier",
                         "name": "id",
                         "in": "path",
@@ -517,6 +1073,30 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.Device"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -533,6 +1113,22 @@ const docTemplate = `{
                 ],
                 "summary": "Get profiles list",
                 "operationId": "get-profiles-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -544,6 +1140,30 @@ const docTemplate = `{
                                     "$ref": "#/definitions/entities.Profile"
                                 }
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -559,9 +1179,23 @@ const docTemplate = `{
                 "tags": [
                     "profile"
                 ],
-                "summary": "Add new profile",
+                "summary": "(NOT IMPLEMENTED) Add new profile",
                 "operationId": "add-profile",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "profile params",
                         "name": "input",
@@ -582,25 +1216,93 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/handlers.errorResponse"
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/profiles/status/{id}": {
+            "post": {
+                "description": "Get command status by command id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Check status",
+                "operationId": "get-status-profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command identifier",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
                         }
                     }
                 }
@@ -620,6 +1322,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "profile identifier",
                         "name": "id",
                         "in": "path",
@@ -632,6 +1348,30 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/entities.Profile"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/pkg_httpserver_handlers.errorResponse"
+                        }
                     }
                 }
             },
@@ -643,9 +1383,23 @@ const docTemplate = `{
                 "tags": [
                     "profile"
                 ],
-                "summary": "Delete profile",
+                "summary": "(NOT IMPLEMENTED) Delete profile",
                 "operationId": "delete-profile",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tenantId",
+                        "name": "tenantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrationId",
+                        "name": "integrationId",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "profile identifier",
@@ -672,21 +1426,55 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entities.BundleId": {
+        "d-kv_signer_api_pkg_httpserver_entities.InputCreateBundleId": {
             "type": "object",
             "properties": {
-                "identifier": {
+                "bundleId": {
                     "type": "string"
                 },
-                "name": {
+                "bundleName": {
+                    "type": "string"
+                },
+                "platform": {
+                    "type": "string"
+                },
+                "seedId": {
                     "type": "string"
                 }
             }
         },
-        "entities.Capability": {
+        "d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate": {
+            "type": "object",
+            "properties": {
+                "NoContent": {
+                    "type": "string"
+                }
+            }
+        },
+        "d-kv_signer_api_pkg_httpserver_entities.InputEnableCapability": {
             "type": "object",
             "properties": {
                 "bundleId": {
+                    "type": "string"
+                },
+                "capabilityType": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.BundleId": {
+            "type": "object",
+            "properties": {
+                "capabilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.CapabilityType"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "identifier": {
                     "type": "string"
                 },
                 "name": {
@@ -697,13 +1485,7 @@ const docTemplate = `{
         "entities.Certificate": {
             "type": "object",
             "properties": {
-                "identifier": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
+                "content": {
                     "type": "string"
                 }
             }
@@ -711,10 +1493,13 @@ const docTemplate = `{
         "entities.Device": {
             "type": "object",
             "properties": {
-                "identifier": {
+                "name": {
                     "type": "string"
                 },
-                "name": {
+                "platform": {
+                    "$ref": "#/definitions/entity.Platform"
+                },
+                "udid": {
                     "type": "string"
                 },
                 "userId": {
@@ -725,21 +1510,40 @@ const docTemplate = `{
         "entities.Profile": {
             "type": "object",
             "properties": {
-                "bundleId": {
-                    "type": "string"
-                },
-                "identifier": {
-                    "type": "string"
-                },
-                "integrationId": {
-                    "type": "string"
-                },
-                "name": {
+                "content": {
                     "type": "string"
                 }
             }
         },
-        "handlers.errorResponse": {
+        "entity.CapabilityType": {
+            "type": "string",
+            "enum": [
+                "IN_APP_PURCHASE",
+                "PUSH_NOTIFICATIONS",
+                "APPLE_PAY",
+                "NFC_TAG_READING",
+                "APPLE_ID_AUTH"
+            ],
+            "x-enum-varnames": [
+                "InAppPurchase",
+                "PushNotifications",
+                "ApplePay",
+                "NfcTagReading",
+                "AppleIdAuth"
+            ]
+        },
+        "entity.Platform": {
+            "type": "string",
+            "enum": [
+                "IOS",
+                "MAC_OS"
+            ],
+            "x-enum-varnames": [
+                "Ios",
+                "MacOs"
+            ]
+        },
+        "pkg_httpserver_handlers.errorResponse": {
             "type": "object",
             "properties": {
                 "message": {

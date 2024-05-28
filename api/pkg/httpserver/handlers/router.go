@@ -24,34 +24,39 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		bundleId := identification.Group("/bundleIds")
 		{
 			bundleId.POST("/", h.postBundleId)
+			bundleId.GET("/status/:id", h.getBundleIdStatusByID)
 			bundleId.GET("/", h.getBundleIds)
 			bundleId.GET("/:id", h.getBundleIdByID)
-			bundleId.DELETE("/:id", h.deleteBundleIdByID)
+			//bundleId.DELETE("/:id", h.deleteBundleIdByID)
 		}
 		capability := identification.Group("/capabilities")
 		{
 			capability.POST("/", h.postCapability)
-			capability.DELETE("/:id", h.deleteCapabilityByID)
+			capability.GET("/status/:id", h.getCapabilityStatusByID)
+			//capability.DELETE("/:id", h.deleteCapabilityByID)
 		}
 		device := identification.Group("/devices")
 		{
 			device.POST("/", h.postDevice)
+			device.GET("/status/:id", h.getDeviceStatusByID)
 			device.GET("/", h.getDevices)
 			device.GET("/:id", h.getDeviceByID)
 		}
 		certificate := identification.Group("/certificates")
 		{
 			certificate.POST("/", h.postCertificate)
+			certificate.GET("/status/:id", h.getCertificateStatusByID)
 			certificate.GET("/", h.getCertificates)
 			certificate.GET("/:id", h.getCertificateByID)
-			certificate.DELETE("/:id", h.deleteCertificateByID)
+			//certificate.DELETE("/:id", h.deleteCertificateByID)
 		}
 		profile := identification.Group("/profiles")
 		{
 			profile.POST("/", h.postProfile)
+			profile.GET("/status/:id", h.getProfileStatusByID)
 			profile.GET("/", h.getProfiles)
 			profile.GET("/:id", h.getProfileByID)
-			profile.DELETE("/:id", h.deleteProfileByID)
+			//profile.DELETE("/:id", h.deleteProfileByID)
 		}
 
 	}

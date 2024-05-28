@@ -20,6 +20,7 @@ type (
 		Update(context.Context, *entity.Device) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Device, error)
+		FindByIntegrationId(context.Context, string) ([]entity.Device, error)
 	}
 
 	IntegrationRepo interface {
@@ -41,6 +42,7 @@ type (
 	BundleIdRepo interface {
 		Create(context.Context, *entity.BundleId) error
 		FindById(context.Context, string) (entity.BundleId, error)
+		FindByIntegrationId(context.Context, string) (entity.BundleId, error)
 		Update(context.Context, *entity.BundleId) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.BundleId, error)
@@ -64,19 +66,33 @@ type (
 
 	CapabilityRepo interface {
 		Create(context.Context, *entity.Capability) error
-		FindById(context.Context, string) (entity.Capability, error)
+		FindByBundleIdId(context.Context, string) ([]entity.Capability, error)
 		Update(context.Context, *entity.Capability) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Capability, error)
 	}
 )
 
+//go:generate go run github.com/vektra/mockery/v2@v2.43.0 --name=CommandRepo
 type CommandRepo interface {
+	CreateBundleIdCommand(context.Context, entity.CreateBundleId) (error, entity.CreateBundleId)
+	CreateDeviceCommand(context.Context, entity.CreateDevice) (error, entity.CreateDevice)
+	CreateEnableCapabilityTypeCommand(context.Context, entity.EnableCapabilityType) (error, entity.EnableCapabilityType)
+
 	FindByStatusBundleIdCommand(context.Context, entity.Status) []entity.CreateBundleId
 	FindByStatusDeviceCommand(context.Context, entity.Status) []entity.CreateDevice
 	FindByStatusEnableCapabilityTypeCommand(context.Context, entity.Status) []entity.EnableCapabilityType
 
+	GetStatusByIdBundleIdCommand(context.Context, uint) (error, entity.Status)
+	GetStatusByIdDeviceCommand(context.Context, uint) (error, entity.Status)
+	GetStatusByIdEnableCapabilityTypeCommand(context.Context, uint) (error, entity.Status)
+
 	SetStatusByIdBundleIdCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdDeviceCommand(context.Context, uint, entity.Status) error
 	SetStatusByIdEnableCapabilityTypeCommand(context.Context, uint, entity.Status) error
+}
+
+type VaultRepo interface {
+	FindTokenByIntegrationId(context.Context, string) (error, *entity.IntegrationToken)
+	SaveIntegrationToken(context.Context, *entity.IntegrationToken) error
 }

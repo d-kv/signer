@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"d-kv/signer/query-handler/internal/services"
+	"d-kv/signer/db-common/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	QueryProcessor *services.QueryProcessor
+	DomainRepos *usecase.DomainRepos
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-	identification := router.Group("/v1/query")
+	identification := router.Group("/v1/query/:tenantId/:integrationId")
 	{
 		bundleId := identification.Group("/bundleIds")
 		{
