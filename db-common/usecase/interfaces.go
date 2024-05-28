@@ -37,6 +37,7 @@ type (
 		Update(context.Context, *entity.Profile) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Profile, error)
+		FindByIntegrationId(context.Context, string) (entity.Profile, error)
 	}
 
 	BundleIdRepo interface {
@@ -54,6 +55,7 @@ type (
 		Update(context.Context, *entity.Certificate) error
 		DeleteById(context.Context, string) error
 		FindAll(context.Context) ([]entity.Certificate, error)
+		FindByIntegrationId(context.Context, string) (entity.Certificate, error)
 	}
 
 	UserRepo interface {

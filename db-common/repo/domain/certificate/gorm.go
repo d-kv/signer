@@ -40,3 +40,9 @@ func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.Certificate, error)
 	err := repo.DB.WithContext(ctx).Find(&certificates).Error
 	return certificates, err
 }
+
+func (repo *GormRepo) FindByIntegrationId(ctx context.Context, ID string) (entity.Certificate, error) {
+	var certificate = entity.Certificate{}
+	err := repo.DB.WithContext(ctx).Where("integrationId = ?", ID).First(&certificate).Error
+	return certificate, err
+}
