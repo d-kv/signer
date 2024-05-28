@@ -40,3 +40,9 @@ func (repo *GormRepo) FindAll(ctx context.Context) ([]entity.Profile, error) {
 	err := repo.DB.WithContext(ctx).Find(&profiles).Error
 	return profiles, err
 }
+
+func (repo *GormRepo) FindByIntegrationId(ctx context.Context, ID string) (entity.Profile, error) {
+	var profile = entity.Profile{}
+	err := repo.DB.WithContext(ctx).Where("integrationId = ?", ID).First(&profile).Error
+	return profile, err
+}

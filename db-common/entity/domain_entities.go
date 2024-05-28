@@ -11,6 +11,7 @@ type Integration struct {
 	TeamId   string
 	Tenant   Tenant   `gorm:"references:ID"`
 	Devices  []Device `gorm:"many2many:integration_devices"`
+
 	// Ids
 	TenantId string
 }
