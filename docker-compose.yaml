@@ -19,6 +19,7 @@ services:
       COMMAND_QUEUE_POSTGRES_PASSWORD: "postgres"
       COMMAND_QUEUE_POSTGRES_DB: "command_queue"
       COMMAND_QUEUE_POSTGRES_PORT: "5432"
+      QUERY_HANDLER_ADDRESS: "http://query-handler:8081"
     networks:
       - signer-net
 
