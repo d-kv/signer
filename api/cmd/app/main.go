@@ -26,7 +26,7 @@ func main() {
 		Port:     os.Getenv("COMMAND_QUEUE_POSTGRES_PORT"),
 	}
 	queue := command.New(pgConfig)
-	queryURL := "http://localhost:8081/v1/query"
+	queryURL := os.Getenv("QUERY_HANDLER_HOST") + ":" + os.Getenv("QUERY_HANDLER_PORT") + "/v1/query"
 	services := clientservice.NewService(queue, queryURL)
 	handler := handlers.NewHandler(services)
 	server := new(httpserver.Server)
