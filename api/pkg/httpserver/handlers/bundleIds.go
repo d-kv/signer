@@ -28,15 +28,15 @@ func (h *Handler) postBundleId(c *gin.Context) {
 	integrationId := c.Param("integrationId")
 	err := c.BindJSON(&input)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	bundleInput, err := entities.ConvertBundleInput(&input, tenantId, integrationId)
+	converted, err := entities.ConvertBundleInput(&input, tenantId, integrationId)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	opId, err := h.services.CommandExecutorService.PostBundleId(c, bundleInput)
+	opId, err := h.services.CommandExecutorService.PostBundleId(c, converted)
 	if err != nil {
 		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
 		return

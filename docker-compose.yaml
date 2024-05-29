@@ -1,7 +1,5 @@
 version: '3.8'
 
-networks:
-  signer-net:
 
 services:
   api:
@@ -19,6 +17,7 @@ services:
       COMMAND_QUEUE_POSTGRES_PASSWORD: "postgres"
       COMMAND_QUEUE_POSTGRES_DB: "command_queue"
       COMMAND_QUEUE_POSTGRES_PORT: "5432"
+      QUERY_HANDLER_URL: "http://query-handler:8081"
     networks:
       - signer-net
 
@@ -51,6 +50,8 @@ services:
     build:
       context: .
       dockerfile: docker/query-handler/Dockerfile
+    ports:
+      - "8081:8081"
     depends_on:
       db:
         condition: "service_healthy"
@@ -122,3 +123,7 @@ volumes:
     driver: local
   db_command_queue:
     driver: local
+
+networks:
+  signer-net:
+    driver: bridge

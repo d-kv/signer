@@ -23,7 +23,25 @@ import (
 // @Failure default {object} errorResponse
 // @Router /certificates [post]
 func (h *Handler) postCertificate(c *gin.Context) {
-	var _ entities.InputCreateCertificate
+	var input entities.InputCreateCertificate
+	tenantId := c.Param("tenantId")
+	integrationId := c.Param("integrationId")
+	err := c.BindJSON(&input)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	converted, err := entities.ConvertCertificate(&input, tenantId, integrationId)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	opId, err := h.services.CommandExecutorService.PostCertificate(c, converted)
+	if err != nil {
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
+		return
+	}
+	c.JSON(http.StatusOK, opId)
 }
 
 // @Summary Check status
@@ -40,7 +58,7 @@ func (h *Handler) postCertificate(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /certificates/status/{id} [post]
 func (h *Handler) getCertificateStatusByID(c *gin.Context) {
-	status, err := h.services.CommandExecutorService.GetDeviceStatusByID(c)
+	status, err := h.services.CommandExecutorService.GetCertificateStatusByID(c)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			newErrorResponse(c, http.StatusNotFound, "No commands with this status")
