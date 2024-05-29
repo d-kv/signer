@@ -1,11 +1,18 @@
 package entity
 
+import "time"
+
 type ApiEntity interface {
 	GetURL() URL
 }
+
+//--------------------------------------
+
 type BundleIdResponse struct {
 	Id string `json:"id"`
 }
+
+// ApiCreateBundleId AppstoreConnectAPI body
 type ApiCreateBundleId struct {
 	Data BundleIdData `json:"data"`
 }
@@ -24,11 +31,12 @@ type BundleIdData struct {
 }
 
 func (b *ApiCreateBundleId) GetURL() URL {
-	return BundleIdURL
+	return BundleIdsURL
 }
 
-//BundleID
+//--------------------------------------
 
+// ApiCreateDevice AppstoreConnectAPI body
 type ApiCreateDevice struct {
 	Data DeviceData `json:"data"`
 }
@@ -48,8 +56,9 @@ func (b *ApiCreateDevice) GetURL() URL {
 	return DevicesURL
 }
 
-//Device
+//--------------------------------------
 
+// ApiEnableCapability AppstoreConnectAPI body
 type ApiEnableCapability struct {
 	Data DataForCapability `json:"data"`
 }
@@ -102,4 +111,101 @@ func (b *ApiEnableCapability) GetURL() URL {
 	return CapabilitiesURL
 }
 
-//Capability
+//--------------------------------------
+
+// ProfileResponse Response
+type ProfileResponse struct {
+	Data ProfileResponseData `json:"data"`
+}
+
+type ProfileResponseAttributes struct {
+	Name           string    `json:"name"`
+	Platform       string    `json:"platform"`
+	ProfileType    string    `json:"profileType"`
+	ProfileState   string    `json:"profileState"`
+	ProfileContent string    `json:"profileContent"`
+	UUID           string    `json:"uuid"`
+	CreatedDate    time.Time `json:"createdDate"`
+	ExpirationDate time.Time `json:"expirationDate"`
+}
+
+type ProfileResponseData struct {
+	ID         string                    `json:"id"`
+	Type       string                    `json:"type"`
+	Attributes ProfileResponseAttributes `json:"attributes"`
+}
+
+// ApiCreateProfile AppstoreConnectAPI body
+type ApiCreateProfile struct {
+	Data ProfileData `json:"data"`
+}
+type ProfileData struct {
+	Type          string               `json:"type"`
+	Attributes    ProfileAttributes    `json:"attributes"`
+	Relationships ProfileRelationships `json:"relationships"`
+}
+
+type ProfileAttributes struct {
+	Name        string `json:"name"`
+	ProfileType string `json:"profileType"`
+}
+
+type ProfileRelationships struct {
+	BundleID     ProfileArgument `json:"bundleId"`
+	Certificates ProfileArgument `json:"certificates"`
+	Devices      ProfileArgument `json:"devices"`
+}
+
+type ProfileArgument struct {
+	Data []ProfileArgumentData `json:"data"`
+}
+type ProfileArgumentData struct {
+	ID   string `json:"id"`
+	Type string `json:"type"`
+}
+
+func (b *ApiCreateProfile) GetURL() URL {
+	return ProfilesURL
+}
+
+//--------------------------------------
+
+// CertificateResponse Response
+type CertificateResponse struct {
+	Data CertificateResponseData `json:"data"`
+}
+
+type CertificateResponseAttributes struct {
+	Name               string    `json:"name"`
+	CertificateType    string    `json:"certificateType"`
+	DisplayName        string    `json:"displayName"`
+	SerialNumber       string    `json:"serialNumber"`
+	Platform           string    `json:"platform"`
+	ExpirationDate     time.Time `json:"expirationDate"`
+	CertificateContent string    `json:"certificateContent"`
+}
+
+type CertificateResponseData struct {
+	ID         string                        `json:"id"`
+	Type       string                        `json:"type"`
+	Attributes CertificateResponseAttributes `json:"attributes"`
+}
+
+// ApiAddCertificate AppstoreConnectAPI body
+type ApiAddCertificate struct {
+	Data CertificateData `json:"data"`
+}
+
+type CertificateData struct {
+	Attributes CertificateAttributes `json:"attributes"`
+	Type       string                `json:"type"`
+}
+
+type CertificateAttributes struct {
+	CsrContent      string `json:"csrContent"`
+	CertificateType string `json:"certificateType"`
+}
+
+func (b *ApiAddCertificate) GetURL() URL {
+	return CertificatesURL
+}

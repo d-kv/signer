@@ -48,7 +48,7 @@ func (s *AppApiService) SendCreateCommand(ctx context.Context, e entity.ApiEntit
 			fmt.Println("Error reading response body:", err1)
 			return resp, err1
 		}
-		fmt.Println("Response Body:", string(responseBody))
+		fmt.Println("BundleIdResponse Body:", string(responseBody))
 		return resp, errors.New(resp.Status)
 	}
 	fmt.Println("New instance created successfully!")

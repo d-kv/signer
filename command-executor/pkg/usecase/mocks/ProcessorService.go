@@ -9,8 +9,6 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
-	pkgentity "d-kv/signer/command-executor/pkg/entity"
-
 	usecase "d-kv/signer/command-executor/pkg/usecase"
 )
 
@@ -70,60 +68,6 @@ func (_m *ProcessorService) SetStatusById(ctx context.Context, baseCommand *usec
 // StartProcessor provides a mock function with given fields: ctx
 func (_m *ProcessorService) StartProcessor(ctx context.Context) {
 	_m.Called(ctx)
-}
-
-// WriteBundleId provides a mock function with given fields: ctx, operation, response
-func (_m *ProcessorService) WriteBundleId(ctx context.Context, operation entity.CreateBundleId, response *pkgentity.BundleIdResponse) error {
-	ret := _m.Called(ctx, operation, response)
-
-	if len(ret) == 0 {
-		panic("no return value specified for WriteBundleId")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, entity.CreateBundleId, *pkgentity.BundleIdResponse) error); ok {
-		r0 = rf(ctx, operation, response)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// WriteCapability provides a mock function with given fields: ctx, err, operation
-func (_m *ProcessorService) WriteCapability(ctx context.Context, err error, operation entity.EnableCapabilityType) error {
-	ret := _m.Called(ctx, err, operation)
-
-	if len(ret) == 0 {
-		panic("no return value specified for WriteCapability")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, error, entity.EnableCapabilityType) error); ok {
-		r0 = rf(ctx, err, operation)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// WriteDevice provides a mock function with given fields: ctx, operation
-func (_m *ProcessorService) WriteDevice(ctx context.Context, operation entity.CreateDevice) error {
-	ret := _m.Called(ctx, operation)
-
-	if len(ret) == 0 {
-		panic("no return value specified for WriteDevice")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, entity.CreateDevice) error); ok {
-		r0 = rf(ctx, operation)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
 }
 
 // NewProcessorService creates a new instance of ProcessorService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.

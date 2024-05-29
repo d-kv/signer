@@ -15,6 +15,12 @@ func (input *CreateBundleId) GetId() uint {
 func (input *EnableCapabilityType) GetId() uint {
 	return input.Outer.ID
 }
+func (input *CreateProfile) GetId() uint {
+	return input.Outer.ID
+}
+func (input *CreateCertificate) GetId() uint {
+	return input.Outer.ID
+}
 
 func (input *CreateDevice) GetIntegrationId() string {
 	return input.Outer.IntegrationId
@@ -23,6 +29,12 @@ func (input *CreateBundleId) GetIntegrationId() string {
 	return input.Outer.IntegrationId
 }
 func (input *EnableCapabilityType) GetIntegrationId() string {
+	return input.Outer.IntegrationId
+}
+func (input *CreateProfile) GetIntegrationId() string {
+	return input.Outer.IntegrationId
+}
+func (input *CreateCertificate) GetIntegrationId() string {
 	return input.Outer.IntegrationId
 }
 
@@ -99,4 +111,59 @@ func (input *EnableCapabilityType) Convert() ApiEntity {
 	}
 
 	return &apiEnableCapability
+}
+
+type CreateProfile struct {
+	Outer entity.CreateProfile
+}
+
+func (input *CreateProfile) Convert() ApiEntity {
+	var certificateData []ProfileArgumentData
+	for _, id := range input.Outer.CertificateIds {
+		certificateData = append(certificateData, ProfileArgumentData{
+			ID:   id,
+			Type: "certificates",
+		})
+	}
+	var deviceData []ProfileArgumentData
+	for _, id := range input.Outer.DeviceIds {
+		deviceData = append(deviceData, ProfileArgumentData{
+			ID:   id,
+			Type: "devices",
+		})
+	}
+	var bundleIdData []ProfileArgumentData
+	bundleIdData = append(bundleIdData, ProfileArgumentData{
+		ID:   input.Outer.BundleId,
+		Type: "bundleIds",
+	})
+	newProfile := ApiCreateProfile{Data: ProfileData{
+		Type: "profiles",
+		Attributes: ProfileAttributes{
+			Name:        input.Outer.Name,
+			ProfileType: string(input.Outer.ProfileType),
+		},
+		Relationships: ProfileRelationships{
+			BundleID:     ProfileArgument{Data: bundleIdData},
+			Certificates: ProfileArgument{Data: certificateData},
+			Devices:      ProfileArgument{Data: deviceData},
+		},
+	},
+	}
+	return &newProfile
+}
+
+type CreateCertificate struct {
+	Outer entity.CreateCertificate
+}
+
+func (input *CreateCertificate) Convert() ApiEntity {
+	newCertificate := ApiAddCertificate{Data: CertificateData{
+		Attributes: CertificateAttributes{
+			CsrContent:      input.Outer.CsrContent,
+			CertificateType: string(input.Outer.Type),
+		},
+		Type: "certificates",
+	}}
+	return &newCertificate
 }
