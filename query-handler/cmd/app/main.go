@@ -44,6 +44,7 @@ func main() {
 
 	server := new(httpserver.Server)
 	err = server.Run("8081", h.InitRoutes())
+	log.Println("Query-handler successfully started!")
 	if err != nil {
 		log.Fatalf("server running error: %s", err.Error())
 	}
