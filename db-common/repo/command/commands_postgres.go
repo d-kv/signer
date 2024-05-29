@@ -23,6 +23,8 @@ func New(conf config.PostgresConfig) *Repo {
 		&entity.EnableCapabilityType{},
 		&entity.CreateDevice{},
 		&entity.CreateBundleId{},
+		&entity.CreateProfile{},
+		&entity.CreateCertificate{},
 	)
 	if err != nil {
 		log.Fatal(err)
