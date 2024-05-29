@@ -14,9 +14,6 @@ type ProcessorService interface {
 	SetStatusById(ctx context.Context, baseCommand *DataBaseCommand, status dbEntity.Status) error
 	Processing(ctx context.Context, operation DataBaseCommand) (*http.Response, error)
 	StartProcessor(ctx context.Context)
-	WriteCapability(ctx context.Context, err error, operation dbEntity.EnableCapabilityType) error
-	WriteDevice(ctx context.Context, operation dbEntity.CreateDevice) error
-	WriteBundleId(ctx context.Context, operation dbEntity.CreateBundleId, response *entity.BundleIdResponse) error
 }
 
 //go:generate go run github.com/vektra/mockery/v2@v2.43.0 --name=ApiService
@@ -42,6 +39,10 @@ type DataBaseService interface {
 	WriteCapability(ctx context.Context, err error, operation dbEntity.EnableCapabilityType) error
 	WriteDevice(ctx context.Context, operation dbEntity.CreateDevice) error
 	WriteBundleId(ctx context.Context, operation dbEntity.CreateBundleId, response *entity.BundleIdResponse) error
+	WriteProfile(ctx context.Context, operation dbEntity.CreateProfile, resp *entity.ProfileResponse) error
+	WriteCertificate(ctx context.Context, operation dbEntity.CreateCertificate, resp *entity.CertificateResponse) error
+	UpdateArrayDevices(ctx context.Context, devices []dbEntity.Device, converted *dbEntity.Profile, err error) error
+	UpdateArrayCertificates(ctx context.Context, certificates []dbEntity.Certificate, converted *dbEntity.Profile, err error) error
 }
 
 type Service struct {

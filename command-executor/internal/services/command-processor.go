@@ -55,8 +55,6 @@ func (s *ProcessorService) Processing(ctx context.Context, operation usecase.Dat
 		return nil, err
 	}
 	resp, err := s.service.Api.SendCreateCommand(ctx, operation.Convert(), token)
-	if err != nil {
-	}
 	return resp, err
 }
 
@@ -177,6 +175,101 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 				continue
 			}
 			err = s.service.Queue.SetStatusByIdEnableCapabilityTypeCommand(ctx, operation.ID, dbEntity.Completed)
+			if err != nil {
+				fmt.Println("Error while changing status", err)
+				continue
+			}
+		}
+		profileCommand := s.service.Queue.FindByStatusProfileCommand(ctx, dbEntity.Created)
+		for _, operation := range profileCommand {
+			localOperation := &entity.CreateProfile{Outer: operation}
+			resp, err := s.Processing(ctx, localOperation)
+			if err != nil {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdProfileCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			responseObj := entity.ProfileResponse{}
+
+			decoder := json.NewDecoder(resp.Body)
+			err = decoder.Decode(&responseObj)
+			if err != nil {
+				fmt.Println("Error while decoding api answer", err, responseObj.Data.ID)
+				err = s.service.Queue.SetStatusByIdProfileCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error closing body", err)
+				err = s.service.Queue.SetStatusByIdProfileCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+			}
+			err = s.service.Db.WriteProfile(ctx, operation, &responseObj)
+			if err != nil {
+				fmt.Println("Error while writing to db", err)
+				err = s.service.Queue.SetStatusByIdProfileCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = s.service.Queue.SetStatusByIdProfileCommand(ctx, operation.ID, dbEntity.Completed)
+			if err != nil {
+				fmt.Println("Error while changing status", err)
+				continue
+			}
+		}
+
+		certificateCommand := s.service.Queue.FindByStatusCertificateCommand(ctx, dbEntity.Created)
+		for _, operation := range certificateCommand {
+			localOperation := &entity.CreateCertificate{Outer: operation}
+			resp, err := s.Processing(ctx, localOperation)
+			if err != nil {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdCertificateCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+
+			responseObj := entity.CertificateResponse{}
+			decoder := json.NewDecoder(resp.Body)
+			err = decoder.Decode(&responseObj)
+			if err != nil {
+				fmt.Println("Error while decoding api answer", err, responseObj.Data.ID)
+				err = s.service.Queue.SetStatusByIdCertificateCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = resp.Body.Close()
+			if err != nil {
+				fmt.Println("Error closing body", err)
+				err = s.service.Queue.SetStatusByIdCertificateCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+			}
+			err = s.service.Db.WriteCertificate(ctx, operation, &responseObj)
+			if err != nil {
+				fmt.Println("Error while writing to db", err)
+				err = s.service.Queue.SetStatusByIdCertificateCommand(ctx, operation.ID, dbEntity.Error)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
+			err = s.service.Queue.SetStatusByIdCertificateCommand(ctx, operation.ID, dbEntity.Completed)
 			if err != nil {
 				fmt.Println("Error while changing status", err)
 				continue
