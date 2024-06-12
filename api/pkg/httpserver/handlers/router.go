@@ -27,7 +27,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			bundleId.GET("/status/:id", h.getBundleIdStatusByID)
 			bundleId.GET("/", h.getBundleIds)
 			bundleId.GET("/:id", h.getBundleIdByID)
-			//bundleId.DELETE("/:id", h.deleteBundleIdByID)
+			bundleId.DELETE("/:id", h.deleteBundleIdByID)
 		}
 		capability := identification.Group("/capabilities")
 		{

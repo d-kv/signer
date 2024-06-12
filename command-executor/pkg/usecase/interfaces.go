@@ -12,13 +12,13 @@ import (
 //go:generate go run github.com/vektra/mockery/v2@v2.43.0 --name=ProcessorService
 type ProcessorService interface {
 	SetStatusById(ctx context.Context, baseCommand *DataBaseCommand, status dbEntity.Status) error
-	Processing(ctx context.Context, operation DataBaseCommand) (*http.Response, error)
+	Processing(ctx context.Context, operation DataBaseCommand) (*http.Response, error, bool)
 	StartProcessor(ctx context.Context)
 }
 
 //go:generate go run github.com/vektra/mockery/v2@v2.43.0 --name=ApiService
 type ApiService interface {
-	SendCreateCommand(ctx context.Context, e entity.ApiEntity, IntegrationId string) (*http.Response, error)
+	SendCreateCommand(ctx context.Context, e entity.ApiEntity, IntegrationId string) (*http.Response, error, bool)
 }
 
 //go:generate go run github.com/vektra/mockery/v2@v2.43.0 --name=TokenService

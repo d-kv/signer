@@ -39,23 +39,23 @@ func (s *ProcessorService) SetStatusById(ctx context.Context, baseCommand *useca
 	return err
 }
 
-func (s *ProcessorService) Processing(ctx context.Context, operation usecase.DataBaseCommand) (*http.Response, error) {
+func (s *ProcessorService) Processing(ctx context.Context, operation usecase.DataBaseCommand) (*http.Response, error, bool) {
 	err := s.SetStatusById(ctx, &operation, dbEntity.Processing)
 	if err != nil {
-		return nil, err
+		return nil, err, false
 	}
 	err, tokenInfo := s.service.Vault.FindTokenByIntegrationId(ctx, operation.GetIntegrationId())
 	if err != nil {
 		fmt.Println("Incorrect integration:", err)
-		return nil, err
+		return nil, err, false
 	}
 	token, err := s.service.Token.GetJwtToken(tokenInfo)
 	if err != nil {
 		fmt.Println("Error searching token:", err)
-		return nil, err
+		return nil, err, false
 	}
-	resp, err := s.service.Api.SendCreateCommand(ctx, operation.Convert(), token)
-	return resp, err
+	resp, err, inNeedToRetry := s.service.Api.SendCreateCommand(ctx, operation.Convert(), token)
+	return resp, err, inNeedToRetry
 }
 
 func (s *ProcessorService) StartProcessor(ctx context.Context) {
@@ -63,7 +63,15 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		commands := s.service.Queue.FindByStatusDeviceCommand(ctx, dbEntity.Created)
 		for _, operation := range commands {
 			localOperation := &entity.CreateDevice{Outer: operation}
-			resp, err := s.Processing(ctx, localOperation)
+			resp, err, inNeedToRetry := s.Processing(ctx, localOperation)
+			if inNeedToRetry {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Created)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Error)
@@ -100,7 +108,15 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		bundleIdCommand := s.service.Queue.FindByStatusBundleIdCommand(ctx, dbEntity.Created)
 		for _, operation := range bundleIdCommand {
 			localOperation := &entity.CreateBundleId{Outer: operation}
-			resp, err := s.Processing(ctx, localOperation)
+			resp, err, inNeedToRetry := s.Processing(ctx, localOperation)
+			if inNeedToRetry {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Created)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				err = s.service.Queue.SetStatusByIdBundleIdCommand(ctx, operation.ID, dbEntity.Error)
@@ -147,7 +163,15 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		capabilityCommand := s.service.Queue.FindByStatusEnableCapabilityTypeCommand(ctx, dbEntity.Created)
 		for _, operation := range capabilityCommand {
 			localOperation := entity.EnableCapabilityType{Outer: operation}
-			resp, err := s.Processing(ctx, &localOperation)
+			resp, err, inNeedToRetry := s.Processing(ctx, &localOperation)
+			if inNeedToRetry {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Created)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
 			err = resp.Body.Close()
 			if err != nil {
 				fmt.Println("Error closing body")
@@ -183,7 +207,15 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		profileCommand := s.service.Queue.FindByStatusProfileCommand(ctx, dbEntity.Created)
 		for _, operation := range profileCommand {
 			localOperation := &entity.CreateProfile{Outer: operation}
-			resp, err := s.Processing(ctx, localOperation)
+			resp, err, inNeedToRetry := s.Processing(ctx, localOperation)
+			if inNeedToRetry {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Created)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				err = s.service.Queue.SetStatusByIdProfileCommand(ctx, operation.ID, dbEntity.Error)
@@ -231,7 +263,15 @@ func (s *ProcessorService) StartProcessor(ctx context.Context) {
 		certificateCommand := s.service.Queue.FindByStatusCertificateCommand(ctx, dbEntity.Created)
 		for _, operation := range certificateCommand {
 			localOperation := &entity.CreateCertificate{Outer: operation}
-			resp, err := s.Processing(ctx, localOperation)
+			resp, err, inNeedToRetry := s.Processing(ctx, localOperation)
+			if inNeedToRetry {
+				fmt.Println("Error while processing", err)
+				err = s.service.Queue.SetStatusByIdDeviceCommand(ctx, operation.ID, dbEntity.Created)
+				if err != nil {
+					fmt.Println("Error while status change", err)
+				}
+				continue
+			}
 			if err != nil {
 				fmt.Println("Error while processing", err)
 				err = s.service.Queue.SetStatusByIdCertificateCommand(ctx, operation.ID, dbEntity.Error)

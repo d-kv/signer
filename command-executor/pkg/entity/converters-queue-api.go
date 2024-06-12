@@ -77,39 +77,30 @@ type EnableCapabilityType struct {
 
 func (input *EnableCapabilityType) Convert() ApiEntity {
 	settingData := SettingData{}
-
 	optionData := OptionData{}
-
 	settingData.Options = append(settingData.Options, optionData)
-
 	attributesData := &AttributesData{
 		CapabilityType: string(input.Outer.CapabilityType),
 		Settings:       []SettingData{settingData},
 	}
-
 	bundleIdForCapabilityData := &BundleIdForCapabilityData{
 		Id:   input.Outer.BundleId,
 		Type: "bundleIds",
 	}
-
 	bundleIdRelationship := &BundleIdRelationship{
 		Data: *bundleIdForCapabilityData,
 	}
-
 	relationshipsData := &RelationshipsData{
 		BundleId: *bundleIdRelationship,
 	}
-
 	dataForCapability := &DataForCapability{
 		Relationships: *relationshipsData,
 		Attributes:    *attributesData,
 		Type:          "bundleIdCapabilities",
 	}
-
 	apiEnableCapability := ApiEnableCapability{
 		Data: *dataForCapability,
 	}
-
 	return &apiEnableCapability
 }
 

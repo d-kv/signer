@@ -19,17 +19,17 @@ func NewApiService(client *http.Client) *AppApiService {
 	return &AppApiService{Client: client}
 }
 
-func (s *AppApiService) SendCreateCommand(ctx context.Context, e entity.ApiEntity, token string) (*http.Response, error) {
+func (s *AppApiService) SendCreateCommand(ctx context.Context, e entity.ApiEntity, token string) (*http.Response, error, bool) {
 	payload, err := json.Marshal(e)
 	if err != nil {
 		fmt.Println("Error marshalling JSON:", err)
-		return nil, err
+		return nil, err, false
 	}
 
 	req, err := http.NewRequest("POST", string(e.GetURL()), bytes.NewBuffer(payload))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
-		return nil, err
+		return nil, err, false
 	}
 
 	req.Header.Set("Authorization", "Bearer "+token)
@@ -38,19 +38,23 @@ func (s *AppApiService) SendCreateCommand(ctx context.Context, e entity.ApiEntit
 	resp, err := s.Client.Do(req)
 	if err != nil {
 		fmt.Println("Error making request:", err)
-		return nil, err
+		return nil, err, false
 	}
 
 	if resp.StatusCode != http.StatusCreated {
-		fmt.Println("Error: Unexpected response status code", resp.Status)
-		responseBody, err1 := io.ReadAll(resp.Body)
-		if err1 != nil {
-			fmt.Println("Error reading response body:", err1)
-			return resp, err1
+		if resp.StatusCode == http.StatusInternalServerError {
+			return resp, errors.New(resp.Status), true
+		} else {
+			fmt.Println("Error: Unexpected response status code", resp.Status)
+			responseBody, err1 := io.ReadAll(resp.Body)
+			if err1 != nil {
+				fmt.Println("Error reading response body:", err1)
+				return resp, err1, false
+			}
+			fmt.Println("BundleIdResponse Body:", string(responseBody))
+			return resp, errors.New(resp.Status), false
 		}
-		fmt.Println("BundleIdResponse Body:", string(responseBody))
-		return resp, errors.New(resp.Status)
 	}
 	fmt.Println("New instance created successfully!")
-	return resp, err
+	return resp, err, false
 }
