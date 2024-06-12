@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// @Summary (NOT IMPLEMENTED) Add new certificate
+// @Summary Add new certificate
 // @Tags certificate
 // @Description Create new certificate instance
 // @ID add-certificate
@@ -121,7 +121,7 @@ func (h *Handler) getCertificateByID(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary (NOT IMPLEMENTED) Delete certificate
+// @Summary Delete certificate
 // @Description Certificate deletion by id
 // @Tags certificate
 // @ID delete-certificate

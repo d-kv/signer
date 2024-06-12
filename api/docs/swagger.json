@@ -589,7 +589,7 @@
                 "tags": [
                     "certificate"
                 ],
-                "summary": "(NOT IMPLEMENTED) Add new certificate",
+                "summary": "Add new certificate",
                 "operationId": "add-certificate",
                 "parameters": [
                     {
@@ -787,7 +787,7 @@
                 "tags": [
                     "certificate"
                 ],
-                "summary": "(NOT IMPLEMENTED) Delete certificate",
+                "summary": "Delete certificate",
                 "operationId": "delete-certificate",
                 "parameters": [
                     {
@@ -1173,7 +1173,7 @@
                 "tags": [
                     "profile"
                 ],
-                "summary": "(NOT IMPLEMENTED) Add new profile",
+                "summary": "Add new profile",
                 "operationId": "add-profile",
                 "parameters": [
                     {
@@ -1377,7 +1377,7 @@
                 "tags": [
                     "profile"
                 ],
-                "summary": "(NOT IMPLEMENTED) Delete profile",
+                "summary": "Delete profile",
                 "operationId": "delete-profile",
                 "parameters": [
                     {
@@ -1440,7 +1440,10 @@
         "d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate": {
             "type": "object",
             "properties": {
-                "NoContent": {
+                "certificateType": {
+                    "type": "string"
+                },
+                "csrContent": {
                     "type": "string"
                 }
             }

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// @Summary (NOT IMPLEMENTED) Add new profile
+// @Summary Add new profile
 // @Tags profile
 // @Description Create new profile instance
 // @ID add-profile
@@ -121,7 +121,7 @@ func (h *Handler) getProfileByID(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary (NOT IMPLEMENTED) Delete profile
+// @Summary Delete profile
 // @Description Profile deletion by id
 // @Tags profile
 // @ID delete-profile

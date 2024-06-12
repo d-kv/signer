@@ -595,7 +595,7 @@ const docTemplate = `{
                 "tags": [
                     "certificate"
                 ],
-                "summary": "(NOT IMPLEMENTED) Add new certificate",
+                "summary": "Add new certificate",
                 "operationId": "add-certificate",
                 "parameters": [
                     {
@@ -793,7 +793,7 @@ const docTemplate = `{
                 "tags": [
                     "certificate"
                 ],
-                "summary": "(NOT IMPLEMENTED) Delete certificate",
+                "summary": "Delete certificate",
                 "operationId": "delete-certificate",
                 "parameters": [
                     {
@@ -1179,7 +1179,7 @@ const docTemplate = `{
                 "tags": [
                     "profile"
                 ],
-                "summary": "(NOT IMPLEMENTED) Add new profile",
+                "summary": "Add new profile",
                 "operationId": "add-profile",
                 "parameters": [
                     {
@@ -1383,7 +1383,7 @@ const docTemplate = `{
                 "tags": [
                     "profile"
                 ],
-                "summary": "(NOT IMPLEMENTED) Delete profile",
+                "summary": "Delete profile",
                 "operationId": "delete-profile",
                 "parameters": [
                     {
@@ -1446,7 +1446,10 @@ const docTemplate = `{
         "d-kv_signer_api_pkg_httpserver_entities.InputCreateCertificate": {
             "type": "object",
             "properties": {
-                "NoContent": {
+                "certificateType": {
+                    "type": "string"
+                },
+                "csrContent": {
                     "type": "string"
                 }
             }
