@@ -20,7 +20,7 @@ func NewCommandService(db *command.Repo) *CommandService {
 func (s *CommandService) PostBundleId(c *gin.Context, ent *entity.CreateBundleId) (uint, error) {
 	err, e := s.queue.CreateBundleIdCommand(c, *ent)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	return e.ID, err
 }
@@ -48,7 +48,7 @@ func (s *CommandService) DelBundleIdById(c *gin.Context) (uint, error) {
 func (s *CommandService) PostCapability(c *gin.Context, ent *entity.EnableCapabilityType) (uint, error) {
 	err, e := s.queue.CreateEnableCapabilityTypeCommand(c, *ent)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	return e.ID, err
 }
@@ -59,7 +59,7 @@ func (s *CommandService) GetCapabilityStatusByID(c *gin.Context) (entity.Status,
 	if err != nil {
 		return "", err
 	}
-	err, status := s.queue.GetStatusByIdBundleIdCommand(c, uint(id))
+	err, status := s.queue.GetStatusByIdEnableCapabilityTypeCommand(c, uint(id))
 	if err != nil {
 		return "", err
 	}
@@ -76,7 +76,7 @@ func (s *CommandService) DelCapability(c *gin.Context) (uint, error) {
 func (s *CommandService) PostDevice(c *gin.Context, ent *entity.CreateDevice) (uint, error) {
 	err, e := s.queue.CreateDeviceCommand(c, *ent)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	return e.ID, err
 }
@@ -87,7 +87,7 @@ func (s *CommandService) GetDeviceStatusByID(c *gin.Context) (entity.Status, err
 	if err != nil {
 		return "", err
 	}
-	err, status := s.queue.GetStatusByIdBundleIdCommand(c, uint(id))
+	err, status := s.queue.GetStatusByIdDeviceCommand(c, uint(id))
 	if err != nil {
 		return "", err
 	}
@@ -97,13 +97,24 @@ func (s *CommandService) GetDeviceStatusByID(c *gin.Context) (entity.Status, err
 // Profile
 
 func (s *CommandService) PostProfile(c *gin.Context, ent *entity.CreateProfile) (uint, error) {
-	//TODO implement me
-	panic("implement me")
+	err, e := s.queue.CreateProfileCommand(c, *ent)
+	if err != nil {
+		return -1, err
+	}
+	return e.ID, err
 }
 
 func (s *CommandService) GetProfileStatusByID(c *gin.Context) (entity.Status, error) {
-	//TODO implement me
-	panic("implement me")
+	strId := c.Param("id")
+	id, err := strconv.ParseUint(strId, 10, 32)
+	if err != nil {
+		return "", err
+	}
+	err, status := s.queue.GetStatusByIdProfileCommand(c, uint(id))
+	if err != nil {
+		return "", err
+	}
+	return status, err
 }
 
 func (s *CommandService) DelProfileById(c *gin.Context) (uint, error) {
@@ -114,13 +125,24 @@ func (s *CommandService) DelProfileById(c *gin.Context) (uint, error) {
 // Certificate
 
 func (s *CommandService) PostCertificate(c *gin.Context, ent *entity.CreateCertificate) (uint, error) {
-	//TODO implement me
-	panic("implement me")
+	err, e := s.queue.CreateCertificateCommand(c, *ent)
+	if err != nil {
+		return -1, err
+	}
+	return e.ID, err
 }
 
 func (s *CommandService) GetCertificateStatusByID(c *gin.Context) (entity.Status, error) {
-	//TODO implement me
-	panic("implement me")
+	strId := c.Param("id")
+	id, err := strconv.ParseUint(strId, 10, 32)
+	if err != nil {
+		return "", err
+	}
+	err, status := s.queue.GetStatusByIdCertificateCommand(c, uint(id))
+	if err != nil {
+		return "", err
+	}
+	return status, err
 }
 
 func (s *CommandService) DelCertificateById(c *gin.Context) (uint, error) {

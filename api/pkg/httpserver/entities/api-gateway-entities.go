@@ -19,9 +19,14 @@ type InputCreateDevice struct {
 }
 
 type InputCreateProfile struct {
-	NoContent string `json:"NoContent"`
+	CertificateIds []string `json:"certificateIds"`
+	DeviceIds      []string `json:"deviceIds"`
+	BundleId       string   `json:"bundleId-id"`
+	ProfileType    string   `json:"type"`
+	Name           string   `json:"name"`
 }
 
 type InputCreateCertificate struct {
-	NoContent string `json:"NoContent"`
+	CsrContent      string `json:"csrContent"`
+	CertificateType string `json:"certificateType"`
 }

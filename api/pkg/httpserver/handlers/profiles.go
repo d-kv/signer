@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// @Summary (NOT IMPLEMENTED) Add new profile
+// @Summary Add new profile
 // @Tags profile
 // @Description Create new profile instance
 // @ID add-profile
@@ -23,7 +23,25 @@ import (
 // @Failure default {object} errorResponse
 // @Router /profiles [post]
 func (h *Handler) postProfile(c *gin.Context) {
-	var _ entities.InputCreateBundleId
+	var input entities.InputCreateProfile
+	tenantId := c.Param("tenantId")
+	integrationId := c.Param("integrationId")
+	err := c.BindJSON(&input)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	converted, err := entities.ConvertProfile(&input, tenantId, integrationId)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	opId, err := h.services.CommandExecutorService.PostProfile(c, converted)
+	if err != nil {
+		newErrorResponse(c, http.StatusServiceUnavailable, "error while sending to CE")
+		return
+	}
+	c.JSON(http.StatusOK, opId)
 }
 
 // @Summary Check status
@@ -40,7 +58,7 @@ func (h *Handler) postProfile(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /profiles/status/{id} [post]
 func (h *Handler) getProfileStatusByID(c *gin.Context) {
-	status, err := h.services.CommandExecutorService.GetDeviceStatusByID(c)
+	status, err := h.services.CommandExecutorService.GetProfileStatusByID(c)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			newErrorResponse(c, http.StatusNotFound, "No commands with this status")
@@ -103,7 +121,7 @@ func (h *Handler) getProfileByID(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// @Summary (NOT IMPLEMENTED) Delete profile
+// @Summary Delete profile
 // @Description Profile deletion by id
 // @Tags profile
 // @ID delete-profile
